@@ -113,7 +113,6 @@ $(document).ready(function() {
                     chrome.tabs.getCurrent(function(tab) {
                         chrome.tabs.remove(tab.id, function() { });
                     });
-
                 },
                 error: function(e) {
                     var a = $.parseJSON(e.responseText);
