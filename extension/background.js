@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 
-
+var selectedTabId;
 //capture 
 function getTimeStamp() {
 	var e, t, o, a, n, r, s = new Date;
@@ -103,7 +103,9 @@ var screenshot = {
 				}, c.src = o
 			}
 			screenshot.createBlob(o, r, function() {
-				localStorage.imgdata = screenshot.path + r, 1 == saveScroll ? saveScroll = !1 : screenshot.createEditPage(n)
+				localStorage.imgdata = screenshot.path + r, 
+				1 == saveScroll ? saveScroll = !1 : screenshot.createEditPage(n)
+				
 			})
 		}
 		var a = {};
@@ -114,14 +116,10 @@ var screenshot = {
 			} [e.msg];
 			r && r(e, a, n)
 		})), chrome.tabs.getSelected(null, function(t) {
-			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.js"
+			chrome.tabs.executeScript(t.id, {
+				file: "/js/capture-plugin/js/page.js"
 			}, function() {
-				chrome.tabs.executeScript(t.id, {
-					file: "/js/capture-plugin/js/page.js"
-				}, function() {
-					e(t)
-				})
+				e(t)
 			})
 		})
 	},
@@ -233,7 +231,8 @@ var screenshot = {
 		t %= 12, t = t ? t : 12, o = 10 > o ? "0" + o : o;
 		var r = t + "-" + o + "-" + a + n;
 		return r
-	},
+	}
+	,
 	scrollSelected: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.insertCSS(null, {
@@ -254,6 +253,7 @@ var screenshot = {
 					}, function() {})
 				})
 			})
+			selectedTabId = e.id;
 		})
 	},
 	destroyscrollSelected: function() {
@@ -262,20 +262,17 @@ var screenshot = {
 				file: "/js/capture-plugin/css/jquery.Jcrop.css"
 			}), chrome.tabs.insertCSS(null, {
 				file: "/js/capture-plugin/css/stylecrop.css"
-			}), chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.js"
+			}), 
+			chrome.tabs.executeScript(null, {
+				file: "/js/capture-plugin/js/jquery.Jcrop.js"
 			}, function() {
 				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/jquery.Jcrop.js"
+					file: "/js/capture-plugin/js/scrolltoCrop.js"
 				}, function() {
-					chrome.tabs.executeScript(null, {
-						file: "/js/capture-plugin/js/scrolltoCrop.js"
-					}, function() {
-						chrome.tabs.sendRequest(e.id, {
-							type: "destroy_selected",
-							flashSound: localStorage.flashSound
-						}, function() {})
-					})
+					chrome.tabs.sendRequest(e.id, {
+						type: "destroy_selected",
+						flashSound: localStorage.flashSound
+					}, function() {})
 				})
 			})
 		})
@@ -334,6 +331,17 @@ var screenshot = {
 		for (o = matches.length - 1; o >= 0; o--)
 			if (t = new RegExp("^" + matches[o].replace(/\*/g, ".*") + "$"), t.test(e)) return !0;
 		return !1
+	},
+	insertImage: function(e){
+		chrome.tabs.getSelected(null, function(tab) {
+			chrome.tabs.sendRequest(
+				selectedTabId,
+				{
+					callFunction: "insertImage",
+					url : e.url
+				}
+			);
+		});
 	}
 };
 chrome.tabs.onUpdated.addListener(function(e, t, o) {
@@ -368,7 +376,10 @@ else if ("up" == e.type) {
 	thisCrop, matches = ["http://*/*", "https://*/*", "ftp://*/*", "file://*/*"],
 	noMatches = [/^https?:\/\/chrome.google.com\/.*$/];
   chrome.extension.onRequest.addListener(function(e) {
-	//"cap" == e.operation && (xs = e.xs, ys = e.ys, ws = e.ws, hs = e.hs), "voilaScroll" == e.operation && (voilaScroll = !0, scrollToCrop = !0, screenshot.captureEntire()), "saveScroll" == e.operation && (scrollToCrop = !0, saveScroll = !0, screenshot.captureEntire()), "Crop" == e.operation && (thisCrop = e.parameter)
+	"cap" == e.operation && (xs = e.xs, ys = e.ys, ws = e.ws, hs = e.hs), 
+	"voilaScroll" == e.operation && (voilaScroll = !0, scrollToCrop = !0, screenshot.captureEntire()), 
+	"saveScroll" == e.operation && (scrollToCrop = !0, saveScroll = !0, screenshot.captureEntire()), 
+	"Crop" == e.operation && (thisCrop = e.parameter)
   }), localStorage.flashSound = localStorage.flashSound || !1, localStorage.firstuse = localStorage.firstuse || !0, localStorage.format = localStorage.format || "png", localStorage.imageQuality = localStorage.imageQuality || "92", localStorage.hideFixedElements = localStorage.hideFixedElements || "false", localStorage.fileNamePattern = "screen_capture {date}_{time}", localStorage.saveCropPosition = localStorage.saveCropPosition || "false", localStorage.cropPosition = localStorage.cropPosition || JSON.stringify({
 	x: 50,
 	y: 50,

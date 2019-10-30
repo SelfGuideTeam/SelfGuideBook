@@ -66,7 +66,10 @@ $(document).ready(function() {
                     pageinfo: $("#image_name_text").val() + $("#filename_ext").text()
                 })
             })
-        }), $("#save-to-voila").click(function() {
+        }), 
+        $("#insert-image").click(function() {
+        }), 
+        $("#save-to-imgur").click(function() {
             $("#iframe").css({
                 "margin-bottom": "178px"
             });
@@ -78,23 +81,45 @@ $(document).ready(function() {
             n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
             var o = ($("#imgfordownload"), (new Date).getTime() + "screenshot."),
                 r = localStorage.format || "png";
-            o += r, c = t.toDataURL("image/" + r, localStorage.imageQuality / 100), console.log(c);
+            o += r, 
+
+            c = t.toDataURL("image/" + r, localStorage.imageQuality / 100) 
+            c = c.substring(22)
+
             var i = chrome.extension.getBackgroundPage().screenshot,
                 l = i.getFileName(g, !0);
             l = $("#image_name_text").val() + $("#filename_ext").text();
-            var s = "http://localhost:58540";
             $.ajax({
+                url: "https://api.imgur.com/3/image",
+                headers: {
+                    'Authorization': 'Client-ID 1264088c861551b'
+                },
                 type: "POST",
-                url: s,
-                data: "filename=" + l + "&&globaldelight&&pageTitle=" + localStorage.pageTitle + "&&globaldelight&&metaDesc=" + localStorage.metaDescription + "&&globaldelight&&imageUrl=" + $("#image_url").text() + "&&globaldelight&&" + c,
-                success: function(e) {
-                    "OK" == e && $("#message").addClass("success-message").show().html("Your Capture Has Successfully Been Saved In Voila")
+                data: {
+                    'image': c,
+                    'type': 'base64', 
+                    'title': 'image'
+                },
+                success: function(data) {
+                    // imageSelected = null;
+                    // chrome.tabs.create({
+                    //     url: data.data.link
+                    // });
+
+                    var e = chrome.extension.getBackgroundPage().screenshot;
+                    e.insertImage({
+                        url: data.data.link
+                    })
+                    chrome.tabs.getCurrent(function(tab) {
+                        chrome.tabs.remove(tab.id, function() { });
+                    });
+
                 },
                 error: function(e) {
                     var a = $.parseJSON(e.responseText);
-                    $("#message").removeClass("success-message").show().html("The Voila desktop app doesn't seem to be installed/updated or launched. Please check and retry."), a && console.log(a.error)
+                    alert(a.error);
                 }
-            })
+            });
         })
     }
 
