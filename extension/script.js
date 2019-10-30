@@ -2,6 +2,11 @@
 function handleRequest(request){
 	if (request.callFunction == "toggleSidebar") {
 		toggleSidebar();
+	}else if(request.callFunction == "insertImage"){
+		var imgsrc = request.url
+		var img = document.createElement('img'); 
+        img.setAttribute('src', imgsrc);
+		document.getElementById('my-editor').appendChild(img)
 	}
 
 }
