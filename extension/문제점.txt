@@ -13,3 +13,6 @@ https://alex-d.github.io/Trumbowyg/demos/#plugins-resizimg
 image resize api
 https://imageresizer.io/demo
 
+html to pdf api
+https://www.sejda.com/developers#html-pdf-api
+https://www.sejda.com/html-pdf-api

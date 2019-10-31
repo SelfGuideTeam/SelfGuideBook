@@ -42,8 +42,21 @@ $('#my-editor').trumbowyg({
       fn: function(){
         chrome.runtime.sendMessage({message: "domCapture"}, null);
       }
+    },
+    fullscreen : {
+      title: '전체 크기',
+      ico: 'fullscreen',
+      hasIcon: true,
+      fn: function(){
+        if($('#mySidebar').css('width')=='350px'){
+          $('#mySidebar').css('width', '900px');
+        }else{
+          $('#mySidebar').css('width', '350px');
+        }
+        //alert('ggg')
+        //chrome.runtime.sendMessage({message: "domCapture"}, null);
+      }
     }
-
   },
   btns: [
     ['viewHTML'],
@@ -57,7 +70,6 @@ $('#my-editor').trumbowyg({
     ['superscript', 'subscript'],
     ['link'],
     ['image'],
-    ['removeformat'],
     ['lineheight'],
     ['fullscreen']
   ],
@@ -92,7 +104,55 @@ $('#my-editor').blur(function(){
 })
 
 $('#btn1').click(function(){
-  chrome.tabs.create({url:"/js/capture-plugin/view/popup.html"});
+  var html = $('#my-editor').html();
+  SejdaJsApi.htmlToPdf({
+    filename: 'out.pdf',
+    /* leave blank for one long page */
+    pageSize: 'a4',
+    publishableKey: 'api_public_y0urap1k3yh3r3',
+    htmlCode: html,
+    /* url: window.location.href */
+    always: function() {
+      alert('success')
+      // PDF download should have started
+    },
+    error: function(err) {
+      console.error(err);
+      alert('An error occurred');
+    }
+  });
+
+
+  // $.ajax({
+  //   type: "POST",
+  //   url: "https://api.html2pdf.app/v1/generate",
+  //   data : {
+  //     html,
+  //     apiKey: 'e764a8d19bf5f878d7482a1ffa5079e91baf649d4dad2917a40e7728a6ff5d96',
+  //     email : 'eric2317@naver.com'
+  //   },
+    
+  //   success: function(data) {
+  //       // imageSelected = null;
+  //       // chrome.tabs.create({
+  //       //     url: data.data.link
+  //       // });
+  //       alert(data.document)
+  //       console.log(data)
+  //       alert('성공')
+  //       // var e = chrome.extension.getBackgroundPage().screenshot;
+  //       // e.insertImage({
+  //       //     url: data.data.link
+  //       // })
+  //       // chrome.tabs.getCurrent(function(tab) {
+  //       //     chrome.tabs.remove(tab.id, function() { });
+  //       // });
+  //   },
+  //   error: function(e) {
+  //       var a = $.parseJSON(e.responseText);
+  //       alert(a.error);
+  //   }
+  // });
 })
 
 $('#btn2').click(function(){
@@ -122,7 +182,15 @@ function getData(){
 
 
 
-
+// headers: {
+//   'Authorization': 'Client-ID 1264088c861551b'
+// },
+// type: "POST",
+// data: {
+//   'image': c,
+//   'type': 'base64', 
+//   'title': 'image'
+// },
 
 
 
