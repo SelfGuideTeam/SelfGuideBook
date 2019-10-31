@@ -16,3 +16,6 @@ https://imageresizer.io/demo
 html to pdf api
 https://www.sejda.com/developers#html-pdf-api
 https://www.sejda.com/html-pdf-api
+
+https://portal.api2pdf.com/
+https://www.api2pdf.com/convert-html-to-pdf-with-client-side-javascript-and-jquery/
