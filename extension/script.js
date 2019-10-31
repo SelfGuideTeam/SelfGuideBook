@@ -55,7 +55,7 @@ function toggleSidebar() {
 			position:fixed;\
 			top:0px;\
 			right:0px;\
-			width:800px;\
+			width:350px;\
 		    height:100%;\
 			background:white;\
 			z-index:999999;\

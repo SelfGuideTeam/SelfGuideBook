@@ -30,6 +30,9 @@
 				"js/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
 				"js/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
 				"js/capture-plugin/js/contentscript.js",
+				"js/jsPDF-master/dist/jspdf.debug.js",
+				"js/jsPDF-master/dist/html2canvas.js",
+				"js/html2pdf.js",
 				"script.js"
 			],
 			"css": ["js/Trumbowyg-master/dist/ui/trumbowyg.min.css"]
