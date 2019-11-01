@@ -26,12 +26,12 @@ function toggleSidebar() {
 		sidebar.id = "mySidebar";
 		sidebar.innerHTML = "\
 		<style>\
-		#editor-container {height: 700px;}\
+		#editor-container {height: 1280px;}\
 		#editor {\
 			border: 1px solid #ccc;\
 		}\
 		#my-editor{\
-			height: 700px;\
+			height: 1280px;\
 		}\
 		#counter {\
 			border: 1px solid #ccc;\

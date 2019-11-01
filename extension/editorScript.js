@@ -49,7 +49,7 @@ $('#my-editor').trumbowyg({
       hasIcon: true,
       fn: function(){
         if($('#mySidebar').css('width')=='350px'){
-          $('#mySidebar').css('width', '800px');
+          $('#mySidebar').css('width', '715px');
         }else{
           $('#mySidebar').css('width', '350px');
         }
@@ -130,8 +130,9 @@ function getData(){
 function printHtmlToPdf(html) {
   var endpoint = 'https://v2018.api2pdf.com/chrome/html';
   var apikey = 'ab1ce02b-9a63-48c1-b7a5-a2469f2decc9'; //replace this with your own from portal.api2pdf.com
+  //다른 언어도 쓰려면 meta charset 명시
   var payload = {
-    "html": html,
+    "html": "<meta charset='UTF-8'>"+html,
     "inlinePdf": false
   };
   $.ajax({
@@ -147,11 +148,11 @@ function printHtmlToPdf(html) {
           xhr.setRequestHeader("Authorization", apikey);
       },
       success: function (data) {
-				  console.log(data.pdf); //this is the url to the pdf
-					document.getElementById('my_iframe').src = data.pdf;
+        console.log(data.pdf); //this is the url to the pdf
+        document.getElementById('my_iframe').src = data.pdf;
       },
       error: function (jqXHR, textStatus, errorThrown) {
-
+        
       }
   });
 }
