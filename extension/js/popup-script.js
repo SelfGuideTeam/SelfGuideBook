@@ -49,12 +49,29 @@ $('#my-editor').trumbowyg({
       hasIcon: true,
       fn: function(){
         if($('#mySidebar').css('width')=='350px'){
-          $('#mySidebar').css('width', '900px');
+          $('#mySidebar').css('width', '800px');
         }else{
           $('#mySidebar').css('width', '350px');
         }
         //alert('ggg')
         //chrome.runtime.sendMessage({message: "domCapture"}, null);
+      }
+    },
+    SaveToPdf : {
+      title: 'PDF 저장',
+      ico : 'fullscreen',
+      hasIcon : true,
+      fn : function(){
+        printHtmlToPdf($('#my-editor').html());
+      }
+    },
+    refreshEditor : {
+      title : '에디터 초기화',
+      ico : 'fullscreen',
+      hasIcon : true,
+      fn : function(){
+        chrome.storage.sync.set({key: ''}, function() {
+        });
       }
     }
   },
@@ -71,7 +88,7 @@ $('#my-editor').trumbowyg({
     ['link'],
     ['image'],
     ['lineheight'],
-    ['fullscreen']
+    ['SaveToPdf', 'refreshEditor', 'fullscreen']
   ],
   plugins: {
     // Add imagur parameters to upload plugin for demo purposes
@@ -103,70 +120,55 @@ $('#my-editor').blur(function(){
   });
 })
 
-$('#btn1').click(function(){
-  var html = $('#my-editor').html();
-  SejdaJsApi.htmlToPdf({
-    filename: 'out.pdf',
-    /* leave blank for one long page */
-    pageSize: 'a4',
-    publishableKey: 'api_public_y0urap1k3yh3r3',
-    htmlCode: html,
-    /* url: window.location.href */
-    always: function() {
-      alert('success')
-      // PDF download should have started
-    },
-    error: function(err) {
-      console.error(err);
-      alert('An error occurred');
-    }
-  });
-
-
-  // $.ajax({
-  //   type: "POST",
-  //   url: "https://api.html2pdf.app/v1/generate",
-  //   data : {
-  //     html,
-  //     apiKey: 'e764a8d19bf5f878d7482a1ffa5079e91baf649d4dad2917a40e7728a6ff5d96',
-  //     email : 'eric2317@naver.com'
-  //   },
-    
-  //   success: function(data) {
-  //       // imageSelected = null;
-  //       // chrome.tabs.create({
-  //       //     url: data.data.link
-  //       // });
-  //       alert(data.document)
-  //       console.log(data)
-  //       alert('성공')
-  //       // var e = chrome.extension.getBackgroundPage().screenshot;
-  //       // e.insertImage({
-  //       //     url: data.data.link
-  //       // })
-  //       // chrome.tabs.getCurrent(function(tab) {
-  //       //     chrome.tabs.remove(tab.id, function() { });
-  //       // });
-  //   },
-  //   error: function(e) {
-  //       var a = $.parseJSON(e.responseText);
-  //       alert(a.error);
-  //   }
-  // });
-})
-
-$('#btn2').click(function(){
-  chrome.storage.sync.set({key: ''}, function() {
-  });
-})
-
-
 function getData(){
   var rr= chrome.storage.sync.get(['key'], function (result) {
     $('#my-editor').html(result.key)
     //returnData = result.key;
   });
 }
+
+function printHtmlToPdf(html) {
+  var endpoint = 'https://v2018.api2pdf.com/chrome/html';
+  var apikey = 'ab1ce02b-9a63-48c1-b7a5-a2469f2decc9'; //replace this with your own from portal.api2pdf.com
+  var payload = {
+    "html": html,
+    "inlinePdf": false
+  };
+  $.ajax({
+      url: endpoint,
+      method: "POST",
+      dataType: "json",
+      crossDomain: true,
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(payload),
+      cache: false,
+      beforeSend: function (xhr) {
+          /* Authorization header */
+          xhr.setRequestHeader("Authorization", apikey);
+      },
+      success: function (data) {
+				  console.log(data.pdf); //this is the url to the pdf
+					document.getElementById('my_iframe').src = data.pdf;
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+
+      }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -199,6 +201,54 @@ function getData(){
 
 
 
+
+  // var html = $('#my-editor').html();
+  // SejdaJsApi.htmlToPdf({
+  //   filename: 'out.pdf',
+  //   /* leave blank for one long page */
+  //   pageSize: 'a4',
+  //   publishableKey: 'api_public_e1a15bbd4fa240ceb8eb01e7e53aaff2',
+  //   htmlCode: html,
+  //   /* url: window.location.href */
+  //   always: function() {
+  //     // PDF download should have started
+  //   },
+  //   error: function(err) {
+  //     console.error(err);
+  //     alert('An error occurred');
+  //   }
+  // });
+
+  // $.ajax({
+  //   type: "POST",
+  //   url: "https://api.html2pdf.app/v1/generate",
+  //   data : {
+  //     html,
+  //     apiKey: 'e764a8d19bf5f878d7482a1ffa5079e91baf649d4dad2917a40e7728a6ff5d96',
+  //     email : 'eric2317@naver.com'
+  //   },
+    
+  //   success: function(data) {
+  //       // imageSelected = null;
+  //       // chrome.tabs.create({
+  //       //     url: data.data.link
+  //       // });
+  //       alert(data.document)
+  //       console.log(data)
+  //       alert('성공')
+  //       // var e = chrome.extension.getBackgroundPage().screenshot;
+  //       // e.insertImage({
+  //       //     url: data.data.link
+  //       // })
+  //       // chrome.tabs.getCurrent(function(tab) {
+  //       //     chrome.tabs.remove(tab.id, function() { });
+  //       // });
+  //   },
+  //   error: function(e) {
+  //       var a = $.parseJSON(e.responseText);
+  //       alert(a.error);
+  //   }
+  // });
 
 
 

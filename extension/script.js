@@ -3,13 +3,15 @@ function handleRequest(request){
 	if (request.callFunction == "toggleSidebar") {
 		toggleSidebar();
 	}else if(request.callFunction == "insertImage"){
-		var imgsrc = request.url
+		//https://imgur링크를 src에 넣으면 pdf에 이미지가 저장이 안됨   http:// 는 됨 --?
+		var imgsrc = (request.url).replace('https://','http://');
 		var img = document.createElement('img'); 
         img.setAttribute('src', imgsrc);
 		document.getElementById('my-editor').appendChild(img)
 	}
 
 }
+
 chrome.extension.onRequest.addListener(handleRequest);
 var sidebarOpen = false;
 function toggleSidebar() {
@@ -20,14 +22,6 @@ function toggleSidebar() {
 	}
 	else {
 		var sidebar = document.createElement('div');
-		// var menuImage = chrome.runtime.getURL('menu.png');
-		// var menuImage1 = chrome.runtime.getURL('sample.jpg');
-		// var sideBarImage = chrome.runtime.getURL('Sidebar-Menu.png');
-		// var url = chrome.runtime.getURL('js/jquery/jquery.js');
-		//var quillUrl = chrome.runtime.getURL('/js/quill-1.3.6/quill.js')
-		//var quillSnowUrl = chrome.runtime.getURL('/js/quill-1.3.6/themes/snow.js')
-		//var mmyscript = chrome.runtime.getURL('/js/myscript.js');
-
 
 		sidebar.id = "mySidebar";
 		sidebar.innerHTML = "\
@@ -47,8 +41,7 @@ function toggleSidebar() {
 			text-align: right;\
 		}\
 		</style>\
-		<input type='button' value='캡쳐' id='btn1'>\
-		<input type='button' value='초기화' id='btn2'>\
+		<iframe id='my_iframe' style='display:none;'></iframe>\
 		<div id='my-editor'></div>\
 		";
 		sidebar.style.cssText = "\
@@ -62,6 +55,40 @@ function toggleSidebar() {
 		";
 		document.body.appendChild(sidebar);
 		sidebarOpen = true;
+
+		chrome.runtime.sendMessage({message: "sidebar"}, null);
+
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// var menuImage = chrome.runtime.getURL('menu.png');
+		// var menuImage1 = chrome.runtime.getURL('sample.jpg');
+		// var sideBarImage = chrome.runtime.getURL('Sidebar-Menu.png');
+		// var url = chrome.runtime.getURL('js/jquery/jquery.js');
+		//var quillUrl = chrome.runtime.getURL('/js/quill-1.3.6/quill.js')
+		//var quillSnowUrl = chrome.runtime.getURL('/js/quill-1.3.6/themes/snow.js')
+		//var mmyscript = chrome.runtime.getURL('/js/myscript.js');
+
+
+
 		// var actualCode = [ 'var toggle = (function () { var visible = false, ele = document.getElementById("mymenu"), btn = document.getElementById("menuBarToggle");function flip() {var display = ele.style.display;ele.style.display = (display === "block" ? "none" : "block");visible = !visible;}btn.addEventListener("click", flip);ele.addEventListener("click", function (e) {e.stopPropagation();});document.addEventListener("click", function (e) {if (visible && e.target !== btn) flip();});ele.style.display = "none";return flip;}());'
 		// + 'var slideBar = (function () {ele1 = document.getElementById("mySidebar"), btn1 = document.getElementById("sideBarToggle");function slideInOut() {var webkitTransform = ele1.style.webkitTransform;ele1.style.webkitTransform = (webkitTransform === "translateX(-361px)" ? "translateX(0px)" : "translateX(-361px)");}btn1.addEventListener("click", slideInOut);ele1.addEventListener("click", function (e) {e.stopPropagation();});return slideInOut;}()); ' ].join('\n');
 		// var myScript = document.createElement('script');
@@ -80,11 +107,3 @@ function toggleSidebar() {
 		// ",placeholder: 'Compose an epic...',theme: 'snow'  });";
 		//document.body.appendChild(myScript2);
 		//script.parentNode.removeChild(script);
-		chrome.runtime.sendMessage({message: "sidebar"}, null);
-
-
-
-
-	}
-}
-
