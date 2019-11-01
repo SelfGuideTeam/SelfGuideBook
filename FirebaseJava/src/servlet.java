@@ -1,4 +1,6 @@
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -18,6 +20,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
+
 @WebServlet("*.do")
 public class servlet extends HttpServlet{
 	
@@ -28,6 +31,7 @@ public class servlet extends HttpServlet{
 		
 		if (req.getRequestURI().equals(contextPath + "save.do")) {
 			asd();
+			resp.sendRedirect("aa.do");
 		}
 		
 		if (req.getRequestURI().equals(contextPath + "aa.do")) {
@@ -39,21 +43,27 @@ public class servlet extends HttpServlet{
 
 	public void asd() {
 		try {
+			
 			GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-			FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(credentials).setProjectId("fir-ex-63c1a")
-					.build();
+			FirebaseOptions options = new FirebaseOptions.Builder()
+			    .setCredentials(credentials)
+			    .setProjectId("fir-ex-63c1a")
+			    .build();
+//			InputStream serviceAccount = new FileInputStream("Z:/REAL_FINAL_GIT/FirebaseJava/WebContent/file.json");
+//			GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+//			FirebaseOptions options = new FirebaseOptions.Builder()
+//			    .setCredentials(credentials)
+//			    .build();
 			FirebaseApp.initializeApp(options);
 			Firestore db = FirestoreClient.getFirestore();
-
+			
+			
 			DocumentReference docRef = db.collection("users").document("alovelace");
 			Map<String, Object> data = new HashMap<>();
 			data.put("first", "Ada");
 			data.put("last", "Lovelace");
 			data.put("born", 1815);
-			//asynchronously write data
 			ApiFuture<WriteResult> result = docRef.set(data);
-			// ...
-			// result.get() blocks on response
 			System.out.println("Update time : " + result.get().getUpdateTime());
 			
 			
