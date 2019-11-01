@@ -37,9 +37,9 @@
             <button v-on:click="reverseMessage">메시지뒤집기</button>
         </div>
         <div id="app6">
-                <p>{{message}}</p>
-                <input v-model="message">
-            </div>
+            <p>{{message}}</p>
+            <input v-model="message">
+        </div>
         <script>
             var asd = new Vue({
                 el: '#app',
@@ -63,22 +63,30 @@
                 el: '#app4',
                 data: {
                     todos: [
-                        { text : '자바스크립트배우기 '},
-                        { text : 'Vue 배우기'},
-                        { text : '무언가 멋진 것을 만들기 '}
+                        {
+                            text: '자바스크립트배우기 '
+                        }, {
+                            text: 'Vue 배우기'
+                        }, {
+                            text: '무언가 멋진 것을 만들기 '
+                        }
                     ]
                 }
             })
             var app5 = new Vue({
                 el: '#app5',
-                data:{
+                data: {
                     message: "안녕하세요! vue.js!"
                 },
                 methods: {
-                    reverseMessage:function(){
-                        this.message = this.message.split('').reverse().join('');
+                    reverseMessage: function () {
+                        this.message = this
+                            .message
+                            .split('')
+                            .reverse()
+                            .join('');
                     }
-                },
+                }
             })
             var app6 = new Vue({
                 el: '#app6',
