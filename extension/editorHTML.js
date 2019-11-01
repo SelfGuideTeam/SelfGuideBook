@@ -106,4 +106,3 @@ function toggleSidebar() {
 		// "toolbar: [[{ header: [1, 2, false] }],['bold', 'italic', 'underline'],['image', 'code-block']]}"+
 		// ",placeholder: 'Compose an epic...',theme: 'snow'  });";
 		//document.body.appendChild(myScript2);
-		//script.parentNode.removeChild(script);
