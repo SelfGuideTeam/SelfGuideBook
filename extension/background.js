@@ -21,11 +21,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
 	if(message=='sidebar'){
 		chrome.tabs.executeScript(null, {
-			file: "js/popup-script.js"
+			file: "editorScript.js"
 		}, function () { // Execute your code
 		});
 	}else if(message=='selectCapture'){
 		localStorage.firstuse = !1, /*screenshot.destroydomcapture(),*/ screenshot.scrollSelected()
+	}else if(message=='entireCapture'){
+		
+	}else if(message=='domCapture'){
+
 	}
 });
 
