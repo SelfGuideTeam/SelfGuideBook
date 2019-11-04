@@ -34,7 +34,7 @@ jQuery.trumbowyg.langs.ko = {
     unorderedList: '기호 목록',
     orderedList: '번호 목록',
 
-    insertImage: '그림 넣기',
+    insertImage: 'URL 링크',
     link: '링크',
     createLink: '링크 넣기',
     unlink: '링크 지우기',
@@ -59,5 +59,10 @@ jQuery.trumbowyg.langs.ko = {
     title: '툴팁',
     text: '내용',
     target: '타겟',
-    width: '너비'
+    width: '너비',
+
+    image : '이미지',
+    upload : '업로드',
+
+    lineheight : '줄 간격'
 };

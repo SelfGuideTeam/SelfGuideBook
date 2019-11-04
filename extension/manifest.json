@@ -29,6 +29,7 @@
 				"js/Trumbowyg-master/dist/trumbowyg.min.js",
 				"js/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
 				"js/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
+				"js/Trumbowyg-master/dist/langs/ko.js",
 				"js/capture-plugin/js/contentscript.js",
 				"js/html2pdf.js",
 				"editorHTML.js"
@@ -44,8 +45,8 @@
 		"tabs",
 		"storage", 
 		"http://*/*", "https://*/*"
-		,"desktopCapture",
-		"downloads", "clipboardWrite", "clipboardRead",
+		,
+		"downloads", 
 		"unlimitedStorage", "<all_urls>"
 	]
 }

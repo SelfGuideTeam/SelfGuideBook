@@ -5,8 +5,12 @@
 
   
 $('#my-editor').trumbowyg({
+  resetCss: true,
+  removeformatPasted: true,
   lang : 'ko',
+  tagsToRemove: ['script', 'link'],
   svgPath : chrome.runtime.getURL('/js/Trumbowyg-master/dist/ui/icons.svg'),
+  autogrow: true,
   btnsDef: {
     // Create a new dropdown
     image: {
@@ -114,11 +118,13 @@ $('#my-editor').trumbowyg({
 
 //저장된 데이터를 가져와서 입력
 getData();
-$('#my-editor').blur(function(){
+$('#my-editor').blur(setData)
+
+function setData(){
   chrome.storage.sync.set({key: $('#my-editor').html()}, function() {
     //console.log('Value is set to ' + $('#my-editor').html());
   });
-})
+}
 
 function getData(){
   var rr= chrome.storage.sync.get(['key'], function (result) {
