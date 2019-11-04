@@ -10,6 +10,7 @@
 
 
 <script>
+import firebase from 'firebase'
 export default {
     name: "login",
     data() {
@@ -22,18 +23,19 @@ export default {
         login(){
             var email = this.email;
             var password = this.password;
-
+            const db = firebase.firestore();
             db.collection('email').get().then((snapshot) => {
             snapshot.docs.forEach(doc => {
 
-                console.log(doc.id + doc.data().email + doc.data().password);
+                console.log(doc.id +"/"+ doc.data().email +"/" +doc.data().password);
                 
-                name.textContent = doc.id;
-                city.textContent = doc.data().city;
+                
 
-                li.appendChild(name);
-                li.appendChild(city);
-                cafeList.appendChild(li);
+
+
+
+
+
                 }); 
                 
             })
