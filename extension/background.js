@@ -340,6 +340,7 @@ var screenshot = {
 					url : e.url
 				}
 			);
+			chrome.tabs.update(selectedTabId, {highlighted: true});
 		});
 	}
 };

@@ -1,6 +1,7 @@
 확장에서 타이핑하면 페이지 자체의 단축키(리스너)와 겹침
-페이지 자체의 style이 확장에서 쓴 글의 style과 겹침
+페이지 자체의 style이 확장에서 쓴 글의 style과 겹침(버튼)
 확장프로그램이 페이지를 가림
+
 
 이미지 resize
 확장프로그램 height 조절
@@ -19,6 +20,9 @@ https://www.sejda.com/html-pdf-api
 
 
 페이징 기능
+
+
+html clean
 
 
 
