@@ -203,6 +203,7 @@
                                             } else {
                                                 if (!!getDeep(data, trumbowyg.o.plugins.upload.statusPropertyName.split('.'))) {
                                                     var url = getDeep(data, trumbowyg.o.plugins.upload.urlPropertyName.split('.'));
+                                                    url = (url).replace('https://','http://');
                                                     trumbowyg.execCmd('insertImage', url, false, true);
                                                     var $img = $('img[src="' + url + '"]:not([alt])', trumbowyg.$box);
                                                     $img.attr('alt', values.alt);

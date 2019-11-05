@@ -66,7 +66,11 @@ $('#my-editor').trumbowyg({
       ico : 'fullscreen',
       hasIcon : true,
       fn : function(){
-        printHtmlToPdf($('#my-editor').html());
+        var html = '';
+        pages.toArray().forEach(function(element){
+          html+=element;
+        });
+        printHtmlToPdf(html);
       }
     },
     refreshEditor : {
@@ -87,11 +91,13 @@ $('#my-editor').trumbowyg({
     ['strong', 'em', 'del'],
     ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
     ['unorderedList', 'orderedList'],
-    ['horizontalRule'],
+    ['horizontalRule'], 
+    ['fontfamily'],
     ['superscript', 'subscript'],
     ['link'],
     ['image'],
     ['lineheight'],
+    ['removeformat'],
     ['SaveToPdf', 'refreshEditor', 'fullscreen']
   ],
   plugins: {
@@ -115,20 +121,87 @@ $('#my-editor').trumbowyg({
 });
 
 
+// $('#my-editor').on('drop',function(e){
+//   e.originalEvent.dataTransfer.items[0].getAsString(function(str)
+//   {
+//     alert(str)
+//   })
+// })
+
+$('#btn1').click(getTotalContentHeight)
+
+//한페이지당 최대 사이즈는 850px 
+//현재 자식의 자식까지 계산해버림 상위 자식만 계산하도록
+function getTotalContentHeight(){
+  var childrens = $('#my-editor').children();
+  var totalHeight = 0;
+
+  $.each(childrens, function (index, item) { 
+    totalHeight+= item.offsetHeight
+  })
+
+  alert(childrens.size())
+  alert(totalHeight);
+  if(totalHeight>840){
+    $(childrens).last().remove();
+    getTotalContentHeight();
+  }else{
+    return;
+  }
+  //alert(totalHeight);
+}
+
+$('#btn2').click(function(){
+  chrome.storage.sync.set({editorPages: null}, function() {
+    //console.log('Value is set to ' + $('#my-editor').html());
+  });
+
+  
+
+
+})
+
+$('#btn3').click(deletePage);
+
+$('#createPage').click(createPage);
+$('#pageNaviii').click(navi);
 
 //저장된 데이터를 가져와서 입력
+//initPages();
 getData();
 $('#my-editor').blur(setData)
+var currentPage = 1;
 
 function setData(){
-  chrome.storage.sync.set({key: $('#my-editor').html()}, function() {
+  //alert($('#my-editor').html())
+  pages.setByIndex(currentPage-1, $('#my-editor').html());
+  //alert(pages.toArray());
+  chrome.storage.sync.set({editorPages: pages.toArray()}, function() {
     //console.log('Value is set to ' + $('#my-editor').html());
   });
 }
 
 function getData(){
-  var rr= chrome.storage.sync.get(['key'], function (result) {
-    $('#my-editor').html(result.key)
+  var rr= chrome.storage.sync.get(['editorPages'], function (result) {
+    pages = new ArrayList();
+    if(result.editorPages==null){
+      alert('null이네')
+      pages.add('')
+    }else{
+      var currentPage2 = currentPage+1;
+      result.editorPages.forEach(function(item, index) {
+        pages.add(item);
+        if(index!=1){
+          $('<li><a href="#">'+currentPage2+'</a></li>').insertBefore('#createPage');
+          currentPage2++;
+        }
+      });
+      // pages = result.editorPages;
+      // console.log(result.editorPages);
+      // alert(pages.get(0))
+      // $('#my-editor').html(pages.get(0))
+    }
+    $('#my-editor').html(pages.get(0))
     //returnData = result.key;
   });
 }
@@ -162,6 +235,66 @@ function printHtmlToPdf(html) {
       }
   });
 }
+
+
+var currentPage3 = $('#pageNaviii').children().eq(0)
+//$(currentPage3).attr('class', '');
+function navi(e){
+  if(e.target.innerText!='+'){
+    $(currentPage3).attr('class', '');
+    currentPage3 = $(e.target).closest('li');
+    currentPage3.attr('class','active')
+    currentPage = e.target.innerText;
+    $('#my-editor').html(pages.get(currentPage-1))
+  }
+
+}
+
+// function initPages(){
+//   pages = new ArrayList;
+//   chrome.storage.sync.get(['key'], function (result) {
+//     pages.add(result.key);
+//   });
+// }
+
+function createPage(){
+  pages.add('');
+  $('<li><a href="#">'+pages.size()+'</a></li>').insertBefore('#createPage');
+}
+
+function deletePage(){
+  pages.removeAt(currentPage-1);
+  currentPage--;
+  setData();
+
+  $('#pageNaviii').empty();
+  var currentPage2 = 1;
+  var rr= chrome.storage.sync.get(['editorPages'], function (result) {
+    $('#pageNaviii').append('<li id="createPage"><a href="#">+</a></li>')
+    $('#createPage').click(createPage);
+    result.editorPages.forEach(function(item, index) {
+      //pages.add(item);
+      //if(index!=1){
+        $('<li><a href="#">'+currentPage2+'</a></li>').insertBefore('#createPage');
+        currentPage2++;
+      //}
+    });
+    $('#pageNaviii').children().eq(0).trigger('click');
+    //console.log()
+  });
+
+  //$('#pageNaviii').children().eq(0).children().eq(0).trigger('click');
+  //$('#pageNaviii').children().eq(0).trigger('click');
+
+
+
+
+}
+
+function savePages(){
+
+}
+
 
 
 

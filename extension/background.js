@@ -8,30 +8,22 @@ chrome.tabs.getSelected(null, function(tab) {
 
 chrome.pageAction.onClicked.addListener(function(tab) {
 	chrome.tabs.getSelected(null, function(tab) {
-		chrome.tabs.sendRequest(
-			tab.id,
-			{
-				callFunction: "toggleSidebar"
-			}
-		);
+		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
 	});
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
 	if(message=='sidebar'){
-		chrome.tabs.executeScript(null, {
-			file: "editorScript.js"
-		}, function () { // Execute your code
-		});
+		chrome.tabs.executeScript(null, {file: "editorScript.js"}, null);
 	}else if(message=='selectCapture'){
 		localStorage.firstuse = !1, screenshot.destroydomcapture(), screenshot.scrollSelected()
 	}else if(message=='entireCapture'){
 		alert('entire')
-		localStorage.firstuse = !1, bgScreencapture.destroyscrollSelected(), bgScreencapture.destroydomcapture(), bgScreencapture.captureEntire()
+		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.destroydomcapture(), screenshot.captureEntire()
 	}else if(message=='domCapture'){
 		alert('dom')
-		localStorage.firstuse = !1, bgScreencapture.destroyscrollSelected(), bgScreencapture.domcapture()
+		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.domcapture()
 	}
 });
 
@@ -44,6 +36,7 @@ function getTimeStamp() {
 	var e, t, o, a, n, r, s = new Date;
 	return e = s.getFullYear(), t = s.getMonth() + 1, o = s.getDate(), a = s.getHours(), n = s.getMinutes(), r = s.getSeconds(), 10 > t && (t = "0" + t), 10 > o && (o = "0" + o), 10 > a && (a = "0" + a), 10 > n && (n = "0" + n), 10 > r && (r = "0" + r), e + "-" + t + "-" + o + " " + a + "-" + n + "-" + r
 }
+
 var screenshot = {
 	path: "filesystem:chrome-extension://" + chrome.i18n.getMessage("@@extension_id") + "/temporary/",
 	generated: !1,
@@ -340,6 +333,7 @@ var screenshot = {
 					url : e.url
 				}
 			);
+			chrome.tabs.update(selectedTabId, {highlighted: true});
 		});
 	}
 };
