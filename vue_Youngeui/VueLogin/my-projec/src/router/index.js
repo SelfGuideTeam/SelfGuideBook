@@ -7,20 +7,18 @@ import SignUp from '@/components/SignUp'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/hello',
-      name: 'HelloWorld',
-      component:  HelloWorld
-    },{
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },{
-      path: '/signup',
-      name: 'SignUp',
-      component: SignUp
-    }
-  ],
-  
+  routes: [{
+    path: '/hello',
+    name: 'HelloWorld',
+    component: HelloWorld
+  }, {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  }, {
+    path: '/signup',
+    name: 'SignUp',
+    component: SignUp
+  }],
+
 })
