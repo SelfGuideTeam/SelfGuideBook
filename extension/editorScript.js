@@ -155,6 +155,10 @@ $('#btn2').click(function(){
   chrome.storage.sync.set({editorPages: null}, function() {
     //console.log('Value is set to ' + $('#my-editor').html());
   });
+
+  
+
+
 })
 
 $('#btn3').click(deletePage);

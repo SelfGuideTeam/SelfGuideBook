@@ -3,20 +3,6 @@
 확장프로그램이 페이지를 가림
 
 
-이미지 resize
-확장프로그램 height 조절
-
-
-Trumbowyg 에디터 사용
-https://alex-d.github.io/Trumbowyg/demos/#plugins-resizimg
-
-
-image resize api
-https://imageresizer.io/demo
-
-html to pdf api
-https://www.sejda.com/developers#html-pdf-api
-https://www.sejda.com/html-pdf-api
 
 
 페이징 기능
@@ -29,3 +15,31 @@ html clean
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+이미지 resize
+확장프로그램 height 조절
+
+
+Trumbowyg 에디터 사용
+https://alex-d.github.io/Trumbowyg/demos/#plugins-resizimg
+
+
+image resize api
+https://imageresizer.io/demo
+
+html to pdf api
+https://app.swaggerhub.com/apis-docs/api2pdf/api2pdf/1.0.0#/WkHtmlToPdfHtmlToPdfRequest
+
+https://www.sejda.com/developers#html-pdf-api
+https://www.sejda.com/html-pdf-api
