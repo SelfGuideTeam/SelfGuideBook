@@ -1,0 +1,42 @@
+.center {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    display: -webkit-flex;
+    -webkit-align-item: center;
+    -webkit-justify-content: center;
+}
+.loginForm{
+    width: min-content; 
+    height: min-content; 
+    padding: 50px; 
+    border: 1px solid skyblue;
+}
+.loginFormText{
+    font-size: 20px;
+}
+.loginFormInputText{
+    width: 400px;
+    height: 20px;
+    padding: 10px;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+.loginFormBtn{
+    width: 420px;
+    height: 40px;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+#btnIdFind{
+    width: 150px;
+    height: 40px;
+    font-size: 20px;
+    margin-top: 20px;
+}

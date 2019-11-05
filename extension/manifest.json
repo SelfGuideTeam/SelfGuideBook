@@ -1,15 +1,15 @@
 {
-	"name": "Acme",
+	"name": "GuideEditor",
 	"manifest_version": 2,
-	"description": "Sample Demo",
-	"version": "0.2",
+	"description": "Edit your own guide book",
+	"version": "0.3",
 	"background": {
 	  "scripts": ["background.js"]
     },
 	"page_action": {
 		"default_icon": "acme.png",
 		"__default_popup": "js/capture-plugin/view/popup.html",
-		"default_title": "Clicked Me"
+		"__default_title": "Clicked Me"
 	},
     "__content_scripts": [
 		{
@@ -29,10 +29,15 @@
 				"js/Trumbowyg-master/dist/trumbowyg.min.js",
 				"js/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
 				"js/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
+				"js/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
+				"js/Trumbowyg-master/dist/langs/ko.js",
 				"js/capture-plugin/js/contentscript.js",
-				"script.js"
+				"js/html2pdf.js",
+				"js/arrayList.js",
+				"editorHTML.js"
 			],
-			"css": ["js/Trumbowyg-master/dist/ui/trumbowyg.min.css"]
+			"css": ["js/Trumbowyg-master/dist/ui/trumbowyg.min.css",
+					"editorCSS.css"]
 		}
 	],
     "web_accessible_resources": [
@@ -43,8 +48,8 @@
 		"tabs",
 		"storage", 
 		"http://*/*", "https://*/*"
-		,"desktopCapture",
-		"downloads", "clipboardWrite", "clipboardRead",
-		"activeTab", "unlimitedStorage", "<all_urls>"
+		,
+		"downloads", 
+		"unlimitedStorage", "<all_urls>"
 	]
 }

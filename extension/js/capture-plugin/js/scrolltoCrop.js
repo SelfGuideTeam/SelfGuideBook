@@ -1,6 +1,10 @@
 var flashSound = "";
 chrome.extension.onRequest.addListener(function(o, e, n) {
-    "setOptions" === o.type ? flashSound = o.flashSound : "destroy_selected" === o.type && $("#areafon").remove(), n({})
+    "setOptions" === o.type ? 
+    flashSound = o.flashSound 
+    : 
+    "destroy_selected" === o.type && $("#areafon").remove(),
+     n({})
 }),
 function(o) {
     function e() {
@@ -149,6 +153,7 @@ function(o) {
         }, function() {})
     }
 
+    //alert('aferon 삭제')
     function s() {
         window.voilaChromeOption = !1, window.thisScrollEr = !1, o("#areafon").remove()
     }
@@ -192,27 +197,31 @@ function(o) {
         o("body").mouseup(function() {
             h = 1e6
         }), o(".bottom").width() > h && r(e)
-    }), window.addEventListener("keydown", function(o) {
+    }), 
+    window.addEventListener("keydown", function(o) {
         o = o || window.event, 27 == o.keyCode && s()
-    }, !1), window.addEventListener("keydown", function(e) {
-        e = e || window.event, 13 == e.keyCode && v && (v = !1, "true" === flashSound ? (p(), o(".jcrop-holder div div .jcrop-tracker").css({
-            background: "rgba(255, 255, 255, 0.5)"
-        }), setTimeout(function() {
-            o(".jcrop-holder div div .jcrop-tracker").animate({
-                background: "rgba(255, 255, 255, 0)"
-            }, 200, function() {
-                s(), chrome.extension.sendRequest({
-                    operation: "saveScroll",
-                    scrollToCrop: !1
-                }, function() {})
-            })
-        }, 100)) : (s(), chrome.extension.sendRequest({
-            operation: "saveScroll",
-            scrollToCrop: !1
-        }, function() {})))
-    }, !1), document.body.addEventListener("mousemove", t, !1), document.body.addEventListener("mouseup", function() {
+    }, !1), 
+    // window.addEventListener("keydown", function(e) {
+    //     e = e || window.event, 13 == e.keyCode && v && (v = !1, "true" === flashSound ? (p(), o(".jcrop-holder div div .jcrop-tracker").css({
+    //         background: "rgba(255, 255, 255, 0.5)"
+    //     }), setTimeout(function() {
+    //         o(".jcrop-holder div div .jcrop-tracker").animate({
+    //             background: "rgba(255, 255, 255, 0)"
+    //         }, 200, function() {
+    //             s(), chrome.extension.sendRequest({
+    //                 operation: "saveScroll",
+    //                 scrollToCrop: !1
+    //             }, function() {})
+    //         })
+    //     }, 100)) : (s(), chrome.extension.sendRequest({
+    //         operation: "saveScroll",
+    //         scrollToCrop: !1
+    //     }, function() {})))
+    // }, !1), 
+    document.body.addEventListener("mousemove", t, !1), document.body.addEventListener("mouseup", function() {
         "0px" != o(".jcrop-hline").parent().parent().css("width") && "0px" != o(".jcrop-hline").parent().parent().css("height") && (document.body.removeEventListener("mousemove", t, !1), o(".crosshair").remove())
-    }, !1), parent.document.onmouseup = function() {
+    }, !1), 
+    parent.document.onmouseup = function() {
         setTimeout(function() {
             o("#drag-cordinates").hide()
         }, 200)

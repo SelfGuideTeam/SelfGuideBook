@@ -8,35 +8,35 @@ chrome.tabs.getSelected(null, function(tab) {
 
 chrome.pageAction.onClicked.addListener(function(tab) {
 	chrome.tabs.getSelected(null, function(tab) {
-		chrome.tabs.sendRequest(
-			tab.id,
-			{
-				callFunction: "toggleSidebar"
-			}
-		);
+		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
 	});
 });
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
 	if(message=='sidebar'){
-		chrome.tabs.executeScript(null, {
-			file: "js/popup-script.js"
-		}, function () { // Execute your code
-		});
+		chrome.tabs.executeScript(null, {file: "editorScript.js"}, null);
 	}else if(message=='selectCapture'){
-		localStorage.firstuse = !1, /*screenshot.destroydomcapture(),*/ screenshot.scrollSelected()
+		localStorage.firstuse = !1, screenshot.destroydomcapture(), screenshot.scrollSelected()
+	}else if(message=='entireCapture'){
+		alert('entire')
+		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.destroydomcapture(), screenshot.captureEntire()
+	}else if(message=='domCapture'){
+		alert('dom')
+		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.domcapture()
 	}
 });
 
 
 
 
-
+var selectedTabId;
 //capture 
 function getTimeStamp() {
 	var e, t, o, a, n, r, s = new Date;
 	return e = s.getFullYear(), t = s.getMonth() + 1, o = s.getDate(), a = s.getHours(), n = s.getMinutes(), r = s.getSeconds(), 10 > t && (t = "0" + t), 10 > o && (o = "0" + o), 10 > a && (a = "0" + a), 10 > n && (n = "0" + n), 10 > r && (r = "0" + r), e + "-" + t + "-" + o + " " + a + "-" + n + "-" + r
 }
+
 var screenshot = {
 	path: "filesystem:chrome-extension://" + chrome.i18n.getMessage("@@extension_id") + "/temporary/",
 	generated: !1,
@@ -49,82 +49,7 @@ var screenshot = {
 			url: e
 		}, function() {})
 	},
-	captureEntire: function() {
-		function e(e) {
-			screenshot.newwholepage = !0, a = {}, 1 == scrollToCrop ? chrome.tabs.sendRequest(e.id, {
-				msg: "scrollPage",
-				scrollToCrop: !0,
-				xs: xs,
-				ys: ys,
-				ws: ws,
-				hs: hs
-			}, function() {}) : chrome.tabs.sendRequest(e.id, {
-				msg: "scrollPage",
-				scrollToCrop: !1,
-				hideFixedElements: "true" === localStorage.hideFixedElements
-			}, function() {})
-		}
-  
-		function t(e, t, o) {
-			var n = e.devicePixelRatio || 1;
-			localStorage.metaDescription = e.meta_description;
-			var r = null;
-			screenshot.newwholepage && (screenshot.newwholepage = !1, r || (r = document.createElement("canvas")), r.width = Math.round(e.totalWidth * n), r.height = Math.round(e.totalHeight * n), a.canvas = r, a.ctx = r.getContext("2d")), chrome.tabs.captureVisibleTab(null, {
-				format: "png",
-				quality: 100
-			}, function(t) {
-				if (t) {
-					var r = new Image;
-					r.onload = function() {
-						a.ctx.drawImage(r, Math.round(e.x * n), Math.round(e.y * n), Math.round(e.width * n), Math.round(e.height * n)), o(!0)
-					}, r.src = t
-				}
-			})
-		}
-  
-		function o(e) {
-			var t = e.devicePixelRatio || 1;
-			localStorage.metaDescription = e.meta_description;
-			var o = a.canvas.toDataURL();
-			if (1 == screenshot.domcaptureFullScreen) return screenshot.domcaptureFullScreen = !1, screenshot.domElementCapture(o), !1;
-			var n, r = "screencapture.png";
-			if (1 == scrollToCrop) {
-				var s = null;
-				scrollToCrop = !1, localStorage.imgdata = "", s || (s = document.createElement("canvas"), document.body.appendChild(s));
-				var c = new Image;
-				c.onload = function() {
-					s.width = Math.round(e.w * t), s.height = Math.round(e.h * t);
-					var o = s.getContext("2d");
-					o.drawImage(c, Math.round(e.x * t), Math.round(e.y * t), Math.round(e.w * t), Math.round(e.h * t), 0, 0, Math.round(e.w * t), Math.round(e.h * t));
-					var a = s.toDataURL("image/png");
-					r = Date.now() + "screencapture." + localStorage.format, screenshot.createBlob(a, r, function() {
-						localStorage.imgdata = screenshot.path + r, screenshot.createEditPage("edit")
-					})
-				}, c.src = o
-			}
-			screenshot.createBlob(o, r, function() {
-				localStorage.imgdata = screenshot.path + r, 1 == saveScroll ? saveScroll = !1 : screenshot.createEditPage(n)
-			})
-		}
-		var a = {};
-		screenshot.generated || (screenshot.generated = !0, chrome.extension.onRequest.addListener(function(e, a, n) {
-			var r = {
-				capturePage: t,
-				openPage: o
-			} [e.msg];
-			r && r(e, a, n)
-		})), chrome.tabs.getSelected(null, function(t) {
-			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.js"
-			}, function() {
-				chrome.tabs.executeScript(t.id, {
-					file: "/js/capture-plugin/js/page.js"
-				}, function() {
-					e(t)
-				})
-			})
-		})
-	},
+
 	setScreenName: function(e) {
 		localStorage.screenname = "screenshot-by-voila", chrome.tabs.getSelected(null, function(t) {
 			var o = {
@@ -234,6 +159,80 @@ var screenshot = {
 		var r = t + "-" + o + "-" + a + n;
 		return r
 	},
+	captureEntire: function() {
+		function e(e) {
+			screenshot.newwholepage = !0, a = {}, 1 == scrollToCrop ? chrome.tabs.sendRequest(e.id, {
+				msg: "scrollPage",
+				scrollToCrop: !0,
+				xs: xs,
+				ys: ys,
+				ws: ws,
+				hs: hs
+			}, function() {}) : chrome.tabs.sendRequest(e.id, {
+				msg: "scrollPage",
+				scrollToCrop: !1,
+				hideFixedElements: "true" === localStorage.hideFixedElements
+			}, function() {})
+		}
+  
+		function t(e, t, o) {
+			var n = e.devicePixelRatio || 1;
+			localStorage.metaDescription = e.meta_description;
+			var r = null;
+			screenshot.newwholepage && (screenshot.newwholepage = !1, r || (r = document.createElement("canvas")), r.width = Math.round(e.totalWidth * n), r.height = Math.round(e.totalHeight * n), a.canvas = r, a.ctx = r.getContext("2d")), chrome.tabs.captureVisibleTab(null, {
+				format: "png",
+				quality: 100
+			}, function(t) {
+				if (t) {
+					var r = new Image;
+					r.onload = function() {
+						a.ctx.drawImage(r, Math.round(e.x * n), Math.round(e.y * n), Math.round(e.width * n), Math.round(e.height * n)), o(!0)
+					}, r.src = t
+				}
+			})
+		}
+  
+		function o(e) {
+			var t = e.devicePixelRatio || 1;
+			localStorage.metaDescription = e.meta_description;
+			var o = a.canvas.toDataURL();
+			if (1 == screenshot.domcaptureFullScreen) return screenshot.domcaptureFullScreen = !1, screenshot.domElementCapture(o), !1;
+			var n, r = "screencapture.png";
+			if (1 == scrollToCrop) {
+				var s = null;
+				scrollToCrop = !1, localStorage.imgdata = "", s || (s = document.createElement("canvas"), document.body.appendChild(s));
+				var c = new Image;
+				c.onload = function() {
+					s.width = Math.round(e.w * t), s.height = Math.round(e.h * t);
+					var o = s.getContext("2d");
+					o.drawImage(c, Math.round(e.x * t), Math.round(e.y * t), Math.round(e.w * t), Math.round(e.h * t), 0, 0, Math.round(e.w * t), Math.round(e.h * t));
+					var a = s.toDataURL("image/png");
+					r = Date.now() + "screencapture." + localStorage.format, screenshot.createBlob(a, r, function() {
+						localStorage.imgdata = screenshot.path + r, screenshot.createEditPage("edit")
+					})
+				}, c.src = o
+			}
+			screenshot.createBlob(o, r, function() {
+				localStorage.imgdata = screenshot.path + r, 
+				1 == saveScroll ? saveScroll = !1 : screenshot.createEditPage(n)
+				
+			})
+		}
+		var a = {};
+		screenshot.generated || (screenshot.generated = !0, chrome.extension.onRequest.addListener(function(e, a, n) {
+			var r = {
+				capturePage: t,
+				openPage: o
+			} [e.msg];
+			r && r(e, a, n)
+		})), chrome.tabs.getSelected(null, function(t) {
+			chrome.tabs.executeScript(t.id, {
+				file: "/js/capture-plugin/js/page.js"
+			}, function() {
+				e(t)
+			})
+		})
+	},
 	scrollSelected: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.insertCSS(null, {
@@ -254,6 +253,7 @@ var screenshot = {
 					}, function() {})
 				})
 			})
+			selectedTabId = e.id;
 		})
 	},
 	destroyscrollSelected: function() {
@@ -262,20 +262,17 @@ var screenshot = {
 				file: "/js/capture-plugin/css/jquery.Jcrop.css"
 			}), chrome.tabs.insertCSS(null, {
 				file: "/js/capture-plugin/css/stylecrop.css"
-			}), chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.js"
+			}), 
+			chrome.tabs.executeScript(null, {
+				file: "/js/capture-plugin/js/jquery.Jcrop.js"
 			}, function() {
 				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/jquery.Jcrop.js"
+					file: "/js/capture-plugin/js/scrolltoCrop.js"
 				}, function() {
-					chrome.tabs.executeScript(null, {
-						file: "/js/capture-plugin/js/scrolltoCrop.js"
-					}, function() {
-						chrome.tabs.sendRequest(e.id, {
-							type: "destroy_selected",
-							flashSound: localStorage.flashSound
-						}, function() {})
-					})
+					chrome.tabs.sendRequest(e.id, {
+						type: "destroy_selected",
+						flashSound: localStorage.flashSound
+					}, function() {})
 				})
 			})
 		})
@@ -283,32 +280,24 @@ var screenshot = {
 	domcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.js"
+				file: "/js/capture-plugin/js/contentscript.js"
 			}, function() {
-				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/contentscript.js"
-				}, function() {
-					chrome.tabs.sendRequest(e.id, {
-						type: "start",
-						flashSound: localStorage.flashSound
-					}, function() {})
-				})
+				chrome.tabs.sendRequest(e.id, {
+					type: "start",
+					flashSound: localStorage.flashSound
+				}, function() {})
 			})
 		})
 	},
 	destroydomcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.js"
+				file: "/js/capture-plugin/js/contentscript.js"
 			}, function() {
-				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/contentscript.js"
-				}, function() {
-					chrome.tabs.sendRequest(e.id, {
-						type: "destroy",
-						flashSound: localStorage.flashSound
-					}, function() {})
-				})
+				chrome.tabs.sendRequest(e.id, {
+					type: "destroy",
+					flashSound: localStorage.flashSound
+				}, function() {})
 			})
 		})
 	},
@@ -334,6 +323,18 @@ var screenshot = {
 		for (o = matches.length - 1; o >= 0; o--)
 			if (t = new RegExp("^" + matches[o].replace(/\*/g, ".*") + "$"), t.test(e)) return !0;
 		return !1
+	},
+	insertImage: function(e){
+		chrome.tabs.getSelected(null, function(tab) {
+			chrome.tabs.sendRequest(
+				selectedTabId,
+				{
+					callFunction: "insertImage",
+					url : e.url
+				}
+			);
+			chrome.tabs.update(selectedTabId, {highlighted: true});
+		});
 	}
 };
 chrome.tabs.onUpdated.addListener(function(e, t, o) {
@@ -368,7 +369,10 @@ else if ("up" == e.type) {
 	thisCrop, matches = ["http://*/*", "https://*/*", "ftp://*/*", "file://*/*"],
 	noMatches = [/^https?:\/\/chrome.google.com\/.*$/];
   chrome.extension.onRequest.addListener(function(e) {
-	//"cap" == e.operation && (xs = e.xs, ys = e.ys, ws = e.ws, hs = e.hs), "voilaScroll" == e.operation && (voilaScroll = !0, scrollToCrop = !0, screenshot.captureEntire()), "saveScroll" == e.operation && (scrollToCrop = !0, saveScroll = !0, screenshot.captureEntire()), "Crop" == e.operation && (thisCrop = e.parameter)
+	"cap" == e.operation && (xs = e.xs, ys = e.ys, ws = e.ws, hs = e.hs), 
+	"voilaScroll" == e.operation && (voilaScroll = !0, scrollToCrop = !0, screenshot.captureEntire()), 
+	"saveScroll" == e.operation && (scrollToCrop = !0, saveScroll = !0, screenshot.captureEntire()), 
+	"Crop" == e.operation && (thisCrop = e.parameter)
   }), localStorage.flashSound = localStorage.flashSound || !1, localStorage.firstuse = localStorage.firstuse || !0, localStorage.format = localStorage.format || "png", localStorage.imageQuality = localStorage.imageQuality || "92", localStorage.hideFixedElements = localStorage.hideFixedElements || "false", localStorage.fileNamePattern = "screen_capture {date}_{time}", localStorage.saveCropPosition = localStorage.saveCropPosition || "false", localStorage.cropPosition = localStorage.cropPosition || JSON.stringify({
 	x: 50,
 	y: 50,

@@ -1,6 +1,31 @@
 확장에서 타이핑하면 페이지 자체의 단축키(리스너)와 겹침
-페이지 자체의 style이 확장에서 쓴 글의 style과 겹침
+페이지 자체의 style이 확장에서 쓴 글의 style과 겹침(버튼)
 확장프로그램이 페이지를 가림
+
+
+
+
+페이징 기능
+
+
+html clean
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 이미지 resize
 확장프로그램 height 조절
@@ -13,3 +38,8 @@ https://alex-d.github.io/Trumbowyg/demos/#plugins-resizimg
 image resize api
 https://imageresizer.io/demo
 
+html to pdf api
+https://app.swaggerhub.com/apis-docs/api2pdf/api2pdf/1.0.0#/WkHtmlToPdfHtmlToPdfRequest
+
+https://www.sejda.com/developers#html-pdf-api
+https://www.sejda.com/html-pdf-api
