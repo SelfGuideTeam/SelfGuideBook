@@ -2,7 +2,7 @@
   <div id="app">
     <img src="./assets/logo.png" />
     <router-view />
-    <login message="하하하하하"></login><
+    <login message="하하하하하"></login>
     <router-view></router-view>
   </div>
 </template>
