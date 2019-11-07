@@ -53,7 +53,7 @@ $('#my-editor').trumbowyg({
       hasIcon: true,
       fn: function(){
         if($('#mySidebar').css('width')=='350px'){
-          $('#mySidebar').css('width', '715px');
+          $('#mySidebar').css('width', '870px');
         }else{
           $('#mySidebar').css('width', '350px');
         }
@@ -70,7 +70,7 @@ $('#my-editor').trumbowyg({
         pages.toArray().forEach(function(element){
           html+=element;
         });
-        printHtmlToPdf(html);
+        printHtmlToPdf('<html><head><link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&display=swap&subset=korean" rel="stylesheet"></head>'+'<body>'+html+'</body>'+'</html>');
       }
     },
     refreshEditor : {
@@ -162,6 +162,7 @@ $('#btn2').click(function(){
 })
 
 $('#btn3').click(deletePage);
+$('#sendMessage').click(ajaxTest)
 
 $('#createPage').click(createPage);
 $('#pageNaviii').click(navi);
@@ -215,24 +216,23 @@ function printHtmlToPdf(html) {
     "inlinePdf": false
   };
   $.ajax({
-      url: endpoint,
-      method: "POST",
-      dataType: "json",
-      crossDomain: true,
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify(payload),
-      cache: false,
-      beforeSend: function (xhr) {
-          /* Authorization header */
-          xhr.setRequestHeader("Authorization", apikey);
-      },
-      success: function (data) {
-        console.log(data.pdf); //this is the url to the pdf
-        document.getElementById('my_iframe').src = data.pdf;
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        
-      }
+    url: endpoint,
+    method: "POST",
+    dataType: "json",
+    crossDomain: true,
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify(payload),
+    cache: false,
+    beforeSend: function (xhr) {
+        /* Authorization header */
+        xhr.setRequestHeader("Authorization", apikey);
+    },
+    success: function (data) {
+      console.log(data.pdf); //this is the url to the pdf
+      document.getElementById('my_iframe').src = data.pdf;
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    }
   });
 }
 
@@ -292,6 +292,68 @@ function deletePage(){
 }
 
 function savePages(){
+
+}
+
+function ajaxTest(){
+  // 입력값을 변수에 담고 문자열 형태로 변환
+  var data = {'email' : $('#my-editor').html()};
+  data = JSON.stringify(data);
+
+  // content-type을 설정하고 데이터 송신
+  var xhr = new XMLHttpRequest();
+  
+  xhr.open('POST', 'http://192.168.6.18:3000/board2/test');
+  xhr.setRequestHeader('Content-type', "application/json");
+  xhr.send(data);
+  
+
+  // 데이터 수신이 완료되면 표시
+  xhr.addEventListener('load', function(){
+    console.log(xhr);
+    var result = JSON.parse(xhr.responseText);
+    console.log(result);
+    $('#my-editor').append('<p>'+result.result+'</p>');
+    //console.log(xhr.responseText);
+  });
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {   // (수신 완료, XMLHttpRequest.DONE : 4)
+        if (xhr.status === 200) { // (통신 성공)
+            console.log(xhr.responseText);
+        } else {
+            console.log('서버 에러 발생');
+        }
+    } else { // 통신 완료 전
+        console.log('통신중...');
+    }
+  }
+
+
+  xhr.addEventListener("progress", updateProgress);
+  function updateProgress (oEvent) {
+    if (oEvent.lengthComputable) {
+      var percentComplete = oEvent.loaded / oEvent.total * 100;
+      console.log(percentComplete)
+      // ...
+    } else {
+      // Unable to compute progress information since the total size is unknown
+    }
+  }
 
 }
 

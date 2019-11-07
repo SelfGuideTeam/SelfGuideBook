@@ -12,7 +12,10 @@ html clean
 
 
 
-
+한글 폰트를 쓰려면 pdf html에 포함해주어야함
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Spicy+Rice" rel="stylesheet">
+  </head>
 
 
 
@@ -43,3 +46,12 @@ https://app.swaggerhub.com/apis-docs/api2pdf/api2pdf/1.0.0#/WkHtmlToPdfHtmlToPdf
 
 https://www.sejda.com/developers#html-pdf-api
 https://www.sejda.com/html-pdf-api
+
+https://www.api2pdf.com/using-custom-fonts-with-wkhtmltopdf-and-headless-chrome/
+
+
+
+
+필요한 이미지
+확장프로그램 메인아이콘 128X128
+SVG이미지 아이콘 - 선택캡처, 전체캡처, 영역캡처, PDF저장, 페이지삭제, 페이지추가, 에디터초기화
