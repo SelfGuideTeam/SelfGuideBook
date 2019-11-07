@@ -303,7 +303,7 @@ function ajaxTest(){
   // content-type을 설정하고 데이터 송신
   var xhr = new XMLHttpRequest();
   
-  xhr.open('POST', 'https://192.168.6.18:3000/board2/test');
+  xhr.open('POST', 'https:/192.168.6.44:3002/ajaxTest/test');
   //https로 해야되는듯?
   xhr.setRequestHeader('Content-type', "application/json");
   xhr.send(data);
