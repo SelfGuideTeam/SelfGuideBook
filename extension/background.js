@@ -1,3 +1,18 @@
+// var config = {
+// 	apiKey: '<YOUR_API_KEY>',
+// 	databaseURL: '<YOUR_DATABASE_URL>',
+// 	storageBucket: '<YOUR_STORAGE_BUCKET_NAME>'
+//   };
+// firebase.initializeApp(config);
+
+// function initApp() {
+// 	// Listen for auth state changes.
+// 	firebase.auth().onAuthStateChanged(function(user) {
+// 		console.log('User state change detected from the Background script of the Chrome Extension:', user);
+// 	});
+// }
+
+
 chrome.tabs.onUpdated.addListener(function(tabId) {
 	chrome.pageAction.show(tabId);
 });
@@ -15,6 +30,14 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
 	if(message=='sidebar'){
+		// chrome.windows.create({
+		// 	url: chrome.runtime.getURL("credentials.html"),
+		// 	type: "popup"
+		//   }, function(win) {
+		// 	// win represents the Window object from windows API
+		// 	// Do something after opening
+		//   });
+
 		chrome.tabs.executeScript(null, {file: "editorScript.js"}, null);
 	}else if(message=='selectCapture'){
 		localStorage.firstuse = !1, screenshot.destroydomcapture(), screenshot.scrollSelected()
@@ -24,7 +47,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}else if(message=='domCapture'){
 		alert('dom')
 		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.domcapture()
+	}else if(request.contentScriptQuery == 'fetchUrl') {
+        // WARNING: SECURITY PROBLEM - a malicious web page may abuse
+        // the message handler to get access to arbitrary cross-origin
+        // resources.
+        fetch(request.url)
+            .then(response => response.text())
+            .then(text => sendResponse(text))
+            .catch(error => catchError())
+			return true;  // Will respond asynchronously.
+	  	}
+
+	function catchError(){
+		console.log('errr')
 	}
+
+
+
 });
 
 
@@ -388,5 +427,6 @@ else if ("up" == e.type) {
 	w: 400,
 	h: 200
   }), window.onload = function() {
+	initApp();
 	screenshot.init()
   };
