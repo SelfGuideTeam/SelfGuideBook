@@ -4,7 +4,7 @@
 	"description": "Edit your own guide book",
 	"version": "0.3",
 	"background": {
-	  "scripts": ["background.js"]
+		"page":"background.html"
     },
 	"page_action": {
 		"default_icon": "acme.png",
@@ -37,19 +37,22 @@
 				"editorHTML.js"
 			],
 			"css": ["js/Trumbowyg-master/dist/ui/trumbowyg.min.css",
-					"editorCSS.css"]
+					"editorCSS.css"],
+			"all_frames": true
 		}
 	],
     "web_accessible_resources": [
         "*"
-    ],
-    "content_security_policy": "script-src 'self' 'sha256-IThiKMnsg0UHaLmP7sJxZpd/ohvINImwjxFJyxGFSlk='; object-src 'self'",
+	],
+	"content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+    "__content_security_policy": "script-src 'self' 'sha256-IThiKMnsg0UHaLmP7sJxZpd/ohvINImwjxFJyxGFSlk='; object-src 'self'",
 	"permissions": [
 		"tabs",
 		"storage", 
 		"http://*/*", "https://*/*"
 		,
 		"downloads", 
-		"unlimitedStorage", "<all_urls>"
+		"unlimitedStorage", "<all_urls>",
+		"identity"
 	]
 }

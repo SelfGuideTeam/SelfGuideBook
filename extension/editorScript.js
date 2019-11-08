@@ -296,73 +296,92 @@ function savePages(){
 }
 
 function ajaxTest(){
-  // 입력값을 변수에 담고 문자열 형태로 변환
-  var data = {'email' : $('#my-editor').html()};
-  data = JSON.stringify(data);
 
-  // content-type을 설정하고 데이터 송신
-  var xhr = new XMLHttpRequest();
-  
-  xhr.open('POST', 'https:/192.168.6.44:3002/ajaxTest/test');
-  //https로 해야되는듯?
-  xhr.setRequestHeader('Content-type', "application/json");
-  xhr.send(data);
-  
+  chrome.runtime.sendMessage(
+    {contentScriptQuery: 'fetchUrl',
+     url: 'http:/192.168.6.18:3000/board2/test/test' },
+     response => parsePrice(response));
 
-  // 데이터 수신이 완료되면 표시
-  xhr.addEventListener('load', function(){
-    console.log(xhr);
-    var result = JSON.parse(xhr.responseText);
-    console.log(result);
-    $('#my-editor').append('<p>'+result.result+'</p>');
-    //console.log(xhr.responseText);
-  });
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {   // (수신 완료, XMLHttpRequest.DONE : 4)
-        if (xhr.status === 200) { // (통신 성공)
-            console.log(xhr.responseText);
-        } else {
-            console.log('서버 에러 발생');
-        }
-    } else { // 통신 완료 전
-        console.log('통신중...');
+    function parsePrice(text){
+      console.log(text)
     }
-  }
+
+    // +
+    // encodeURIComponent(request.itemId)
+
+  // // 입력값을 변수에 담고 문자열 형태로 변환
+  // var data = {'email' : '"'+$('#my-editor').html()+'"'};
+  // data = JSON.stringify(data);
 
 
-  xhr.addEventListener("progress", updateProgress);
-  function updateProgress (oEvent) {
-    if (oEvent.lengthComputable) {
-      var percentComplete = oEvent.loaded / oEvent.total * 100;
-      console.log(percentComplete)
-      // ...
-    } else {
-      // Unable to compute progress information since the total size is unknown
-    }
-  }
+
+  
+  // // content-type을 설정하고 데이터 송신
+  // var xhr = new XMLHttpRequest();
+  
+  // xhr.open('POST', 'http:/192.168.6.44:3002/ajaxTest/test');
+  // //https로 해야되는듯?
+  // xhr.setRequestHeader('Content-type', "application/json");
+  // xhr.send(data);
+  
+
+  // // 데이터 수신이 완료되면 표시
+  // xhr.addEventListener('load', function(){
+  //   console.log(xhr);
+  //   var result = JSON.parse(xhr.responseText);
+  //   console.log(result);
+  //   $('#my-editor').append('<p>'+result.result+'</p>');
+  //   //console.log(xhr.responseText);
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  // xhr.onreadystatechange = function() {
+  //   if (xhr.readyState === 4) {   // (수신 완료, XMLHttpRequest.DONE : 4)
+  //       if (xhr.status === 200) { // (통신 성공)
+  //           console.log(xhr.responseText);
+  //       } else {
+  //           console.log('서버 에러 발생');
+  //       }
+  //   } else { // 통신 완료 전
+  //       console.log('통신중...');
+  //   }
+  // }
+
+
+  // xhr.addEventListener("progress", updateProgress);
+  // function updateProgress (oEvent) {
+  //   if (oEvent.lengthComputable) {
+  //     var percentComplete = oEvent.loaded / oEvent.total * 100;
+  //     console.log(percentComplete)
+  //     // ...
+  //   } else {
+  //     // Unable to compute progress information since the total size is unknown
+  //   }
+  // }
 
 }
 
 
 
 
-
-
+$('#btn10').click(ajaxMacro);
+function ajaxMacro(){
+  var ss = setInterval(function(){
+    $('#sendMessage').trigger('click')
+  },10000)
+}
 
 
 
