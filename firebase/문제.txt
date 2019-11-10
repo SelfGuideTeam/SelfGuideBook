@@ -1,0 +1,67 @@
+확장에서 구글 로그인 리다이렉트 방법으로 사용이 안됨 (accounts.google.com에서 연결을 거부했습니다.)
+ => 팝업은 됨
+
+
+If the deploy is successful, this is likely a caching issue.
+
+You can try pressing cmd+shift+R (ctrl+shift+R on Windows) to do a hard refresh of the cache.
+
+
+https://lng1982.tistory.com/227
+http://blog.302chanwoo.com/2016/08/postmessage/
+https://blog.naver.com/PostView.nhn?blogId=varkiry05&logNo=221204222494&parentCategoryNo=&categoryNo=107&viewDate=&isShowPopularPosts=false&from=postView
+https://mateeth.tistory.com/6?category=755404
+https://fkkmemi.github.io/nuxt/nuxt-012-firebase-auth-token/
+
+
+
+
+https://console.firebase.google.com/u/0/project/ajaxtest-882ac/hosting/main?hl=ko
+https://firebase.google.com/docs/auth/web/google-signin?hl=ko
+https://console.firebase.google.com/u/0/project/ajaxtest-882ac/authentication/providers?hl=ko
+https://firebase.google.com/docs/auth/admin/manage-sessions?hl=ko
+https://firebase.google.com/docs/auth/web/auth-state-persistence?hl=ko
+https://firebase.google.com/docs/auth/web/manage-users?hl=ko
+https://firebase.google.com/docs/auth/admin/verify-id-tokens?hl=ko //토큰 검증
+https://firebase.google.com/docs/database/rest/auth?hl=ko
+
+
+
+https://www.isrgrajan.com/how-to-download-uploaded-files-from-google-firebase-hosting.html //pull
+
+
+
+
+
+
+-구조
+    1. 확장에서 로그인 -> 서버로 구글로그인 요청
+    2. 로그인후 받은 토큰 background에 저장
+    3. 확장이 발급받은 토큰과, 요청메세지를 서버에 보냄
+    4. 서버는 받은 토큰을 검증하고 유효하면 요청받은 메세지(가이드북 불러오기 등)를 처리하고 다시 확장으로 보냄
+
+
+-디자인
+    *뷰
+        로그인 -> 로그인되면 상단메뉴 변화
+        가이드북 리스트
+        ...
+    *버튼
+        로그인 로그아웃
+        저장버튼
+        불러오기버튼
+        ...
+
+
+-생각
+    *로컬저장 없애고 서버로만 저장하는 형태
+        지속적인 요청 막기
+
+
+
+
+
+
+
+
+
