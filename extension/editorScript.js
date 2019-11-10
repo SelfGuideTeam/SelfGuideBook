@@ -3,7 +3,33 @@
 //     bgScreencapture = bg.screenshot,
 //     option_icon_state = !1;
 
+window.addEventListener("message", processFn, false);	
+
+
+$(document).ready(function(){
+  setTimeout(function(){
+    console.log($('#firebase').get(0).contentDocument)
   
+  }, 3000)
+})
+
+function processFn(event) {
+  var bla = event.data;
+  alert(bla);
+  console.log(bla)
+
+}
+
+
+function sendChildMessage() {	
+  document.getElementById("ifr").contentWindow.postMessage('sent message from parent.html', '*');
+}	
+
+
+
+
+
+
 $('#my-editor').trumbowyg({
   resetCss: true,
   removeformatPasted: true,
@@ -154,7 +180,7 @@ function getTotalContentHeight(){
 $('#btn2').click(function(){
   chrome.storage.sync.set({editorPages: null}, function() {
     //console.log('Value is set to ' + $('#my-editor').html());
-  });
+});
 
   
 
@@ -166,6 +192,8 @@ $('#sendMessage').click(ajaxTest)
 
 $('#createPage').click(createPage);
 $('#pageNaviii').click(navi);
+
+
 
 //저장된 데이터를 가져와서 입력
 //initPages();
