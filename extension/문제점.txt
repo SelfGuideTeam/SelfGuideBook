@@ -67,7 +67,7 @@ https://ahribori.com/article/5a2032f5014bc70f303f77b4
 
 
 
-https://chrome.google.com/webstore/developer/dashboard
+c
 
 
 
@@ -82,3 +82,4 @@ https://chrome.google.com/webstore/developer/dashboard
 
 
 
+https://gomdoreepooh.github.io/notes/ajax-by-nodejs

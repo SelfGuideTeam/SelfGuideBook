@@ -6,12 +6,6 @@
 window.addEventListener("message", processFn, false);	
 
 
-$(document).ready(function(){
-  setTimeout(function(){
-    console.log($('#firebase').get(0).contentDocument)
-  
-  }, 3000)
-})
 
 function processFn(event) {
   var bla = event.data;
@@ -21,13 +15,9 @@ function processFn(event) {
 }
 
 
-function sendChildMessage() {	
-  document.getElementById("ifr").contentWindow.postMessage('sent message from parent.html', '*');
-}	
-
-
-
-
+// function sendChildMessage() {	
+//   document.getElementById("ifr").contentWindow.postMessage('sent message from parent.html', '*');
+// }	
 
 
 $('#my-editor').trumbowyg({
@@ -413,9 +403,57 @@ function ajaxMacro(){
 
 
 
+$('#btn110').click(ajaxTest2)
+
+function ajaxTest2(){
+    // 입력값을 변수에 담고 문자열 형태로 변환
+    var data = {'email' : 'data'};
+    data = JSON.stringify(data);
+  
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/board2/insertFromExtension');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+    
+    // 데이터 수신이 완료되면 표시
+    xhr.addEventListener('load', function(){
+      console.log(xhr)
+      console.log(xhr.responseText);
+      $('#my-editor').html(xhr.responseText)
+    });
 
 
 
+
+  // var payload = {
+  //   "__html": "<meta charset='UTF-8'>"+'html',
+  //   "html" : 'hhttmmll',
+  //   "inlinePdf": false
+  // };
+  // $.ajax({
+  //   url: 'https://ajaxtest-882ac.firebaseapp.com/board2/insertFromExtension',
+  //   method: "POST",
+  //   dataType: "json",
+  //   crossDomain: true,
+  //   contentType: "application/json; charset=utf-8",
+  //   data: JSON.stringify(payload),
+  //   cache: false,
+  //   beforeSend: function (xhr) {
+  //     alert('전송전')
+  //       /* Authorization header */
+  //       //xhr.setRequestHeader("Authorization", apikey);
+  //   },
+  //   success: function (data) {
+  //     alert('success')
+  //     console.log(data); //this is the url to the pdf
+  //     //document.getElementById('my_iframe').src = data.pdf;
+  //   },
+  //   error: function (jqXHR, textStatus, errorThrown) {
+  //     alert('error')
+  //   }
+  // });
+}
 
 
 

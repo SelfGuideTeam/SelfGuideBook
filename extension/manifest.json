@@ -2,7 +2,7 @@
 	"name": "GuideEditor",
 	"manifest_version": 2,
 	"description": "Edit your own guide book",
-	"version": "0.3",
+	"version": "0.3.1",
 	"background": {
 		"page":"background.html"
     },

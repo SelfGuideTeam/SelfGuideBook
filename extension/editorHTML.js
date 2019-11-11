@@ -35,6 +35,7 @@ function toggleSidebar() {
 		<input type='button' id='btn2' value='스토리지삭제'>\
 		<input type='button' id='btn3' value='페이지삭제'>\
 		<input type='button' id='btn10' value='요청'>\
+		<input type='button' id='btn110' value='파이어베이스 요청'>\
 		<input type='button' id='sendMessage' value='메세지 보내기'>\
 		<div id='my-editor'></div>\
 		";
