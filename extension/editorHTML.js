@@ -30,7 +30,7 @@ function toggleSidebar() {
 		<li class='active'><a href='#' >1</a></li>\
 		<li id='createPage'><a href='#'>+</a></li>\
 		</ul>\
-		<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/'></iframe>\
+		<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google'></iframe>\
 		<input type='button' id='btn1' value='총길이'>\
 		<input type='button' id='btn2' value='스토리지삭제'>\
 		<input type='button' id='btn3' value='페이지삭제'>\

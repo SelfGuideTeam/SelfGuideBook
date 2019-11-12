@@ -12,7 +12,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         //alert('loginGG')
         // User is signed in.
     } else {
-        alert('not login')
+        //alert('not login')
         // No user is signed in.
     }
 });
@@ -28,6 +28,7 @@ function redirectGoogleLogin(){
         // The signed-in user info.
         var user = result.user;
         // ...
+        return;
       }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -45,6 +46,7 @@ function redirectGoogleLogin(){
 function googleLogout(){
   firebase.auth().signOut().then(function() {
   // Sign-out successful.
+  return;
   }).catch(function(error) {
   // An error happened.
   });

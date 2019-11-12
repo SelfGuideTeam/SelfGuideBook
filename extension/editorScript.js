@@ -9,9 +9,15 @@ window.addEventListener("message", processFn, false);
 
 function processFn(event) {
   var bla = event.data;
-  alert(bla);
-  console.log(bla)
-
+  if(bla.stsTokenManager.accessToken != undefined){
+    chrome.storage.sync.set({loginToken: bla}, function() {
+      chrome.storage.sync.get(['loginToken'], function (result) {
+        console.log(result)
+        console.log(result.loginToken.stsTokenManager.accessToken)
+      })
+    });
+    //console.log(bla)
+  }
 }
 
 
@@ -323,6 +329,82 @@ function ajaxTest(){
     function parsePrice(text){
       console.log(text)
     }
+}
+
+
+
+
+$('#btn10').click(ajaxMacro);
+function ajaxMacro(){
+  var ss = setInterval(function(){
+    $('#sendMessage').trigger('click')
+  },10000)
+}
+
+
+
+$('#btn110').click(ajaxTest2)
+
+function ajaxTest2(accessToken, htmlCode){
+  // 입력값을 변수에 담고 문자열 형태로 변환
+  var accessToken = '';
+  chrome.storage.sync.get(['loginToken'], function (result) {
+    accessToken = result.loginToken.stsTokenManager.accessToken
+    //console.log(result.loginToken.stsTokenManager.accessToken);
+    var html ='';
+    pages.toArray().forEach(function(element){
+      html+=element;
+    });
+    var data = {'accessToken' : accessToken,
+                'htmlCode' : html };
+    data = JSON.stringify(data);
+  
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+    
+    // 데이터 수신이 완료되면 표시
+    xhr.addEventListener('load', function(){
+      console.log(xhr)
+      console.log(xhr.responseText);
+      $('#my-editor').html(xhr.responseText)
+    });
+  })
+}
+
+
+
+
+  // var payload = {
+  //   "__html": "<meta charset='UTF-8'>"+'html',
+  //   "html" : 'hhttmmll',
+  //   "inlinePdf": false
+  // };
+  // $.ajax({
+  //   url: 'https://ajaxtest-882ac.firebaseapp.com/board2/insertFromExtension',
+  //   method: "POST",
+  //   dataType: "json",
+  //   crossDomain: true,
+  //   contentType: "application/json; charset=utf-8",
+  //   data: JSON.stringify(payload),
+  //   cache: false,
+  //   beforeSend: function (xhr) {
+  //     alert('전송전')
+  //       /* Authorization header */
+  //       //xhr.setRequestHeader("Authorization", apikey);
+  //   },
+  //   success: function (data) {
+  //     alert('success')
+  //     console.log(data); //this is the url to the pdf
+  //     //document.getElementById('my_iframe').src = data.pdf;
+  //   },
+  //   error: function (jqXHR, textStatus, errorThrown) {
+  //     alert('error')
+  //   }
+  // });
+
 
     // +
     // encodeURIComponent(request.itemId)
@@ -388,78 +470,6 @@ function ajaxTest(){
   //     // Unable to compute progress information since the total size is unknown
   //   }
   // }
-
-}
-
-
-
-
-$('#btn10').click(ajaxMacro);
-function ajaxMacro(){
-  var ss = setInterval(function(){
-    $('#sendMessage').trigger('click')
-  },10000)
-}
-
-
-
-$('#btn110').click(ajaxTest2)
-
-function ajaxTest2(){
-    // 입력값을 변수에 담고 문자열 형태로 변환
-    var data = {'email' : 'data'};
-    data = JSON.stringify(data);
-  
-    // content-type을 설정하고 데이터 송신
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/board2/insertFromExtension');
-    xhr.setRequestHeader('Content-type', "application/json");
-    xhr.send(data);
-    
-    // 데이터 수신이 완료되면 표시
-    xhr.addEventListener('load', function(){
-      console.log(xhr)
-      console.log(xhr.responseText);
-      $('#my-editor').html(xhr.responseText)
-    });
-
-
-
-
-  // var payload = {
-  //   "__html": "<meta charset='UTF-8'>"+'html',
-  //   "html" : 'hhttmmll',
-  //   "inlinePdf": false
-  // };
-  // $.ajax({
-  //   url: 'https://ajaxtest-882ac.firebaseapp.com/board2/insertFromExtension',
-  //   method: "POST",
-  //   dataType: "json",
-  //   crossDomain: true,
-  //   contentType: "application/json; charset=utf-8",
-  //   data: JSON.stringify(payload),
-  //   cache: false,
-  //   beforeSend: function (xhr) {
-  //     alert('전송전')
-  //       /* Authorization header */
-  //       //xhr.setRequestHeader("Authorization", apikey);
-  //   },
-  //   success: function (data) {
-  //     alert('success')
-  //     console.log(data); //this is the url to the pdf
-  //     //document.getElementById('my_iframe').src = data.pdf;
-  //   },
-  //   error: function (jqXHR, textStatus, errorThrown) {
-  //     alert('error')
-  //   }
-  // });
-}
-
-
-
-
-
-
 
 
 
