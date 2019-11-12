@@ -22,9 +22,137 @@ function toggleSidebar() {
 	}
 	else {
 		var sidebar = document.createElement('div');
-
+		var extViewCss = chrome.runtime.getURL('/view/assets/bootstrap3.3.6.css');
+		var extViewCss_pcc = chrome.runtime.getURL('/view/assets/pcss3mm.css');
+		var extViewJs = chrome.runtime.getURL('/view/js/bootstrap3.3.6.js');
+		$('head').append($('<link>')
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href", extViewCss_pcc));
+		$('head').append($('<script>')
+			.attr("type","text/javascript")
+			.attr("charset","utf-8")
+			.attr("src", extViewJs));
+		
+		// <nav class='navbar navbar-default'>\
+		// 	<div class='container-fluid'>\
+		// 		<div class='navbar-header'>\
+		// 		<a class='navbar-brand' href='#'>SPLessons</a>\
+		// 		</div>\
+		// 		<ul class='nav navbar-nav'>\
+		// 		<li><a href='#'>Home</a></li>\
+		// 		<li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' href='#' >Web Designing <span class='caret'></span></a>\
+		// 			<ul class='dropdown-menu'>\
+		// 			<li><a href='#'>HTML</a></li>\
+		// 			<li><a href='#'>JavaScript</a></li>\
+		// 			<li><a href='#'>Bootstrap</a></li>\
+		// 			</ul>\
+		// 		</li>\
+		// 		<li><a href='#'>Web Development</a></li>\
+		// 		<li><a href='#'>Databases</a></li>\
+		// 		</ul>\
+		// 		<ul class='nav navbar-nav navbar-right'>\
+		// 		<li><a href='#'><span class='glyphicon glyphicon-user'></span> Sign Up</a></li>\
+		// 		<li><a href='#'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>\
+		// 		</ul>\
+		// 	</div>\
+		// </nav>\
 		sidebar.id = "mySidebar";
 		sidebar.innerHTML = "\
+		<ul id='pcss3mm' class='pcss3mm'>\
+				<!-- home -->\
+				<li>\
+					<a href='#'><i class='icon-home'></i>Home</a>\
+				</li>\
+				<!--/ home -->\
+				<!-- about -->\
+				<li class='dropdown'>\
+					<a href='#' class='active'><i class='icon-star'></i>About</a><b></b>\
+					<div class='grid-container3'>\
+						<ul>\
+							<li class='dropdown'>\
+								<a href='#' class='active'><i class='icon-bullhorn'></i>News</a>\
+								<div class='grid-container3'>\
+									<ul>\
+										<li><a href='#'><i class='icon-ok'></i>Company</a></li>\
+										<li><a href='#'><i class='icon-ok'></i>Products</a></li>\
+										<li><a href='#'><i class='icon-ok'></i>Specials</a></li>\
+									</ul>\
+								</div>\
+							</li>\
+							<li><a href='#'><i class='icon-globe'></i>Mission</a></li>\
+							<li class='dropdown'>\
+								<a href='#'><i class='icon-group'></i><b></b>Our Team</a>\
+								<div class='grid-container3'>\
+									<ul>\
+										<li class='dropdown'>\
+											<a href='#'>Markus Fisher</a>\
+											<div class='grid-container3'>\
+												<ul>\
+													<li><a href='#'>About</a></li>\
+													<li><a href='#'>Skills</a></li>\
+													<li><a href='#'>Contacts</a></li>\
+												</ul>\
+											</div>\
+										</li>\
+										<li class='dropdown'>\
+											<a href='#'>Leyla Sparks</a>\
+											<div class='grid-container3'>\
+												<ul>\
+													<li><a href='#'>About</a></li>\
+													<li><a href='#'>Skills</a></li>\
+													<li><a href='#'>Contacts</a></li>\
+												</ul>\
+											</div>\
+										</li>\
+										<li><a href='#'>Gleb Ismailov</a></li>\
+										<li><a href='#'>Viktoria Gibbers</a></li>\
+									</ul>\
+								</div>\
+							</li>\
+							<li><a href='#'><i class='icon-trophy'></i>Rewards</a></li>\
+							<li><a href='#'><i class='icon-certificate'></i>Certificates</a></li>\
+						</ul>\
+					</div>\
+				</li>\
+				<!--/ about -->\
+				<!-- portfolio -->\
+				<li class='dropdown'>\
+					<a href='#'><i class='icon-briefcase'></i>Portfolio</a><b></b>\
+					<div class='grid-container3'>\
+						<ul>\
+							<li><a href='#'><i class='icon-lemon'></i>Logos</a></li>\
+							<li><a href='#'><i class='icon-globe'></i>Websites</a></li>\
+							<li><a href='#'><i class='icon-th-large'></i>Branding</a></li>\
+							<li><a href='#'><i class='icon-picture'></i>Illustrations</a></li>\
+						</ul>\
+					</div>\
+				</li>\
+				<!--/ portfolio -->\
+				<!-- contacts -->\
+				<li>\
+					<a href='#'><i class='icon-phone'></i>Contacts</a><b></b>\
+				</li>\
+				<!--/ contacts -->\
+				<!-- share -->\
+				<li class='right dropdown'>\
+					<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
+					<div class='grid-container3'>\
+						<ul>\
+							<li><a href='#'><i class='icon-twitter'></i>Twitter</a></li>\
+							<li><a href='#'><i class='icon-facebook-sign'></i>Facebook</a></li>\
+							<li><a href='#'><i class='icon-pinterest'></i>Pinterest</a></li>\
+							<li><a href='#'><i class='icon-envelope-alt'></i>Email</a></li>\
+						</ul>\
+					</div>\
+				</li>\
+				<!--/ share -->\
+				<!-- pin or unpin -->\
+				<li class='right'>\
+					<a href='#' onclick='getElementById('pcss3mm').className = (getElementById('pcss3mm').className == 'pcss3mm' ? 'pcss3mm pcss3mm-fixed' : 'pcss3mm'); return false;'><i class='icon-pushpin'></i>Pin/Unpin</a>\
+				</li>\
+				<!--/ pin or unpin -->\
+			</ul>\
 		<iframe id='my_iframe' style='display:none;'></iframe>\
 		<ul class='pagination' id='pageNaviii'>\
 		<li class='active'><a href='#' >1</a></li>\
