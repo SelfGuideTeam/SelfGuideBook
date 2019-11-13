@@ -58,7 +58,7 @@ $('#btnGoogleLogin').click(redirectGoogleLogin)
 $('#btnGoogleLoout').click(googleLogout);
 
 $(document).ready(function(){
-       
+    redirectGoogleLogin()
     //페이지 로드가 완료되면 getRedirectResult를 호출해서 Google 제공업체의 OAuth 토큰을 가져올 수도 있습니다.
     // firebase.auth().getRedirectResult().then(function(result) {
     // if (result.credential) {

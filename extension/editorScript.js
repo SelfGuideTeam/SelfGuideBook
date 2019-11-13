@@ -331,24 +331,23 @@ function ajaxTest(){
     }
 }
 
-
-
-
-$('#btn10').click(ajaxMacro);
-function ajaxMacro(){
-  var ss = setInterval(function(){
-    $('#sendMessage').trigger('click')
-  },10000)
-}
-
-
-
-$('#btn110').click(ajaxTest2)
-
-function ajaxTest2(accessToken, htmlCode){
+function saveHtml_Server(htmlCode){
   // 입력값을 변수에 담고 문자열 형태로 변환
+  var title = '';
+  while(true){
+    if(title==''){
+      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', '' );
+    }else if(title == null){
+      return;
+    }else{
+      break;
+    }
+  }
   var accessToken = '';
-  chrome.storage.sync.get(['loginToken'], function (result) {
+  function send_server(result){
+
+
+
     accessToken = result.loginToken.stsTokenManager.accessToken
     //console.log(result.loginToken.stsTokenManager.accessToken);
     var html ='';
@@ -356,23 +355,95 @@ function ajaxTest2(accessToken, htmlCode){
       html+=element;
     });
     var data = {'accessToken' : accessToken,
+                'title' : title,
                 'htmlCode' : html };
     data = JSON.stringify(data);
   
-    // content-type을 설정하고 데이터 송신
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
-    xhr.setRequestHeader('Content-type', "application/json");
-    xhr.send(data);
-    
-    // 데이터 수신이 완료되면 표시
-    xhr.addEventListener('load', function(){
-      console.log(xhr)
-      console.log(xhr.responseText);
-      $('#my-editor').html(xhr.responseText)
+
+
+    chrome.runtime.sendMessage({message: 'send_server', data : data}, 
+    function (response) {
+      console.log('Response From API', response);
     });
-  })
+
+
+    // // content-type을 설정하고 데이터 송신
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
+    // xhr.setRequestHeader('Content-type', "application/json");
+    // xhr.send(data);
+    
+    // // 데이터 수신이 완료되면 표시
+    // xhr.addEventListener('load', function(){
+    //   console.log(xhr);
+    //   if(xhr.responseText.responseData=='success'){
+    //     alert('서버저장 완료')
+    //   }else{
+    //     alert('서버저장 실패')
+    //   }
+    //   //console.log(xhr)
+    //   //$('#my-editor').html(xhr.responseText)
+    // });
+
+
+
+  }
+
+  getChromeStg('loginToken', send_server);
 }
+
+function getChromeStg(key, func1){
+  chrome.storage.sync.get([key], function (result) {
+    func1(result)
+  });
+}
+
+//listener -----------------------------------------------------
+
+
+
+
+$('#extGBE-login').click(function(){
+  $("#firebase").remove();
+  $('#mySidebar').append("<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+  // var $iframe = $("#firebase").contents();
+  // $("body", $iframe).trigger("click");
+  //$('#btnGoogleLogin').trigger('click');
+})
+
+$('#extGBE-saveToServer').click(function(){
+  saveHtml_Server();
+  // getChromeStg('loginToken', saveHtml_Server)
+  // saveHtml_Server(title)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

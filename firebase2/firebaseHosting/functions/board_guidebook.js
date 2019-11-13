@@ -100,11 +100,18 @@ router.post('/saveHTML', function(req, res, next){
 
         let guideCol = db.collection('BOARD_GUIDEBOOK');
         let setSf = guideCol.doc(decodedToken.email).set({
+            title : req.body.title,
             html : req.body.htmlCode,
             created_date : Date.now(),
             modifiyed_date : Date.now()
+        }).then(function(error) {
+            console.log(error)
+            var responseData = {'result' : 'ok'}
+            res.json(responseData);
+            return;
         });
-        // name: 'San Francisco', state: 'CA', country: 'USA',
+        
+        
         // capital: false, population: 860000,
         // regions: ['west_coast', 'norcal']
         // var postData = JSON.parse( JSON.stringify(req.body));
@@ -118,6 +125,7 @@ router.post('/saveHTML', function(req, res, next){
         //     doc = db.collection("BOARD_GUIDEBOOK").doc(postData.brdno);
         //     doc.update(postData);
         // }
+        
         return;
     }).catch(function(error) {
         console.log('유효하지않은 토큰')

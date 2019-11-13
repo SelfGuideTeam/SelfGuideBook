@@ -71,6 +71,40 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             .then(text => sendResponse(text))
             .catch(error => catchError())
 			return true;  // Will respond asynchronously.
+	}else if(message=='send_server'){
+		console.log('sadasd')
+
+		// content-type을 설정하고 데이터 송신
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
+		xhr.setRequestHeader('Content-type', "application/json");
+		xhr.send(request.data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+		console.log(xhr);
+		if(xhr.responseText.responseData=='success'){
+			alert('서버저장 완료')
+		}else{
+			alert('서버저장 실패')
+		}
+		//console.log(xhr)
+		//$('#my-editor').html(xhr.responseText)
+		});
+
+		// $.ajax({ 
+		// 	url: 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML',
+		// 	method: "GET",
+		// 	dataType: "json",
+		// 	crossDomain: true,
+		// 	contentType: "application/json; charset=utf-8",
+		// 	data: request.data,
+		// 	cache: false
+		// }).done(function (success) {
+		// 	sendResponse(success);
+		// }).fail(function () {
+		// 	sendMessage(error);
+		// });
 	}else{
 		alert('저장');
 		console.log(message);

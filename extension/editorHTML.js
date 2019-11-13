@@ -65,76 +65,29 @@ function toggleSidebar() {
 					<a href='#'><i class='icon-home'></i>Home</a>\
 				</li>\
 				<!--/ home -->\
-				<!-- about -->\
+				<!-- 저장 -->\
 				<li class='dropdown'>\
-					<a href='#' class='active'><i class='icon-star'></i>About</a><b></b>\
+					<a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
 					<div class='grid-container3'>\
 						<ul>\
-							<li class='dropdown'>\
-								<a href='#' class='active'><i class='icon-bullhorn'></i>News</a>\
-								<div class='grid-container3'>\
-									<ul>\
-										<li><a href='#'><i class='icon-ok'></i>Company</a></li>\
-										<li><a href='#'><i class='icon-ok'></i>Products</a></li>\
-										<li><a href='#'><i class='icon-ok'></i>Specials</a></li>\
-									</ul>\
-								</div>\
-							</li>\
-							<li><a href='#'><i class='icon-globe'></i>Mission</a></li>\
-							<li class='dropdown'>\
-								<a href='#'><i class='icon-group'></i><b></b>Our Team</a>\
-								<div class='grid-container3'>\
-									<ul>\
-										<li class='dropdown'>\
-											<a href='#'>Markus Fisher</a>\
-											<div class='grid-container3'>\
-												<ul>\
-													<li><a href='#'>About</a></li>\
-													<li><a href='#'>Skills</a></li>\
-													<li><a href='#'>Contacts</a></li>\
-												</ul>\
-											</div>\
-										</li>\
-										<li class='dropdown'>\
-											<a href='#'>Leyla Sparks</a>\
-											<div class='grid-container3'>\
-												<ul>\
-													<li><a href='#'>About</a></li>\
-													<li><a href='#'>Skills</a></li>\
-													<li><a href='#'>Contacts</a></li>\
-												</ul>\
-											</div>\
-										</li>\
-										<li><a href='#'>Gleb Ismailov</a></li>\
-										<li><a href='#'>Viktoria Gibbers</a></li>\
-									</ul>\
-								</div>\
-							</li>\
-							<li><a href='#'><i class='icon-trophy'></i>Rewards</a></li>\
-							<li><a href='#'><i class='icon-certificate'></i>Certificates</a></li>\
+							<li id='extGBE-saveToLocal'><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
+							<li id='extGBE-saveToServer'><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
+							<li id='extGBE-saveToPDF'><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
 						</ul>\
 					</div>\
 				</li>\
-				<!--/ about -->\
-				<!-- portfolio -->\
+				<!-- 내 가이드북 -->\
 				<li class='dropdown'>\
-					<a href='#'><i class='icon-briefcase'></i>Portfolio</a><b></b>\
+					<a href='#'><i class='icon-briefcase'></i>내 가이드북</a><b></b>\
 					<div class='grid-container3'>\
 						<ul>\
-							<li><a href='#'><i class='icon-lemon'></i>Logos</a></li>\
-							<li><a href='#'><i class='icon-globe'></i>Websites</a></li>\
-							<li><a href='#'><i class='icon-th-large'></i>Branding</a></li>\
-							<li><a href='#'><i class='icon-picture'></i>Illustrations</a></li>\
+							<li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
+							<li><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
+							<li><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
 						</ul>\
 					</div>\
 				</li>\
-				<!--/ portfolio -->\
-				<!-- contacts -->\
-				<li>\
-					<a href='#'><i class='icon-phone'></i>Contacts</a><b></b>\
-				</li>\
-				<!--/ contacts -->\
-				<!-- share -->\
+				<!--/ 내 가이드북 -->\
 				<li class='right dropdown'>\
 					<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
 					<div class='grid-container3'>\
@@ -148,8 +101,8 @@ function toggleSidebar() {
 				</li>\
 				<!--/ share -->\
 				<!-- pin or unpin -->\
-				<li class='right'>\
-					<a href='#' onclick='getElementById('pcss3mm').className = (getElementById('pcss3mm').className == 'pcss3mm' ? 'pcss3mm pcss3mm-fixed' : 'pcss3mm'); return false;'><i class='icon-pushpin'></i>Pin/Unpin</a>\
+				<li class='right' id='extGBE-login'>\
+					<a href='#'><i class='icon-bullhorn'></i>로그인</a><b></b>\
 				</li>\
 				<!--/ pin or unpin -->\
 			</ul>\
@@ -158,7 +111,6 @@ function toggleSidebar() {
 		<li class='active'><a href='#' >1</a></li>\
 		<li id='createPage'><a href='#'>+</a></li>\
 		</ul>\
-		<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google'></iframe>\
 		<input type='button' id='btn1' value='총길이'>\
 		<input type='button' id='btn2' value='스토리지삭제'>\
 		<input type='button' id='btn3' value='페이지삭제'>\
