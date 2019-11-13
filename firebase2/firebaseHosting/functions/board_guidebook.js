@@ -12,92 +12,49 @@ admin.initializeApp({
     credential: admin.credential.cert(require('./ajaxtest-882ac-firebase-adminsdk-6ruzm-2eae10b6c1.json'))
 });
 
-
-
 //firestore
 var db = admin.firestore();
 db.settings({timestampsInSnapshots: true})
 
-// // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-// var provider = new firebase.auth.GoogleAuthProvider();
-// //auth
-// //브라우저 창이 닫히거나 React Native에서 활동이 폐기된 경우에도 상태가 유지됨을 나타냅니다. 이 상태를 삭제하려면 명시적으로 로그아웃해야 합니다. Firebase 인증 웹 세션은 단일 호스트 출처이며 단일 도메인의 경우에만 유지된다는 점에 유의하세요. https://firebase.google.com/docs/auth/web/auth-state-persistence?hl=ko#supported_types_of_auth_state_persistence
-// firebase.auth().onAuthStateChanged(function(user) {
-//     if (user) {
-//         //chrome.runtime.sendMessage('mcbcpehojgnomagjldjkiciklakkgkhi',{message: user}, null);
-//         var obj = JSON.parse(JSON.stringify(user));
-//         window.parent.postMessage(obj, "*");   // '*' on any domain  
-//         console.log(user)
-//         // User is signed in.
-//     } else {
-//         console.log('not login')
-//         // No user is signed in.
-//     }
-// });
 
-// // 구글 인증 기능 추가
 
-// function redirectGoogleLogin(){
-//     //로그인 페이지로 리디렉션해서 로그인하려면 다음과 같이 signInWithRedirect를 호출합니다.
-//     firebase.auth().signInWithPopup(provider).then(function(result) {
-//         // This gives you a Google Access Token. You can use it to access the Google API.
-//         var token = result.credential.accessToken;
-//         // The signed-in user info.
-//         var user = result.user;
-//         // ...
-//         return;
-//       }).catch(function(error) {
-//         // Handle Errors here.
-//         var errorCode = error.code;
-//         var errorMessage = error.message;
-//         // The email of the user's account used.
-//         var email = error.email;
-//         // The firebase.auth.AuthCredential type that was used.
-//         var credential = error.credential;
-//         // ...
-//       });
-//     //firebase.auth().signInWithRedirect(provider);
-
-// }
-
-// function googleLogout(){
-//     firebase.auth().signOut().then(function() {
-//   // Sign-out successful.
-//     console.log('logout')
-//     return;
-//   }).catch(function(error) {
-//   // An error happened.
-//   });
-// }
+function validToken(accessToken){
+    return new Promise((resolve, reject) => {
+        admin.auth().verifyIdToken(accessToken)
+        .then(function(decodedToken) {
+            console.log(decodedToken)
+            let uid = decodedToken.uid;
+            // ...
+            console.log('유효')
+            resolve(decodedToken);
+            return;
+        }).catch(function(error) {
+            console.log('유효하지않은 토큰')
+            reject(error);
+            return;
+        });
+    });
+}
 
 
 
-// async function loginCheck(accessToken){
-//     var bol = false;
-
-
-//     await 
-
-//     function a(){
-//         bol = true;
-//     }
-
-//     return bol
-
-// }
 
 // router
 
-router.post('/saveHTML', function(req, res, next){
-    //console.log(loginCheck(req.body.accessToken));
-    // console.log(loginCheck());
-    admin.auth().verifyIdToken(req.body.accessToken)
-    .then(function(decodedToken) {
-        console.log(decodedToken)
-        let uid = decodedToken.uid;
-        // ...
-        console.log('유효')
+router.post('/verifyIdToken', function(req, res, next){
+    validToken(req.body.accessToken).then((decodedToken) => {
+        res.json({'result' : 'success'});
+        return;
+    }).catch((error) => {
+        res.json({'result' : 'fail'});
+        console.log(error);
+        return;
+    });
+})
 
+
+router.post('/saveHTML', function(req, res, next){
+    validToken(req.body.accessToken).then((decodedToken) => {
         let guideCol = db.collection('BOARD_GUIDEBOOK');
         let setSf = guideCol.doc(decodedToken.email).set({
             title : req.body.title,
@@ -107,32 +64,14 @@ router.post('/saveHTML', function(req, res, next){
         }).then(function(error) {
             console.log(error)
             var responseData = {'result' : 'success'}
-            res.json(responseData);
+            
             return;
         });
-        
-        
-        // capital: false, population: 860000,
-        // regions: ['west_coast', 'norcal']
-        // var postData = JSON.parse( JSON.stringify(req.body));
-        // var doc = null;
-        // if (!postData.brdno) {  // new
-        //     postData.brddate = Date.now();
-        //     doc = db.collection("BOARD_GUIDEBOOK").doc();
-        //     postData.brdno = doc.id;
-        //     doc.set(postData);
-        // } else {                // update
-        //     doc = db.collection("BOARD_GUIDEBOOK").doc(postData.brdno);
-        //     doc.update(postData);
-        // }
-        
         return;
-    }).catch(function(error) {
-        console.log('유효하지않은 토큰')
+    }).catch((error) => {
+        console.log(error);
         return;
     });
-
-
 
 });
 
@@ -279,3 +218,106 @@ router.get('/boardDelete',function(req,res,next){
 
 module.exports = router;
 
+
+
+
+
+
+    //console.log(loginCheck(req.body.accessToken));
+    // console.log(loginCheck());
+    // admin.auth().verifyIdToken(req.body.accessToken)
+    // .then(function(decodedToken) {
+    //     console.log(decodedToken)
+    //     let uid = decodedToken.uid;
+    //     // ...
+    //     console.log('유효')
+        
+    //     // capital: false, population: 860000,
+    //     // regions: ['west_coast', 'norcal']
+    //     // var postData = JSON.parse( JSON.stringify(req.body));
+    //     // var doc = null;
+    //     // if (!postData.brdno) {  // new
+    //     //     postData.brddate = Date.now();
+    //     //     doc = db.collection("BOARD_GUIDEBOOK").doc();
+    //     //     postData.brdno = doc.id;
+    //     //     doc.set(postData);
+    //     // } else {                // update
+    //     //     doc = db.collection("BOARD_GUIDEBOOK").doc(postData.brdno);
+    //     //     doc.update(postData);
+    //     // }
+        
+    //     return;
+    // }).catch(function(error) {
+    //     console.log('유효하지않은 토큰')
+    //     return;
+    // });
+
+
+
+// // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+// var provider = new firebase.auth.GoogleAuthProvider();
+// //auth
+// //브라우저 창이 닫히거나 React Native에서 활동이 폐기된 경우에도 상태가 유지됨을 나타냅니다. 이 상태를 삭제하려면 명시적으로 로그아웃해야 합니다. Firebase 인증 웹 세션은 단일 호스트 출처이며 단일 도메인의 경우에만 유지된다는 점에 유의하세요. https://firebase.google.com/docs/auth/web/auth-state-persistence?hl=ko#supported_types_of_auth_state_persistence
+// firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//         //chrome.runtime.sendMessage('mcbcpehojgnomagjldjkiciklakkgkhi',{message: user}, null);
+//         var obj = JSON.parse(JSON.stringify(user));
+//         window.parent.postMessage(obj, "*");   // '*' on any domain  
+//         console.log(user)
+//         // User is signed in.
+//     } else {
+//         console.log('not login')
+//         // No user is signed in.
+//     }
+// });
+
+// // 구글 인증 기능 추가
+
+// function redirectGoogleLogin(){
+//     //로그인 페이지로 리디렉션해서 로그인하려면 다음과 같이 signInWithRedirect를 호출합니다.
+//     firebase.auth().signInWithPopup(provider).then(function(result) {
+//         // This gives you a Google Access Token. You can use it to access the Google API.
+//         var token = result.credential.accessToken;
+//         // The signed-in user info.
+//         var user = result.user;
+//         // ...
+//         return;
+//       }).catch(function(error) {
+//         // Handle Errors here.
+//         var errorCode = error.code;
+//         var errorMessage = error.message;
+//         // The email of the user's account used.
+//         var email = error.email;
+//         // The firebase.auth.AuthCredential type that was used.
+//         var credential = error.credential;
+//         // ...
+//       });
+//     //firebase.auth().signInWithRedirect(provider);
+
+// }
+
+// function googleLogout(){
+//     firebase.auth().signOut().then(function() {
+//   // Sign-out successful.
+//     console.log('logout')
+//     return;
+//   }).catch(function(error) {
+//   // An error happened.
+//   });
+// }
+
+
+
+// async function loginCheck(accessToken){
+//     var bol = false;
+
+
+//     await 
+
+//     function a(){
+//         bol = true;
+//     }
+
+//     return bol
+
+// }

@@ -331,7 +331,7 @@ function ajaxTest(){
     }
 }
 
-function saveHtml_Server(htmlCode){
+async function saveHtml_Server(htmlCode){
   // 입력값을 변수에 담고 문자열 형태로 변환
   var title = '';
   while(true){
@@ -343,61 +343,62 @@ function saveHtml_Server(htmlCode){
       break;
     }
   }
+
+  //로컬에 저장된 토큰 가져오기
   var accessToken = '';
-  function send_server(result){
-
-
-
-    accessToken = result.loginToken.stsTokenManager.accessToken
-    //console.log(result.loginToken.stsTokenManager.accessToken);
-    var html ='';
-    pages.toArray().forEach(function(element){
-      html+=element;
-    });
-    var data = {'accessToken' : accessToken,
-                'title' : title,
-                'htmlCode' : html };
-    data = JSON.stringify(data);
-  
-
-
-    chrome.runtime.sendMessage({message: 'send_server', data : data}, 
-    function (response) {
-      console.log('Response From API', response);
-    });
-
-
-    // // content-type을 설정하고 데이터 송신
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
-    // xhr.setRequestHeader('Content-type', "application/json");
-    // xhr.send(data);
-    
-    // // 데이터 수신이 완료되면 표시
-    // xhr.addEventListener('load', function(){
-    //   console.log(xhr);
-    //   if(xhr.responseText.responseData=='success'){
-    //     alert('서버저장 완료')
-    //   }else{
-    //     alert('서버저장 실패')
-    //   }
-    //   //console.log(xhr)
-    //   //$('#my-editor').html(xhr.responseText)
-    // });
-
-
-
+  accessToken = await getChromeStg('loginToken');
+  if(accessToken.loginToken){
+    accessToken = accessToken.loginToken.stsTokenManager.accessToken;
+    //console.log(accessToken)
+  }else{
+    alert('로그인을 먼저 해주세요.');
+    chrome.runtime.sendMessage({message: 'refresh_page'}, null);
+    return;
   }
 
-  getChromeStg('loginToken', send_server);
+  var html ='';
+  pages.toArray().forEach(function(element){
+    html+=element;
+  });
+  var data = {'accessToken' : accessToken,
+              'title' : title,
+              'htmlCode' : html };
+  data = JSON.stringify(data);
+
+  chrome.runtime.sendMessage({message: 'send_server', data : data}, 
+  function (response) {
+    if(response=='success'){
+      alert('서버저장 완료')
+    }else{
+      alert('서버저장 실패')
+    }
+    //console.log('Response From API', response);
+  });
+
 }
 
 function getChromeStg(key, func1){
-  chrome.storage.sync.get([key], function (result) {
-    func1(result)
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get([key], result => {
+      resolve(result)
+    });
   });
+  // chrome.storage.sync.get([key], function (result) {
+  //   func1(result)
+  // });
 }
 
+function loginCheck(key){
+
+}
+
+async function cheeck(){
+  let tab = await loginCheck('loginToken');
+  console.log(tab)
+  alert(tab);
+}
+
+//cheeck();
 //listener -----------------------------------------------------
 
 

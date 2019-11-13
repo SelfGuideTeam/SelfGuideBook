@@ -80,16 +80,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		
 		// 데이터 수신이 완료되면 표시
 		xhr.addEventListener('load', function(){
-		var result = JSON.parse(xhr.responseText);
-		if(result.result=='success'){
-			alert('서버저장 완료')
-		}else{
-			alert('서버저장 실패')
-		}
-		//console.log(xhr)
-		//$('#my-editor').html(xhr.responseText)
+			var result = JSON.parse(xhr.responseText);
+			sendResponse(result.result);
 		});
-
+		
+		return true;
 		// $.ajax({ 
 		// 	url: 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML',
 		// 	method: "GET",
@@ -103,6 +98,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// }).fail(function () {
 		// 	sendMessage(error);
 		// });
+	}else if(message=='refresh_page'){
+		chrome.tabs.reload();
 	}else{
 		alert('저장');
 		console.log(message);

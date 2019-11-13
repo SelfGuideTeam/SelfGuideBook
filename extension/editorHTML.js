@@ -70,8 +70,8 @@ function toggleSidebar() {
 					<a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
 					<div class='grid-container3'>\
 						<ul>\
-							<li id='extGBE-saveToLocal'><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
-							<li id='extGBE-saveToServer'><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
+							<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
+							<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
 							<li id='extGBE-saveToPDF'><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
 						</ul>\
 					</div>\
@@ -102,7 +102,7 @@ function toggleSidebar() {
 				<!--/ share -->\
 				<!-- pin or unpin -->\
 				<li class='right' id='extGBE-login'>\
-					<a href='#'><i class='icon-bullhorn'></i>로그인</a><b></b>\
+					<a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그인</a><b></b>\
 				</li>\
 				<!--/ pin or unpin -->\
 			</ul>\
