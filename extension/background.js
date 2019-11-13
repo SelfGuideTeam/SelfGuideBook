@@ -72,8 +72,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             .catch(error => catchError())
 			return true;  // Will respond asynchronously.
 	}else if(message=='send_server'){
-		console.log('sadasd')
-
 		// content-type을 설정하고 데이터 송신
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
@@ -82,8 +80,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		
 		// 데이터 수신이 완료되면 표시
 		xhr.addEventListener('load', function(){
-		console.log(xhr);
-		if(xhr.responseText.responseData=='success'){
+		var result = JSON.parse(xhr.responseText);
+		if(result.result=='success'){
 			alert('서버저장 완료')
 		}else{
 			alert('서버저장 실패')

@@ -106,7 +106,7 @@ router.post('/saveHTML', function(req, res, next){
             modifiyed_date : Date.now()
         }).then(function(error) {
             console.log(error)
-            var responseData = {'result' : 'ok'}
+            var responseData = {'result' : 'success'}
             res.json(responseData);
             return;
         });
