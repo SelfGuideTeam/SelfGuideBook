@@ -132,7 +132,9 @@ function toggleSidebar() {
 		sidebarOpen = true;
 		
 		chrome.runtime.sendMessage({message: "sidebar"}, null);
-		
+
+		//확장이 로딩되는 모습을 안보여주기 위함
+		$('#mySidebar').hide();		
 		
 	}
 }

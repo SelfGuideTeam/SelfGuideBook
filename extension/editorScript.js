@@ -424,8 +424,10 @@ $('#extGBE-saveToServer').click(function(){
 
 
 
-
-
+//로딩이 다 됐을 시점에 다시 보여주기
+setTimeout(function(){
+  $('#mySidebar').show();
+},200)
 
 
 
