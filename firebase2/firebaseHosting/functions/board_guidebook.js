@@ -6,22 +6,14 @@ var dateFormat = require('dateformat');
 
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
-
+let checkRevoked = true;
 
 // require 경로에 ..(상위) 있으면 deploy안됨 
 admin.initializeApp({
-    credential: admin.credential.cert(require('./fir-ex-63c1a-firebase-adminsdk-d7x5c-db2abb88bc.json'))
+    credential: admin.credential.cert(require('./fir-ex-63c1a-firebase-adminsdk-d7x5c-db2abb88bc.json')),
+    databaseURL: "https://fir-ex-63c1a.firebaseio.com"
 });
 
-// const metadataRef = admin.database().ref('metadata/' + uid);
-// metadataRef.set({revokeTime: utcRevocationTimeSecs})
-//   .then(() => {
-//     console.log('Database updated successfully.');
-//     return;
-//   }).catch(function(error) {
-//     //reject(error);
-//     return;
-// });
 
 //firestore
 var db = admin.firestore();
@@ -29,7 +21,7 @@ db.settings({timestampsInSnapshots: true})
 
 function validToken(accessToken){
     return new Promise((resolve, reject) => {
-        admin.auth().verifyIdToken(accessToken)
+        admin.auth().verifyIdToken(accessToken, checkRevoked)
         .then(function(decodedToken) {
             console.log(decodedToken)
             let uid = decodedToken.uid;
@@ -45,21 +37,25 @@ function validToken(accessToken){
     });
 }
 
-function revokeToken(user){
+function revokeToken(uid){
     // Revoke all refresh tokens for a specified user for whatever reason.
     // Retrieve the timestamp of the revocation, in seconds since the epoch.
-    admin.auth().revokeRefreshTokens(uid)
-    .then(() => {
-        return admin.auth().getUser(uid);
-    })
-    .then((userRecord) => {
-        return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
-    })
-    .then((timestamp) => {
-        console.log('Tokens revoked at: ', timestamp);
-        return;
-    }).catch(function(error) {
-        return;
+    return new Promise((resolve, reject) => {
+        admin.auth().revokeRefreshTokens(uid)
+        .then(() => {
+            return admin.auth().getUser(uid);
+        })
+        .then((userRecord) => {
+            return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
+        })
+        .then((timestamp) => {
+            console.log('Tokens revoked at: ', timestamp);
+            resolve(timestamp)
+            return;
+        }).catch(function(error) {
+            reject(error);
+            return;
+        });
     });
 }
 
@@ -69,6 +65,25 @@ function revokeToken(user){
 // router
 router.post('/verifyIdToken', function(req, res, next){
     validToken(req.body.accessToken).then((decodedToken) => {
+        res.json({'result' : 'success'});
+        return;
+    }).catch((error) => {
+        res.json({'result' : 'fail'});
+        console.log(error);
+        return;
+    });
+})
+
+router.post('/logout', function(req, res, next){
+    revokeToken(req.body.uid).then((timestamp) => {
+        const metadataRef = admin.database().ref('metadata/' + req.body.uid);
+        metadataRef.set({revokeTime: timestamp})
+        .then(() => {
+            return; 
+        }).catch((error) => {
+            console.log(error);
+            return;
+        });
         res.json({'result' : 'success'});
         return;
     }).catch((error) => {
@@ -101,8 +116,15 @@ router.post('/saveHTML', function(req, res, next){
 });
 
 router.get('/login-google', function(req, res, next){
-
+    console.log('로그인 요청')
     res.render('board_guidebook/test', {row: ""});
+    
+    //redirectGoogleLogin();
+})
+
+router.get('/logout-google', function(req, res, next){
+    console.log('로그아웃 요청')
+    res.render('board_guidebook/logout', {row: ""});
     
     //redirectGoogleLogin();
 })

@@ -111,6 +111,25 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// }).fail(function () {
 		// 	sendMessage(error);
 		// });
+	}else if(message=='logoutRequest'){
+		// content-type을 설정하고 데이터 송신
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout');
+		xhr.setRequestHeader('Content-type', "application/json");
+		var data = {'uid' : request.data
+					};
+		console.log(data)
+		data = JSON.stringify(data);
+		xhr.send(data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			console.log(xhr)
+			var result = JSON.parse(xhr.responseText);
+			sendResponse(result.result);
+		});
+		
+		return true;
 	}else if(message=='tokenValidRequest'){
 		// content-type을 설정하고 데이터 송신
 		var xhr = new XMLHttpRequest();

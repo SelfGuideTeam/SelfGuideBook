@@ -419,13 +419,16 @@ $('#extGBE-login').click(function(){
 })
 
 $('#extGBE-logout').click(async function(){
+  // $("#firebase2").remove();
+  // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+
   let uid = (await getChromeStg('loginToken')).loginToken.uid;
   chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
   function (response) {
     if(response=='success'){
-      alert('로그인 완료')
+      alert('로그아웃 완료')
     }else{
-      alert('로그인 실패')
+      alert('로그아웃 실패')
     }
     //console.log('Response From API', response);
   });

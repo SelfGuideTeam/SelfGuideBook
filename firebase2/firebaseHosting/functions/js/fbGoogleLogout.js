@@ -2,7 +2,7 @@
 
 
 //브라우저 창이 닫히거나 React Native에서 활동이 폐기된 경우에도 상태가 유지됨을 나타냅니다. 이 상태를 삭제하려면 명시적으로 로그아웃해야 합니다. Firebase 인증 웹 세션은 단일 호스트 출처이며 단일 도메인의 경우에만 유지된다는 점에 유의하세요. https://firebase.google.com/docs/auth/web/auth-state-persistence?hl=ko#supported_types_of_auth_state_persistence
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         //chrome.runtime.sendMessage('mcbcpehojgnomagjldjkiciklakkgkhi',{message: user}, null);
@@ -20,28 +20,28 @@ firebase.auth().onAuthStateChanged(function(user) {
 // 구글 인증 기능 추가
 var provider = new firebase.auth.GoogleAuthProvider();
 
-function redirectGoogleLogin(){
-    //로그인 페이지로 리디렉션해서 로그인하려면 다음과 같이 signInWithRedirect를 호출합니다.
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        // ...
-        return;
-      }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-      });
-    //firebase.auth().signInWithRedirect(provider);
+// function redirectGoogleLogin(){
+//     //로그인 페이지로 리디렉션해서 로그인하려면 다음과 같이 signInWithRedirect를 호출합니다.
+//     firebase.auth().signInWithPopup(provider).then(function(result) {
+//         // This gives you a Google Access Token. You can use it to access the Google API.
+//         var token = result.credential.accessToken;
+//         // The signed-in user info.
+//         var user = result.user;
+//         // ...
+//         return;
+//       }).catch(function(error) {
+//         // Handle Errors here.
+//         var errorCode = error.code;
+//         var errorMessage = error.message;
+//         // The email of the user's account used.
+//         var email = error.email;
+//         // The firebase.auth.AuthCredential type that was used.
+//         var credential = error.credential;
+//         // ...
+//       });
+//     //firebase.auth().signInWithRedirect(provider);
 
-}
+// }
 
 function googleLogout(){
   firebase.auth().signOut().then(function() {
@@ -54,13 +54,12 @@ function googleLogout(){
 
 
 
-$('#btnGoogleLogin').click(redirectGoogleLogin)
-$('#btnGoogleLoout').click(googleLogout);
+// $('#btnGoogleLogin').click(redirectGoogleLogin)
+// $('#btnGoogleLoout').click(googleLogout);
 
 $(document).ready(function(){
-  redirectGoogleLogin()
-  
-    // redirectGoogleLogin()
+    console.log('logout')
+    googleLogout()
     //페이지 로드가 완료되면 getRedirectResult를 호출해서 Google 제공업체의 OAuth 토큰을 가져올 수도 있습니다.
     // firebase.auth().getRedirectResult().then(function(result) {
     // if (result.credential) {
