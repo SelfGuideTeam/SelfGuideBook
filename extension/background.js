@@ -149,6 +149,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		});
 		
 		return true;
+	}else if(message=='toggle'){
+		chrome.tabs.getSelected(null, function(tab) {
+			if(toggleStatus){
+				toggleStatus = !toggleStatus;
+			}else{
+				if((await getChromeStg('loginToken')).loginToken){
+					let accessToken = (await getChromeStg('loginToken')).loginToken.stsTokenManager.accessToken;
+					tokenResult = await tokenValidRequest(accessToken);
+				}else{ //확장을 처음 깔았을 때
+					tokenResult = 'fail';
+				}
+				toggleStatus = !toggleStatus;
+			}
+			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", loginStatus: tokenResult});
+		});
 	}else if(message=='refresh_page'){
 		chrome.tabs.reload();
 	}else{

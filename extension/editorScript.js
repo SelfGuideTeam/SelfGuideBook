@@ -11,7 +11,9 @@ function processFn(event) {
   var bla = event.data;
   if(bla.stsTokenManager.accessToken != undefined){
     chrome.storage.sync.set({loginToken: bla}, function() {
-      alert('로그인 됨!!')
+      chrome.runtime.sendMessage({message: 'toggle'}, null);
+      chrome.runtime.sendMessage({message: 'toggle'}, null);
+      //alert('로그인 됨!!')
       // chrome.storage.sync.get(['loginToken'], function (result) {
       //   console.log(result)
       //   console.log(result.loginToken.stsTokenManager.accessToken)
@@ -413,6 +415,7 @@ async function loginCheck(){
 $('#extGBE-login').click(function(){
   $("#firebase").remove();
   $('#mySidebar').append("<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+
   // var $iframe = $("#firebase").contents();
   // $("body", $iframe).trigger("click");
   //$('#btnGoogleLogin').trigger('click');
@@ -427,6 +430,7 @@ $('#extGBE-logout').click(async function(){
   function (response) {
     if(response=='success'){
       alert('로그아웃 완료')
+      chrome.runtime.sendMessage({message: 'toggle'}, null);  
     }else{
       alert('로그아웃 실패')
     }
