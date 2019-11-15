@@ -26,7 +26,7 @@ chrome.pageAction.onClicked.addListener(async function(tab) {
 	if(toggleStatus){
 		toggleStatus = !toggleStatus;
 	}else{
-		if((await getChromeStg('loginToken'))){
+		if((await getChromeStg('loginToken')).loginToken){
 			let accessToken = (await getChromeStg('loginToken')).loginToken.stsTokenManager.accessToken;
 			tokenResult = await tokenValidRequest(accessToken);
 		}else{ //확장을 처음 깔았을 때
