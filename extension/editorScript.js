@@ -11,10 +11,11 @@ function processFn(event) {
   var bla = event.data;
   if(bla.stsTokenManager.accessToken != undefined){
     chrome.storage.sync.set({loginToken: bla}, function() {
-      chrome.storage.sync.get(['loginToken'], function (result) {
-        console.log(result)
-        console.log(result.loginToken.stsTokenManager.accessToken)
-      })
+      alert('로그인 됨!!')
+      // chrome.storage.sync.get(['loginToken'], function (result) {
+      //   console.log(result)
+      //   console.log(result.loginToken.stsTokenManager.accessToken)
+      // })
     });
     //console.log(bla)
   }
@@ -416,6 +417,19 @@ $('#extGBE-login').click(function(){
   // var $iframe = $("#firebase").contents();
   // $("body", $iframe).trigger("click");
   //$('#btnGoogleLogin').trigger('click');
+})
+
+$('#extGBE-logout').click(async function(){
+  let uid = (await getChromeStg('loginToken')).loginToken.uid;
+  chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
+  function (response) {
+    if(response=='success'){
+      alert('로그인 완료')
+    }else{
+      alert('로그인 실패')
+    }
+    //console.log('Response From API', response);
+  });
 })
 
 $('#extGBE-saveToServer').click(function(){
