@@ -1,6 +1,16 @@
 
 function handleRequest(request){
 	if (request.callFunction == "toggleSidebar") {
+		loginStatus = request.loginStatus
+		if(loginStatus == 'success'){
+			saveHtml = saveHtml2
+			myGuideBookHtml = myGuideBookHtml2
+			loginOutHtml = logoutHtml;
+		}else{
+			saveHtml = '';
+			myGuideBookHtml = '';
+			loginOutHtml = loginHtml;
+		}
 		toggleSidebar();
 	}else if(request.callFunction == "insertImage"){
 		//https://imgur링크를 src에 넣으면 pdf에 이미지가 저장이 안됨   http:// 는 됨 --?
@@ -66,44 +76,11 @@ function toggleSidebar() {
 				</li>\
 				<!--/ home -->\
 				<!-- 저장 -->\
-				<li class='dropdown'>\
-					<a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
-					<div class='grid-container3'>\
-						<ul>\
-							<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
-							<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
-							<li id='extGBE-saveToPDF'><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
-						</ul>\
-					</div>\
-				</li>\
-				<!-- 내 가이드북 -->\
-				<li class='dropdown'>\
-					<a href='#'><i class='icon-briefcase'></i>내 가이드북</a><b></b>\
-					<div class='grid-container3'>\
-						<ul>\
-							<li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
-							<li><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
-							<li><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
-						</ul>\
-					</div>\
-				</li>\
-				<!--/ 내 가이드북 -->\
-				<li class='right dropdown'>\
-					<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
-					<div class='grid-container3'>\
-						<ul>\
-							<li><a href='#'><i class='icon-twitter'></i>Twitter</a></li>\
-							<li><a href='#'><i class='icon-facebook-sign'></i>Facebook</a></li>\
-							<li><a href='#'><i class='icon-pinterest'></i>Pinterest</a></li>\
-							<li><a href='#'><i class='icon-envelope-alt'></i>Email</a></li>\
-						</ul>\
-					</div>\
-				</li>\
+				"+saveHtml+"\
+				"+myGuideBookHtml+"\
 				<!--/ share -->\
 				<!-- pin or unpin -->\
-				<li class='right' id='extGBE-login'>\
-					<a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그인</a><b></b>\
-				</li>\
+				"+loginOutHtml+"\
 				<!--/ pin or unpin -->\
 			</ul>\
 		<iframe id='my_iframe' style='display:none;'></iframe>\
@@ -146,8 +123,51 @@ function toggleSidebar() {
 
 
 
+var saveHtml2 = "\
+<li class='dropdown'>\
+<a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
+<div class='grid-container3'>\
+	<ul>\
+		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
+		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
+		<li id='extGBE-saveToPDF'><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
+	</ul>\
+</div>\
+</li>\
+"
 
+var myGuideBookHtml2 = "\
+<!-- 내 가이드북 -->\
+<li class='dropdown'>\
+	<a href='#'><i class='icon-briefcase'></i>내 가이드북</a><b></b>\
+	<div class='grid-container3'>\
+		<ul>\
+			<li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
+			<li><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
+			<li><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
+		</ul>\
+	</div>\
+</li>\
+<!--/ 공유 -->\
+<li class='right dropdown'>\
+	<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
+	<div class='grid-container3'>\
+		<ul>\
+			<li><a href='#'><i class='icon-twitter'></i>Twitter</a></li>\
+			<li><a href='#'><i class='icon-facebook-sign'></i>Facebook</a></li>\
+			<li><a href='#'><i class='icon-pinterest'></i>Pinterest</a></li>\
+			<li><a href='#'><i class='icon-envelope-alt'></i>Email</a></li>\
+		</ul>\
+	</div>\
+</li>\
+"
 
+var loginHtml = "<li class='right' id='extGBE-login'>\
+<a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그인</a><b></b>\
+</li>";
+var logoutHtml = "<li class='right' id='extGBE-logout'>\
+<a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그아웃</a><b></b>\
+</li>";
 
 
 

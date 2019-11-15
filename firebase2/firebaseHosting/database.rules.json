@@ -1,6 +1,10 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    "metadata": {
+      "$user_id": {
+        ".read": "$user_id === auth.uid",
+        ".write": "false"
+      }
+    }
   }
 }

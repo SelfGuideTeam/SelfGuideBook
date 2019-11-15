@@ -1,13 +1,13 @@
 // Initialize Firebase	
 const config = {
-    apiKey: "AIzaSyDGztAUjhzopNX9F2jNuuWxqgDm-JuucLI",
-    authDomain: "ajaxtest-882ac.firebaseapp.com",
-    databaseURL: "https://ajaxtest-882ac.firebaseio.com",
-    projectId: "ajaxtest-882ac",
-    storageBucket: "ajaxtest-882ac.appspot.com",
-    messagingSenderId: "754449056349",
-    appId: "1:754449056349:web:56315a8bebdc207a2343b4",
-    measurementId: "G-D7X193H7H5"
+    apiKey: "AIzaSyAsuqJ-7DH6YCl3zoi90u7DqsD6vIL_PV0",
+    authDomain: "fir-ex-63c1a.firebaseapp.com",
+    databaseURL: "https://fir-ex-63c1a.firebaseio.com",
+    projectId: "fir-ex-63c1a",
+    storageBucket: "fir-ex-63c1a.appspot.com",
+    messagingSenderId: "912304737763",
+    appId: "1:912304737763:web:fa199b4e434c11b27864d6",
+    measurementId: "G-6P274N0X3F"
 };
 
 firebase.initializeApp(config);

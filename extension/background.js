@@ -21,9 +21,18 @@ chrome.tabs.getSelected(null, function(tab) {
 	chrome.pageAction.show(tab.id);
 });
 
-chrome.pageAction.onClicked.addListener(function(tab) {
+var toggleStatus = false;
+chrome.pageAction.onClicked.addListener(async function(tab) {
+	if(toggleStatus){
+		toggleStatus = !toggleStatus;
+	}else{
+		let accessToken = (await getChromeStg('loginToken')).loginToken.stsTokenManager.accessToken;
+		tokenResult = await tokenValidRequest(accessToken);
+		toggleStatus = !toggleStatus;
+	}
+	//await loginCheck()
 	chrome.tabs.getSelected(null, function(tab) {
-		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
+		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", loginStatus: tokenResult});
 	});
 });
 
@@ -71,7 +80,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             .then(text => sendResponse(text))
             .catch(error => catchError())
 			return true;  // Will respond asynchronously.
-	}else if(message=='send_server'){
+	}else if(message=='saveRequest'){
 		// content-type을 설정하고 데이터 송신
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
@@ -98,6 +107,25 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// }).fail(function () {
 		// 	sendMessage(error);
 		// });
+	}else if(message=='tokenValidRequest'){
+		// content-type을 설정하고 데이터 송신
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/verifyIdToken');
+		xhr.setRequestHeader('Content-type', "application/json");
+		var data = {'accessToken' : request.data
+					};
+		console.log(data)
+		data = JSON.stringify(data);
+		xhr.send(data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			console.log(xhr)
+			var result = JSON.parse(xhr.responseText);
+			sendResponse(result.result);
+		});
+		
+		return true;
 	}else if(message=='refresh_page'){
 		chrome.tabs.reload();
 	}else{
@@ -112,6 +140,54 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 });
+
+
+
+
+
+
+function getChromeStg(key){
+	return new Promise((resolve, reject) => {
+	  chrome.storage.sync.get([key], result => {
+		resolve(result)
+	  });
+	});
+	// chrome.storage.sync.get([key], function (result) {
+	//   func1(result)
+	// });
+  }
+
+function tokenValidRequest(accessToken){
+	return new Promise(function(resolve, reject) {
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/verifyIdToken');
+		xhr.setRequestHeader('Content-type', "application/json");
+		var data = {'accessToken' : accessToken
+					};
+		console.log(data)
+		data = JSON.stringify(data);
+		xhr.send(data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			console.log(xhr)
+			var result = JSON.parse(xhr.responseText);
+			resolve(result.result)
+			// if(result.result=='success'){
+			// 	alert('로그인 완료')
+			// }else{
+			// 	alert('로그인 실패')
+			// }
+		});
+	});
+}
+  
+async function loginCheck(){
+
+
+}
+
+
 
 
 

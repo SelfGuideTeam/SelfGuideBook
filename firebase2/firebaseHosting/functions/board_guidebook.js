@@ -7,16 +7,25 @@ var dateFormat = require('dateformat');
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
+
 // require 경로에 ..(상위) 있으면 deploy안됨 
 admin.initializeApp({
-    credential: admin.credential.cert(require('./ajaxtest-882ac-firebase-adminsdk-6ruzm-2eae10b6c1.json'))
+    credential: admin.credential.cert(require('./fir-ex-63c1a-firebase-adminsdk-d7x5c-db2abb88bc.json'))
 });
+
+// const metadataRef = admin.database().ref('metadata/' + uid);
+// metadataRef.set({revokeTime: utcRevocationTimeSecs})
+//   .then(() => {
+//     console.log('Database updated successfully.');
+//     return;
+//   }).catch(function(error) {
+//     //reject(error);
+//     return;
+// });
 
 //firestore
 var db = admin.firestore();
 db.settings({timestampsInSnapshots: true})
-
-
 
 function validToken(accessToken){
     return new Promise((resolve, reject) => {
@@ -36,11 +45,28 @@ function validToken(accessToken){
     });
 }
 
+function revokeToken(user){
+    // Revoke all refresh tokens for a specified user for whatever reason.
+    // Retrieve the timestamp of the revocation, in seconds since the epoch.
+    admin.auth().revokeRefreshTokens(uid)
+    .then(() => {
+        return admin.auth().getUser(uid);
+    })
+    .then((userRecord) => {
+        return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
+    })
+    .then((timestamp) => {
+        console.log('Tokens revoked at: ', timestamp);
+        return;
+    }).catch(function(error) {
+        return;
+    });
+}
+
 
 
 
 // router
-
 router.post('/verifyIdToken', function(req, res, next){
     validToken(req.body.accessToken).then((decodedToken) => {
         res.json({'result' : 'success'});
@@ -51,7 +77,6 @@ router.post('/verifyIdToken', function(req, res, next){
         return;
     });
 })
-
 
 router.post('/saveHTML', function(req, res, next){
     validToken(req.body.accessToken).then((decodedToken) => {
@@ -64,7 +89,7 @@ router.post('/saveHTML', function(req, res, next){
         }).then(function(error) {
             console.log(error)
             var responseData = {'result' : 'success'}
-            
+            res.json(responseData)
             return;
         });
         return;

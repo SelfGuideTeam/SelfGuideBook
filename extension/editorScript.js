@@ -365,7 +365,7 @@ async function saveHtml_Server(htmlCode){
               'htmlCode' : html };
   data = JSON.stringify(data);
 
-  chrome.runtime.sendMessage({message: 'send_server', data : data}, 
+  chrome.runtime.sendMessage({message: 'saveRequest', data : data}, 
   function (response) {
     if(response=='success'){
       alert('서버저장 완료')
@@ -388,17 +388,23 @@ function getChromeStg(key, func1){
   // });
 }
 
-function loginCheck(key){
+async function loginCheck(){
+  let accessToken = (await getChromeStg('loginToken')).loginToken.stsTokenManager.accessToken;
 
+  chrome.runtime.sendMessage({message: 'tokenValidRequest', data : accessToken}, 
+  function (response) {
+    if(response=='success'){
+      alert('로그인 완료')
+    }else{
+      alert('로그인 실패')
+    }
+    //console.log('Response From API', response);
+  });
+
+  //alert(tab);
 }
 
-async function cheeck(){
-  let tab = await loginCheck('loginToken');
-  console.log(tab)
-  alert(tab);
-}
-
-//cheeck();
+// loginCheck();
 //listener -----------------------------------------------------
 
 
