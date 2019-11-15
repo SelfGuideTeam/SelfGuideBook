@@ -30,7 +30,6 @@ chrome.pageAction.onClicked.addListener(async function(tab) {
 			let accessToken = (await getChromeStg('loginToken')).loginToken.stsTokenManager.accessToken;
 			tokenResult = await tokenValidRequest(accessToken);
 		}else{ //확장을 처음 깔았을 때
-			alert('처음')
 			tokenResult = 'fail';
 		}
 		toggleStatus = !toggleStatus;

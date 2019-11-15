@@ -211,7 +211,6 @@ function getData(){
   var rr= chrome.storage.sync.get(['editorPages'], function (result) {
     pages = new ArrayList();
     if(result.editorPages==null){
-      alert('null이네')
       pages.add('')
     }else{
       var currentPage2 = currentPage+1;
