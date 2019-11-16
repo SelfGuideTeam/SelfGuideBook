@@ -15,7 +15,7 @@
           </thead>
           <tbody>
             <tr v-for="item in items" :key="item.id">
-              <td>{{ item.title }}</td>
+              <td @click="sendID(item)">{{ item.title }}</td>
               <td>{{ item.id }}</td>
               <td>{{ item.date }}</td>
             </tr>
@@ -23,10 +23,15 @@
         </template>
       </v-simple-table>
     </template>
+    <v-layout>
+        <v-spacer></v-spacer>
+        <v-btn text @click="moveToWrite">작성</v-btn>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
+import EventBus from '../eventBus.js'
 export default {
   data: () => ({
     items: [],
@@ -41,12 +46,20 @@ export default {
       const snapshot = await this.$firebase.firestore().collection('notes').get()
       this.items = []
       snapshot.forEach(board => {
+        const date = new Date(board.data().date.seconds * 1000)
         const { title, content } = board.data()
         this.items.push({
-          title, content, id: board.id
+          title, content, id: board.id, date
         })
       })
       console.log(snapshot)
+    },
+    sendID (payload) {
+      EventBus.$emit('receiveID', payload)
+      this.$router.push('read-board-page')
+    },
+    moveToWrite () {
+      this.$router.push('write-board-page')
     }
   }
 }
