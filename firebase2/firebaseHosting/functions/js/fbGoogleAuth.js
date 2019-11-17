@@ -6,8 +6,6 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         //chrome.runtime.sendMessage('mcbcpehojgnomagjldjkiciklakkgkhi',{message: user}, null);
-        var obj = JSON.parse(JSON.stringify(user));
-        window.parent.postMessage(obj, "*");   // '*' on any domain  
         //console.log(user)
         //alert('loginGG')
         // User is signed in.
@@ -22,11 +20,16 @@ var provider = new firebase.auth.GoogleAuthProvider();
 
 function redirectGoogleLogin(){
     //로그인 페이지로 리디렉션해서 로그인하려면 다음과 같이 signInWithRedirect를 호출합니다.
+    console.log('redirect')
     firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
+        var obj = JSON.parse(JSON.stringify(user));
+        window.parent.postMessage(obj, "*");   // '*' on any domain  
+        self.close();
+        self.close();
         // ...
         return;
       }).catch(function(error) {
@@ -57,8 +60,8 @@ function googleLogout(){
 $('#btnGoogleLogin').click(redirectGoogleLogin)
 $('#btnGoogleLoout').click(googleLogout);
 
+redirectGoogleLogin()
 $(document).ready(function(){
-  redirectGoogleLogin()
   
     // redirectGoogleLogin()
     //페이지 로드가 완료되면 getRedirectResult를 호출해서 Google 제공업체의 OAuth 토큰을 가져올 수도 있습니다.

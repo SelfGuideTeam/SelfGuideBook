@@ -1,17 +1,25 @@
 
+var sidebarOpen = false;
 function handleRequest(request){
+	
 	if (request.callFunction == "toggleSidebar") {
-		loginStatus = request.loginStatus
-		if(loginStatus == 'success'){
-			saveHtml = saveHtml2
-			myGuideBookHtml = myGuideBookHtml2
-			loginOutHtml = logoutHtml;
+		if(sidebarOpen){
+			toggleSidebar();
 		}else{
-			saveHtml = '';
-			myGuideBookHtml = '';
-			loginOutHtml = loginHtml;
+			chrome.runtime.sendMessage({message: 'tokenValidRequest'}, function(response){
+				if(response == 'success'){
+					saveHtml = saveHtml2
+					myGuideBookHtml = myGuideBookHtml2
+					loginOutHtml = logoutHtml;
+				}else{
+					saveHtml = '';
+					myGuideBookHtml = '';
+					loginOutHtml = loginHtml;
+				}
+				toggleSidebar();
+			});
 		}
-		toggleSidebar();
+		
 	}else if(request.callFunction == "insertImage"){
 		//https://imgur링크를 src에 넣으면 pdf에 이미지가 저장이 안됨   http:// 는 됨 --?
 		var imgsrc = (request.url).replace('https://','http://');
@@ -23,7 +31,6 @@ function handleRequest(request){
 }
 
 chrome.extension.onRequest.addListener(handleRequest);
-var sidebarOpen = false;
 function toggleSidebar() {
 	if(sidebarOpen) {
 		var el = document.getElementById('mySidebar');

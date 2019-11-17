@@ -63,38 +63,41 @@ function revokeToken(uid){
 
 
 // router
-router.post('/verifyIdToken', function(req, res, next){
-    validToken(req.body.accessToken).then((decodedToken) => {
+router.post('/verifyIdToken', async function(req, res, next){
+    try{
+        await validToken(req.body.accessToken);
         res.json({'result' : 'success'});
         return;
-    }).catch((error) => {
+    } catch(err){
         res.json({'result' : 'fail'});
-        console.log(error);
+        console.log(err);
         return;
-    });
+    }
 })
 
-router.post('/logout', function(req, res, next){
-    revokeToken(req.body.uid).then((timestamp) => {
+router.post('/logout', async function(req, res, next){
+    try {
+        let timestamp = await revokeToken(req.body.uid);
         const metadataRef = admin.database().ref('metadata/' + req.body.uid);
         metadataRef.set({revokeTime: timestamp})
         .then(() => {
+            res.json({'result' : 'success'});
             return; 
         }).catch((error) => {
             console.log(error);
             return;
         });
-        res.json({'result' : 'success'});
         return;
-    }).catch((error) => {
+    } catch(err) {
         res.json({'result' : 'fail'});
-        console.log(error);
+        console.log(err);
         return;
-    });
+    }
 })
 
-router.post('/saveHTML', function(req, res, next){
-    validToken(req.body.accessToken).then((decodedToken) => {
+router.post('/saveHTML', async function(req, res, next){
+    try{
+        let decodedToken = await validToken(req.body.accessToken);
         let guideCol = db.collection('BOARD_GUIDEBOOK');
         let setSf = guideCol.doc(decodedToken.email).set({
             title : req.body.title,
@@ -107,11 +110,14 @@ router.post('/saveHTML', function(req, res, next){
             res.json(responseData)
             return;
         });
+    } catch(err){
+        console.log(err);
         return;
-    }).catch((error) => {
-        console.log(error);
-        return;
-    });
+    }
+});
+
+router.post('/getGuideBookList', async function(req, res, next){
+
 
 });
 

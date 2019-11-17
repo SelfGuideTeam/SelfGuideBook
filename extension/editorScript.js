@@ -3,25 +3,17 @@
 //     bgScreencapture = bg.screenshot,
 //     option_icon_state = !1;
 
-window.addEventListener("message", processFn, false);	
+// window.addEventListener("message", processFn, false);	
 
 
 
-function processFn(event) {
-  var bla = event.data;
-  if(bla.stsTokenManager.accessToken != undefined){
-    chrome.storage.sync.set({loginToken: bla}, function() {
-      chrome.runtime.sendMessage({message: 'toggle'}, null);
-      chrome.runtime.sendMessage({message: 'toggle'}, null);
-      //alert('로그인 됨!!')
-      // chrome.storage.sync.get(['loginToken'], function (result) {
-      //   console.log(result)
-      //   console.log(result.loginToken.stsTokenManager.accessToken)
-      // })
-    });
-    //console.log(bla)
-  }
-}
+// function processFn(event) {
+//   var bla = event.data;
+//   console.log(event)
+
+//     //console.log(bla)
+//   }
+// }
 
 
 // function sendChildMessage() {	
@@ -413,28 +405,29 @@ async function loginCheck(){
 
 
 $('#extGBE-login').click(function(){
-  $("#firebase").remove();
-  $('#mySidebar').append("<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
-
-  // var $iframe = $("#firebase").contents();
-  // $("body", $iframe).trigger("click");
-  //$('#btnGoogleLogin').trigger('click');
+  chrome.runtime.sendMessage({message: 'login'}, function (response) {
+    console.log(response)
+    chrome.storage.sync.set({authInfo: response}, function() {
+      chrome.runtime.sendMessage({message: 'toggle'}, null);
+      chrome.runtime.sendMessage({message: 'toggle'}, null);
+    })
+  });
 })
+
 
 $('#extGBE-logout').click(async function(){
   // $("#firebase2").remove();
   // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
 
-  let uid = (await getChromeStg('loginToken')).loginToken.uid;
+  let uid = (await getChromeStg('authInfo')).authInfo.user.uid;
   chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
   function (response) {
     if(response=='success'){
-      alert('로그아웃 완료')
+      //alert('로그아웃 완료')
       chrome.runtime.sendMessage({message: 'toggle'}, null);  
     }else{
       alert('로그아웃 실패')
     }
-    //console.log('Response From API', response);
   });
 })
 
@@ -454,6 +447,68 @@ $('#extGBE-saveToServer').click(function(){
 setTimeout(function(){
   $('#mySidebar').show();
 },200)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // var customWindow = window.open('', '_blank', '');
+    //   customWindow.close();
+    //다시 로그인할때 응답이 여러번옴 삭제된거같아보여도 접속이 남아있는거같음
+    //console.log('토글요청!!')
+    //alert('로그인 됨!!')
+    // chrome.storage.sync.get(['loginToken'], function (result) {
+    //   console.log(result)
+    //   console.log(result.loginToken.stsTokenManager.accessToken)
+    // })
+    // if(response=='success'){
+    //   alert('로그아웃 완료')
+    //   chrome.runtime.sendMessage({message: 'toggle'}, null);  
+    // }else{
+    //   alert('로그아웃 실패')
+    // }
+    //console.log('Response From API', response);
+  // startSignIn();
+  // $("#firebase").remove();
+  // $('#mySidebar').append("<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+
+  // var $iframe = $("#firebase").contents();
+  // $("body", $iframe).trigger("click");
+  //$('#btnGoogleLogin').trigger('click');
+
+
+
+
+
+// TODO(DEVELOPER): Change the values below using values from the initialization snippet: Firebase Console > Overview > Add Firebase to your web app.
+// Initialize Firebase
+/**
+ * initApp handles setting up the Firebase context and registering
+ * callbacks for the auth status.
+ *
+ * The core initialization is in firebase.App - this is the glue class
+ * which stores configuration. We provide an app name here to allow
+ * distinguishing multiple app instances.
+ *
+ * This method also registers a listener with firebase.auth().onAuthStateChanged.
+ * This listener is called when the user is signed in or out, and that
+ * is where we update the UI.
+ *
+ * When signed in, we also authenticate to the Firebase Realtime Database.
+ */
+
+
+
+
 
 
 
