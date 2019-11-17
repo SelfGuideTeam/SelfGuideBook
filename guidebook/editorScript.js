@@ -3,22 +3,17 @@
 //     bgScreencapture = bg.screenshot,
 //     option_icon_state = !1;
 
-window.addEventListener("message", processFn, false);	
+// window.addEventListener("message", processFn, false);	
 
 
 
-function processFn(event) {
-  var bla = event.data;
-  if(bla.stsTokenManager.accessToken != undefined){
-    chrome.storage.sync.set({loginToken: bla}, function() {
-      chrome.storage.sync.get(['loginToken'], function (result) {
-        console.log(result)
-        console.log(result.loginToken.stsTokenManager.accessToken)
-      })
-    });
-    //console.log(bla)
-  }
-}
+// function processFn(event) {
+//   var bla = event.data;
+//   console.log(event)
+
+//     //console.log(bla)
+//   }
+// }
 
 
 // function sendChildMessage() {	
@@ -210,7 +205,6 @@ function getData(){
   var rr= chrome.storage.sync.get(['editorPages'], function (result) {
     pages = new ArrayList();
     if(result.editorPages==null){
-      alert('null이네')
       pages.add('')
     }else{
       var currentPage2 = currentPage+1;
@@ -331,7 +325,7 @@ function ajaxTest(){
     }
 }
 
-async function saveHtml_Server(htmlCode){
+async function saveHtml_Server(){
   // 입력값을 변수에 담고 문자열 형태로 변환
   var title = '';
   while(true){
@@ -344,28 +338,14 @@ async function saveHtml_Server(htmlCode){
     }
   }
 
-  //로컬에 저장된 토큰 가져오기
-  var accessToken = '';
-  accessToken = await getChromeStg('loginToken');
-  if(accessToken.loginToken){
-    accessToken = accessToken.loginToken.stsTokenManager.accessToken;
-    //console.log(accessToken)
-  }else{
-    alert('로그인을 먼저 해주세요.');
-    chrome.runtime.sendMessage({message: 'refresh_page'}, null);
-    return;
-  }
-
   var html ='';
   pages.toArray().forEach(function(element){
     html+=element;
   });
-  var data = {'accessToken' : accessToken,
-              'title' : title,
+  var data = {'title' : title,
               'htmlCode' : html };
-  data = JSON.stringify(data);
 
-  chrome.runtime.sendMessage({message: 'send_server', data : data}, 
+  chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
   function (response) {
     if(response=='success'){
       alert('서버저장 완료')
@@ -375,6 +355,25 @@ async function saveHtml_Server(htmlCode){
     //console.log('Response From API', response);
   });
 
+}
+
+function getMyGuideBooks(){
+  chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){
+    if(response=='fail'){ //수정
+      alert('로그인 먼저 해주세요')
+    }else{
+      myGuideBooks = response;
+      $('#myGuideBookList').empty();
+      response.forEach(function (item, index, array) {
+        //id='myGuideBookList'
+        // <li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
+        let guidBook = JSON.parse(item);
+        $('#myGuideBookList').append("<li class='extGBE-guideBook' value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
+        //console.log(item, index);
+      });
+      setGuideBookListener()
+    }
+  })
 }
 
 function getChromeStg(key, func1){
@@ -388,40 +387,142 @@ function getChromeStg(key, func1){
   // });
 }
 
-function loginCheck(key){
+async function loginCheck(){
+  let accessToken = (await getChromeStg('loginToken')).loginToken.stsTokenManager.accessToken;
 
+  chrome.runtime.sendMessage({message: 'tokenValidRequest', data : accessToken}, 
+  function (response) {
+    if(response=='success'){
+      alert('로그인 완료')
+    }else{
+      alert('로그인 실패')
+    }
+    //console.log('Response From API', response);
+  });
+
+  //alert(tab);
 }
 
-async function cheeck(){
-  let tab = await loginCheck('loginToken');
-  console.log(tab)
-  alert(tab);
-}
 
-//cheeck();
+getMyGuideBooks()
+
+// loginCheck();
 //listener -----------------------------------------------------
 
 
 
 
 $('#extGBE-login').click(function(){
-  $("#firebase").remove();
-  $('#mySidebar').append("<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
-  // var $iframe = $("#firebase").contents();
-  // $("body", $iframe).trigger("click");
-  //$('#btnGoogleLogin').trigger('click');
+  chrome.runtime.sendMessage({message: 'login'}, function (response) {
+    console.log(response)
+    chrome.storage.sync.set({authInfo: response}, function() {
+      chrome.runtime.sendMessage({message: 'toggle'}, null);
+      chrome.runtime.sendMessage({message: 'toggle'}, null);
+    })
+  });
+})
+
+$('#extGBE-logout').click(async function(){
+  // $("#firebase2").remove();
+  // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+
+  let uid = (await getChromeStg('authInfo')).authInfo.user.uid;
+  chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
+  function (response) {
+    if(response=='success'){
+      //alert('로그아웃 완료')
+      chrome.runtime.sendMessage({message: 'toggle'}, null);  
+    }else{
+      alert('로그아웃 실패')
+    }
+  });
 })
 
 $('#extGBE-saveToServer').click(function(){
+
   saveHtml_Server();
   // getChromeStg('loginToken', saveHtml_Server)
   // saveHtml_Server(title)
 })
 
+//목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
+function setGuideBookListener(){
+  $('.extGBE-guideBook').click(function(){
+    let index = $(this).attr('value');
+    let guideBook = JSON.parse(myGuideBooks[index]);
+    $('#my-editor').html(guideBook.html)
+  })
+}
+
+$('#btn10').click(function(){
+
+})
+
+
+// guideBookListRequest
+
+//로딩이 다 됐을 시점에 다시 보여주기
+setTimeout(function(){
+  $('#mySidebar').show();
+},200)
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+    // var customWindow = window.open('', '_blank', '');
+    //   customWindow.close();
+    //다시 로그인할때 응답이 여러번옴 삭제된거같아보여도 접속이 남아있는거같음
+    //console.log('토글요청!!')
+    //alert('로그인 됨!!')
+    // chrome.storage.sync.get(['loginToken'], function (result) {
+    //   console.log(result)
+    //   console.log(result.loginToken.stsTokenManager.accessToken)
+    // })
+    // if(response=='success'){
+    //   alert('로그아웃 완료')
+    //   chrome.runtime.sendMessage({message: 'toggle'}, null);  
+    // }else{
+    //   alert('로그아웃 실패')
+    // }
+    //console.log('Response From API', response);
+  // startSignIn();
+  // $("#firebase").remove();
+  // $('#mySidebar').append("<iframe id='firebase' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/login-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+
+  // var $iframe = $("#firebase").contents();
+  // $("body", $iframe).trigger("click");
+  //$('#btnGoogleLogin').trigger('click');
+
+
+
+
+
+// TODO(DEVELOPER): Change the values below using values from the initialization snippet: Firebase Console > Overview > Add Firebase to your web app.
+// Initialize Firebase
+/**
+ * initApp handles setting up the Firebase context and registering
+ * callbacks for the auth status.
+ *
+ * The core initialization is in firebase.App - this is the glue class
+ * which stores configuration. We provide an app name here to allow
+ * distinguishing multiple app instances.
+ *
+ * This method also registers a listener with firebase.auth().onAuthStateChanged.
+ * This listener is called when the user is signed in or out, and that
+ * is where we update the UI.
+ *
+ * When signed in, we also authenticate to the Firebase Realtime Database.
+ */
 
 
 
