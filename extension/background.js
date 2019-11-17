@@ -68,19 +68,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			sendResponse(error);
 		});
 		return true;
-	}else if(message=='saveRequest'){
+	}else if(message=='guideBookSaveRequest'){
 		// content-type을 설정하고 데이터 송신
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
-		xhr.setRequestHeader('Content-type', "application/json");
-		xhr.send(request.data);
+		// var xhr = new XMLHttpRequest();
+		// xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
+		// xhr.setRequestHeader('Content-type', "application/json");
+		// xhr.send(request.data);
 		
-		// 데이터 수신이 완료되면 표시
-		xhr.addEventListener('load', function(){
-			var result = JSON.parse(xhr.responseText);
-			sendResponse(result.result);
-		});
-		
+		// // 데이터 수신이 완료되면 표시
+		// xhr.addEventListener('load', function(){
+		// 	var result = JSON.parse(xhr.responseText);
+		// 	sendResponse(result.result);
+		// });
+		guideBookSaveRequest(sendResponse, request.data);
 		return true;
 	}else if(message=='logoutRequest'){
 		// content-type을 설정하고 데이터 송신
@@ -166,35 +166,59 @@ async function tokenValid(sendResponse){
 	return true;
 }
 
-async function guideBookListRequest(sendResponse){
+async function guideBookSaveRequest(sendResponse, data){
 	try{
 		let user = (await getChromeStg('authInfo')).authInfo.user;
 		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
-		// console.log(user.email)
-		if(result=='success'){
-			// content-type을 설정하고 데이터 송신
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/getGuideBookList');
-			xhr.setRequestHeader('Content-type', "application/json");
-			var data = {'email' : user.email
-						};
-			data = JSON.stringify(data);
-			xhr.send(data);
-			
-			// 데이터 수신이 완료되면 표시
-			xhr.addEventListener('load', function(){
-				var result = JSON.parse(xhr.responseText);
-				sendResponse(result.result);
-				// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-				// 	toggleSidebar(tabs[0])
-				// });
-			});
+		if(result.result=='success'){
+			var email = {'email' : user.email};
+			var data2 = Object.assign(email, data)
+			data2 = JSON.stringify(data2);
+			let result = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/setGuideBook', data2);
+			sendResponse(result.result);
 		}else{
 			sendResponse('fail')
 		}
 	} catch(err){
 
 	}
+}
+
+async function guideBookListRequest(sendResponse){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		console.log(result)
+		// console.log(user.email)
+		if(result.result=='success'){
+			var data = {'email' : user.email};
+			data = JSON.stringify(data);
+			let guideBooks = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/getGuideBookList', data);
+			//console.log(text)
+			sendResponse(guideBooks);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err);
+	}
+	return true;
+}
+
+function ajaxSend(url, data){
+	return new Promise((resolve, reject) => {
+		// content-type을 설정하고 데이터 송신
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', url);
+		xhr.setRequestHeader('Content-type', "application/json");
+		xhr.send(data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			var result = JSON.parse(xhr.responseText);
+			resolve(result)
+		});
+	});
 }
 
 function tokenValidRequest(accessToken){

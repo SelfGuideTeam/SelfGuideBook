@@ -325,7 +325,7 @@ function ajaxTest(){
     }
 }
 
-async function saveHtml_Server(htmlCode){
+async function saveHtml_Server(){
   // 입력값을 변수에 담고 문자열 형태로 변환
   var title = '';
   while(true){
@@ -338,28 +338,14 @@ async function saveHtml_Server(htmlCode){
     }
   }
 
-  //로컬에 저장된 토큰 가져오기
-  var accessToken = '';
-  accessToken = await getChromeStg('loginToken');
-  if(accessToken.loginToken){
-    accessToken = accessToken.loginToken.stsTokenManager.accessToken;
-    //console.log(accessToken)
-  }else{
-    alert('로그인을 먼저 해주세요.');
-    chrome.runtime.sendMessage({message: 'refresh_page'}, null);
-    return;
-  }
-
   var html ='';
   pages.toArray().forEach(function(element){
     html+=element;
   });
-  var data = {'accessToken' : accessToken,
-              'title' : title,
+  var data = {'title' : title,
               'htmlCode' : html };
-  data = JSON.stringify(data);
 
-  chrome.runtime.sendMessage({message: 'saveRequest', data : data}, 
+  chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
   function (response) {
     if(response=='success'){
       alert('서버저장 완료')
@@ -369,6 +355,25 @@ async function saveHtml_Server(htmlCode){
     //console.log('Response From API', response);
   });
 
+}
+
+function getMyGuideBooks(){
+  chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){
+    if(response=='fail'){ //수정
+      alert('로그인 먼저 해주세요')
+    }else{
+      myGuideBooks = response;
+      $('#myGuideBookList').empty();
+      response.forEach(function (item, index, array) {
+        //id='myGuideBookList'
+        // <li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
+        let guidBook = JSON.parse(item);
+        $('#myGuideBookList').append("<li id='guideBook' value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
+        //console.log(item, index);
+      });
+
+    }
+  })
 }
 
 function getChromeStg(key, func1){
@@ -397,6 +402,9 @@ async function loginCheck(){
 
   //alert(tab);
 }
+
+
+getMyGuideBooks()
 
 // loginCheck();
 //listener -----------------------------------------------------
@@ -432,20 +440,15 @@ $('#extGBE-logout').click(async function(){
 })
 
 $('#extGBE-saveToServer').click(function(){
-  chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){
-    if(response==''){ //수정
 
-    }else{
-      alert('로그인 먼저 해주세요')
-    }
-  })
-  //saveHtml_Server();
+  saveHtml_Server();
   // getChromeStg('loginToken', saveHtml_Server)
   // saveHtml_Server(title)
 })
 
+$('#btn10').click(function(){
 
-
+})
 
 
 // guideBookListRequest

@@ -149,9 +149,6 @@ var myGuideBookHtml2 = "\
 	<a href='#'><i class='icon-briefcase'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
-			<li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
-			<li><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
-			<li><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
 		</ul>\
 	</div>\
 </li>\

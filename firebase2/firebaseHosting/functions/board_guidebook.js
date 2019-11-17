@@ -95,12 +95,9 @@ router.post('/logout', async function(req, res, next){
     }
 })
 
-router.post('/saveHTML', async function(req, res, next){
+router.post('/setGuideBook', async function(req, res, next){
     try{
-        let decodedToken = await validToken(req.body.accessToken);
-        let guideCol = db.collection('BOARD_GUIDEBOOK');
-        let setSf = guideCol.doc(decodedToken.email).set({
-            title : req.body.title,
+        let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title).set({
             html : req.body.htmlCode,
             created_date : Date.now(),
             modifiyed_date : Date.now()
@@ -110,27 +107,45 @@ router.post('/saveHTML', async function(req, res, next){
             res.json(responseData)
             return;
         });
+
+        // let setSf = guideBookRef.doc(req.body.email).set({
+        //     title : req.body.title,
+        //     html : req.body.htmlCode,
+        //     created_date : Date.now(),
+        //     modifiyed_date : Date.now()
+        // }).then(function(error) {
+        //     console.log(error)
+        //     var responseData = {'result' : 'success'}
+        //     res.json(responseData)
+        //     return;
+        // });
     } catch(err){
         console.log(err);
+        res.json(err)
         return;
     }
 });
 
 router.post('/getGuideBookList', async function(req, res, next){
     try{
-        let guideBookRef = db.collection('cities').doc(req.body.email);
+        var guideBooks = new Array();
+        let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS');
         let getDoc = guideBookRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-            console.log('No such document!');
-            } else {
-            console.log('Document data:', doc.data());
-            }
-            res.json({'result' : 'success'});
+        .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                console.log(doc.id, " => ", doc.data());
+                var title = {'title' : doc.id};
+                var data2 = Object.assign(title, doc.data());
+                data2 = JSON.stringify(data2);
+                guideBooks.push(data2)
+            })
+            res.json(guideBooks);
             return;
         })
         .catch(err => {
+            res.json({'result' : 'fail'});
             console.log('Error getting document', err);
+            return;
         });
         // 
     } catch(err){

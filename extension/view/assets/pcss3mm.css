@@ -59,7 +59,7 @@
 	display: block;
 	float: left;
 	margin-right: 7px;
-  font-family: FontAwesome;
+  font-family: Georgia, "Malgun Gothic", serif;
   font-style: normal;
   font-size: 17px;
   -webkit-font-smoothing: antialiased;
@@ -451,16 +451,6 @@
 /**/
 /* font awesome */
 /**/
-@font-face
-{
-	font-family: 'FontAwesome';
-	src: url('../fonts/fontawesome-webfont.eot?v=3.0.1');
-	src: url('../fonts/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
-	url('../fonts/fontawesome-webfont.woff?v=3.0.1') format('woff'),
-	url('../fonts/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
 .icon-glass:before {content: '\f000';}
 .icon-music:before {content: '\f001';}
 .icon-search:before {content: '\f002';}
@@ -959,7 +949,7 @@
 .pcss3mm input,
 .pcss3mm textarea,
 .pcss3mm button {
-	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Georgia, "Malgun Gothic", serif;
 }
 .pcss3mm {
 	background: #ffffff;
