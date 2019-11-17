@@ -15,7 +15,7 @@
           </thead>
           <tbody>
             <tr v-for="item in items" :key="item.id">
-              <td @click="sendID(item)">{{ item.title }}</td>
+              <td @click="moveToRead(item.id)">{{ item.title }}</td>
               <td>{{ item.id }}</td>
               <td>{{ item.date }}</td>
             </tr>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import EventBus from '../eventBus.js'
+// import EventBus from '../eventBus.js'
 export default {
   data: () => ({
     items: [],
@@ -54,9 +54,15 @@ export default {
       })
       console.log(snapshot)
     },
-    sendID (payload) {
-      EventBus.$emit('receiveID', payload)
-      this.$router.push('read-board-page')
+    // sendID (payload) {
+    //   EventBus.$emit('receiveID', payload)
+    //   this.$router.push('read-board-page')
+    // },
+    moveToRead (id) {
+      console.log(id)
+      this.$router.push({
+        name: 'readBoard', params: { id }
+      })
     },
     moveToWrite () {
       this.$router.push('write-board-page')

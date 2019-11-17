@@ -7,15 +7,15 @@
   <v-card>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="headline">{{items.title}}</v-list-item-title>
-        <v-list-item-subtitle>by Kurt Wagner</v-list-item-subtitle>
+        <v-list-item-title class="headline">{{items[0].title}}</v-list-item-title>
+        <v-list-item-subtitle>{{items[0].writeDate}}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
     <v-img></v-img>
 
     <v-card-text>
-      Visit ten places on our planet that are undergoing the biggest changes today.
+      {{items[0].content}}
     </v-card-text>
 
     <v-card-actions>
@@ -38,71 +38,37 @@
 </template>
 
 <script>
-import EventBus from '../eventBus.js'
 export default {
   data () {
+    const boardID = this.$route.params.id
     return {
-      items: []
+      items: [],
+      id: boardID
     }
   },
   created () {
-    EventBus.$on('receiveID', (payload) => {
-      console.log(payload)
-      this
-        .$firebase
-        .firestore()
-        .collection('notes')
-        .doc(payload.id)
-        .get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document!')
-          } else {
-            console.log('Document data:', doc.data())
-            this.items.push({
-              title: doc.data().title,
-              content: doc.data().content,
-              writeDate: new Date(doc.data().date.seconds * 1000)
-            })
-            console.log(this.items)
-          }
-        })
-        .catch(err => {
-          console.log('Error getting document', err)
-        })
-    })
+    this
+      .$firebase
+      .firestore()
+      .collection('notes')
+      .doc(this.$route.params.id)
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log('No such document!')
+        } else {
+          console.log('Document data:', doc.data())
+          const date = new Date(doc.data().date.seconds * 1000)
+          this.items.push({
+            title: doc.data().title,
+            content: doc.data().content,
+            writeDate: date
+          })
+        }
+      })
+      .catch(err => {
+        console.log('Error getting document', err)
+      })
   }
-  // mounted () {
-  //   this.read()
-  // }
-  // methods: {
-  //   async read (id) {
-  //     const article = await this
-  //       .$firebase
-  //       .firestore()
-  //       .collection('notes')
-  //       .doc(id)
-  //       .get()
-  //       .then(doc => {
-  //         if (!doc.exists) {
-  //           console.log('No such document!')
-  //         } else {
-  //           console.log('Document data:', doc.data())
-  //           const date = doc.data().date.seconds * 1000
-  //           console.log(date)
-  //           this.items.push({
-  //             title: doc.data().title,
-  //             content: doc.data().content,
-  //             writeDate: doc.data().date
-  //           })
-  //         }
-  //       })
-  //       .catch(err => {
-  //         console.log('Error getting document', err)
-  //       })
-  //     console.log(article)
-  //   }
-  // }
-
 }
 </script>

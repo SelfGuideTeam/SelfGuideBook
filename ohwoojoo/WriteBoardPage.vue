@@ -7,6 +7,7 @@
       <v-layout>
           <v-col cols="3" offset="1">
             <v-overflow-btn
+              v-model="selectedCategory"
               :items="category"
               label="카테고리 선택"
             ></v-overflow-btn>
@@ -49,6 +50,7 @@ export default {
   data () {
     return {
       category: ['아시아', '유럽', '북아메리카', '남아메리카', '오스트레일리아', '아프리카'],
+      selectedCategory: '',
       title: '',
       content: '',
       fileUpload: []
@@ -57,7 +59,7 @@ export default {
   methods: {
     async post () {
       const r = await this.$firebase.firestore().collection('notes').add({
-        title: this.title, content: this.content, date: new Date()
+        title: this.title, content: this.content, date: new Date(), category: this.selectedCategory
       })
       console.log(r)
       this.title = ''
