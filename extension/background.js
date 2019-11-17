@@ -106,6 +106,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		tokenValid(sendResponse);
 		return true;
 	}else if(message == 'guideBookListRequest'){
+		guideBookListRequest(sendResponse);
+		return true;
 		//   //로컬에 저장된 토큰 가져오기
 		//   var accessToken = '';
 		//   accessToken = await getChromeStg('loginToken');
@@ -117,23 +119,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// 	chrome.runtime.sendMessage({message: 'refresh_page'}, null);
 		// 	return;
 		//   }
-		// // content-type을 설정하고 데이터 송신
-		// var xhr = new XMLHttpRequest();
-		// xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/getGuideBookList');
-		// xhr.setRequestHeader('Content-type', "application/json");
-		// var data = {'uid' : request.data
-		// 			};
-		// data = JSON.stringify(data);
-		// xhr.send(data);
-		
-		// // 데이터 수신이 완료되면 표시
-		// xhr.addEventListener('load', function(){
-		// 	var result = JSON.parse(xhr.responseText);
-		// 	sendResponse(result.result);
-		// 	// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-		// 	// 	toggleSidebar(tabs[0])
-		// 	// });
-		// });
+
 		// return true;
 	}else if(message=='toggle'){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -157,27 +143,58 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 
-function guideBookListRequest(){
-
-}
-
 function getChromeStg(key){
 	return new Promise((resolve, reject) => {
 	  chrome.storage.sync.get([key], result => {
 		resolve(result)
 	  });
 	});
-  }
+}
 
 function setChromeStg(key, value){
 chrome.storage.sync.set({key: value}, null);
 }
 
 async function tokenValid(sendResponse){
-	let accessToken = (await getChromeStg('authInfo')).authInfo.user.stsTokenManager.accessToken
-	let result =  await tokenValidRequest(accessToken);
-	sendResponse(result.result);
+	try{
+		let accessToken = (await getChromeStg('authInfo')).authInfo.user.stsTokenManager.accessToken
+		let result =  await tokenValidRequest(accessToken);
+		sendResponse(result.result);
+	} catch(error){
+		sendResponse('fail')
+	}
 	return true;
+}
+
+async function guideBookListRequest(sendResponse){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		// console.log(user.email)
+		if(result=='success'){
+			// content-type을 설정하고 데이터 송신
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/getGuideBookList');
+			xhr.setRequestHeader('Content-type', "application/json");
+			var data = {'email' : user.email
+						};
+			data = JSON.stringify(data);
+			xhr.send(data);
+			
+			// 데이터 수신이 완료되면 표시
+			xhr.addEventListener('load', function(){
+				var result = JSON.parse(xhr.responseText);
+				sendResponse(result.result);
+				// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+				// 	toggleSidebar(tabs[0])
+				// });
+			});
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+
+	}
 }
 
 function tokenValidRequest(accessToken){

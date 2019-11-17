@@ -117,8 +117,27 @@ router.post('/saveHTML', async function(req, res, next){
 });
 
 router.post('/getGuideBookList', async function(req, res, next){
-
-
+    try{
+        let guideBookRef = db.collection('cities').doc(req.body.email);
+        let getDoc = guideBookRef.get()
+        .then(doc => {
+            if (!doc.exists) {
+            console.log('No such document!');
+            } else {
+            console.log('Document data:', doc.data());
+            }
+            res.json({'result' : 'success'});
+            return;
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+        // 
+    } catch(err){
+        res.json({'result' : 'fail'});
+        console.log(err);
+        return;
+    }
 });
 
 router.get('/login-google', function(req, res, next){

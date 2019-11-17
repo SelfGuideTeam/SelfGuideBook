@@ -432,7 +432,14 @@ $('#extGBE-logout').click(async function(){
 })
 
 $('#extGBE-saveToServer').click(function(){
-  saveHtml_Server();
+  chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){
+    if(response==''){ //수정
+
+    }else{
+      alert('로그인 먼저 해주세요')
+    }
+  })
+  //saveHtml_Server();
   // getChromeStg('loginToken', saveHtml_Server)
   // saveHtml_Server(title)
 })
@@ -441,7 +448,7 @@ $('#extGBE-saveToServer').click(function(){
 
 
 
-
+// guideBookListRequest
 
 //로딩이 다 됐을 시점에 다시 보여주기
 setTimeout(function(){
