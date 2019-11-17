@@ -95,12 +95,6 @@ function toggleSidebar() {
 		<li class='active'><a href='#' >1</a></li>\
 		<li id='createPage'><a href='#'>+</a></li>\
 		</ul>\
-		<input type='button' id='btn1' value='총길이'>\
-		<input type='button' id='btn2' value='스토리지삭제'>\
-		<input type='button' id='btn3' value='페이지삭제'>\
-		<input type='button' id='btn10' value='요청'>\
-		<input type='button' id='btn110' value='파이어베이스 요청'>\
-		<input type='button' id='sendMessage' value='메세지 보내기'>\
 		<div id='my-editor'></div>\
 		";
 		sidebar.style.cssText = "\
@@ -127,7 +121,12 @@ function toggleSidebar() {
 
 {/* <li><a href='#'>&laquo;</a></li>\
 <li><a href='#'>&raquo;</a></li>\ */}
-
+// <input type='button' id='btn1' value='총길이'>\
+// <input type='button' id='btn2' value='스토리지삭제'>\
+// <input type='button' id='btn3' value='페이지삭제'>\
+// <input type='button' id='btn10' value='요청'>\
+// <input type='button' id='btn110' value='파이어베이스 요청'>\
+// <input type='button' id='sendMessage' value='메세지 보내기'>\
 
 
 var saveHtml2 = "\
