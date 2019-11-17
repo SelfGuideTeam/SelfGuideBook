@@ -368,10 +368,10 @@ function getMyGuideBooks(){
         //id='myGuideBookList'
         // <li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
         let guidBook = JSON.parse(item);
-        $('#myGuideBookList').append("<li id='guideBook' value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
+        $('#myGuideBookList').append("<li class='extGBE-guideBook' value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
         //console.log(item, index);
       });
-
+      setGuideBookListener()
     }
   })
 }
@@ -422,7 +422,6 @@ $('#extGBE-login').click(function(){
   });
 })
 
-
 $('#extGBE-logout').click(async function(){
   // $("#firebase2").remove();
   // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
@@ -445,6 +444,15 @@ $('#extGBE-saveToServer').click(function(){
   // getChromeStg('loginToken', saveHtml_Server)
   // saveHtml_Server(title)
 })
+
+//목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
+function setGuideBookListener(){
+  $('.extGBE-guideBook').click(function(){
+    let index = $(this).attr('value');
+    let guideBook = JSON.parse(myGuideBooks[index]);
+    $('#my-editor').html(guideBook.html)
+  })
+}
 
 $('#btn10').click(function(){
 
