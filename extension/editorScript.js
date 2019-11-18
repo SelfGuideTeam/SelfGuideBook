@@ -110,12 +110,12 @@ $('#my-editor').trumbowyg({
     ['unorderedList', 'orderedList'],
     ['horizontalRule'], 
     ['fontfamily'],
-    ['superscript', 'subscript'],
     ['link'],
     ['image'],
+    ['superscript', 'subscript'],
     ['lineheight'],
     ['removeformat'],
-    ['SaveToPdf', 'refreshEditor', 'fullscreen']
+    ['fullscreen']
   ],
   plugins: {
     // Add imagur parameters to upload plugin for demo purposes
@@ -349,6 +349,7 @@ async function saveHtml_Server(){
   function (response) {
     if(response=='success'){
       alert('서버저장 완료')
+      getMyGuideBooks();
     }else{
       alert('서버저장 실패')
     }
@@ -453,6 +454,18 @@ function setGuideBookListener(){
     $('#my-editor').html(guideBook.html)
   })
 }
+
+$('#extGBE-saveToLocal').click(function(){
+})
+
+$('#extGBE-saveToPDF').click(function(){
+  var html = '';
+  pages.toArray().forEach(function(element){
+    html+=element;
+  });
+  printHtmlToPdf(html);
+  printHtmlToPdf(html)
+})
 
 $('#btn10').click(function(){
 

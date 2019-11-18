@@ -79,12 +79,14 @@ function toggleSidebar() {
 		<ul id='pcss3mm' class='pcss3mm'>\
 				<!-- home -->\
 				<li>\
-					<a href='#'><i class='icon-home'></i>Home</a>\
+					<div class='grid-container2_2'>\
+						<a href='#'><i class='icon-home'></i>Ho</a>\
+					</div>\
 				</li>\
 				<!--/ home -->\
 				<!-- 저장 -->\
-				"+saveHtml+"\
 				"+myGuideBookHtml+"\
+				"+saveHtml+"\
 				<!--/ share -->\
 				<!-- pin or unpin -->\
 				"+loginOutHtml+"\
@@ -132,11 +134,20 @@ function toggleSidebar() {
 var saveHtml2 = "\
 <li class='dropdown'>\
 <a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
-<div class='grid-container3'>\
+<div class='grid-container2'>\
 	<ul>\
 		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
 		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
-		<li id='extGBE-saveToPDF'><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
+		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
+	</ul>\
+</div>\
+</li>\
+<li class='dropdown'>\
+<a href='#'><i class='icon-briefcase'></i>삭제</a><b></b>\
+<div class='grid-container2'>\
+	<ul>\
+		<li id='extGBE-deleteOnePage'><a href='' onclick='return false'><i class='icon-lemon'></i>현재 페이지</a></li>\
+		<li id='extGBE-deleteAllPage'><a href='' onclick='return false'><i class='icon-globe'></i>전체 페이지</a></li>\
 	</ul>\
 </div>\
 </li>\
@@ -151,19 +162,19 @@ var myGuideBookHtml2 = "\
 		</ul>\
 	</div>\
 </li>\
-<!--/ 공유 -->\
-<li class='right dropdown'>\
-	<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
-	<div class='grid-container3'>\
-		<ul>\
-			<li><a href='#'><i class='icon-twitter'></i>Twitter</a></li>\
-			<li><a href='#'><i class='icon-facebook-sign'></i>Facebook</a></li>\
-			<li><a href='#'><i class='icon-pinterest'></i>Pinterest</a></li>\
-			<li><a href='#'><i class='icon-envelope-alt'></i>Email</a></li>\
-		</ul>\
-	</div>\
-</li>\
 "
+// <!--/ 공유 -->\
+// <li class='right dropdown'>\
+// 	<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
+// 	<div class='grid-container3'>\
+// 		<ul>\
+// 			<li><a href='#'><i class='icon-twitter'></i>Twitter</a></li>\
+// 			<li><a href='#'><i class='icon-facebook-sign'></i>Facebook</a></li>\
+// 			<li><a href='#'><i class='icon-pinterest'></i>Pinterest</a></li>\
+// 			<li><a href='#'><i class='icon-envelope-alt'></i>Email</a></li>\
+// 		</ul>\
+// 	</div>\
+// </li>\
 
 var loginHtml = "<li class='right' id='extGBE-login'>\
 <a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그인</a><b></b>\

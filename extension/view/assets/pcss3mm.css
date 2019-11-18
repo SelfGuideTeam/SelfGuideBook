@@ -246,6 +246,10 @@
 .pcss3mm .grid-container2 {
 	width: 155px;
 }
+.pcss3mm .grid-column2_2,
+.pcss3mm .grid-container2_2 {
+	width: 117px;
+}
 .pcss3mm .grid-column3,
 .pcss3mm .grid-container3 {
 	width: 233px;
@@ -707,12 +711,14 @@
 /*                               RESPONSIVENESS                               */
 /*----------------------------------------------------------------------------*/
 
+
+
 /**/
-/* wide */
+/* wide   기존 페이지가 밀려나감(트립어드바이저)*/ 
 /**/
 @media screen and (min-width: 1240px) {
 	.page {
-		width: 1200px;
+		width: 1300px;
 	}
 }
 
@@ -958,7 +964,7 @@
 	border-color: #d9d9d9;
 	background: #ffffff;
 	font-size: 13px;
-	line-height: 52px;
+	line-height: 35px;
 }
 .pcss3mm a {
 	color: #a6a6a6;
