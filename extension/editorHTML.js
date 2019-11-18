@@ -26,6 +26,8 @@ function handleRequest(request){
 		var img = document.createElement('img'); 
         img.setAttribute('src', imgsrc);
 		document.getElementById('my-editor').appendChild(img)
+	}else if(request.callFunction == "getMyGuideBooks"){
+		if(sidebarOpen) getMyGuideBooks();
 	}
 
 }
@@ -41,6 +43,7 @@ function toggleSidebar() {
 		var sidebar = document.createElement('div');
 		var extViewCss = chrome.runtime.getURL('/view/assets/bootstrap3.3.6.css');
 		var extViewCss_pcc = chrome.runtime.getURL('/view/assets/pcss3mm.css');
+		var pdfTestCss = chrome.runtime.getURL('/view/assets/pdfTest.css');
 		var extViewJs = chrome.runtime.getURL('/view/js/bootstrap3.3.6.js');
 		$('head').append($('<link>')
 			.attr("rel","stylesheet")
@@ -50,6 +53,11 @@ function toggleSidebar() {
 			.attr("type","text/javascript")
 			.attr("charset","utf-8")
 			.attr("src", extViewJs));
+		// $('head').append($('<script>')
+		// 	.attr("type","text/css")
+		// 	.attr("charset","utf-8")
+		// 	.attr("media", "screen,print")
+		// 	.attr("src", pdfTestCss));
 		
 		// <nav class='navbar navbar-default'>\
 		// 	<div class='container-fluid'>\
@@ -78,14 +86,13 @@ function toggleSidebar() {
 		sidebar.innerHTML = "\
 		<ul id='pcss3mm' class='pcss3mm'>\
 				<!-- home -->\
-				<li>\
-					<div class='grid-container2_2'>\
-						<a href='#'><i class='icon-home'></i>Ho</a>\
-					</div>\
+				<li class='container1' >\
+					<a href='https://fir-ex-63c1a.firebaseapp.com/' target='_blank'><i class='icon-home'></i>Home</a>\
 				</li>\
 				<!--/ home -->\
 				<!-- 저장 -->\
 				"+myGuideBookHtml+"\
+				<!-- 저장 -->\
 				"+saveHtml+"\
 				<!--/ share -->\
 				<!-- pin or unpin -->\
@@ -132,6 +139,11 @@ function toggleSidebar() {
 
 
 var saveHtml2 = "\
+<!-- title -->\
+<li id='extGBE-title' class='container1'>\
+<a id='extGBE-titleArea' href='' onclick='return false'><i class='icon-home'></i>...</a>\
+</li>\
+<!--/ title -->\
 <li class='dropdown'>\
 <a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
 <div class='grid-container2'>\
@@ -139,6 +151,7 @@ var saveHtml2 = "\
 		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
 		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
 		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
+		<li id='extGBE-imageEditorPopup'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
 	</ul>\
 </div>\
 </li>\

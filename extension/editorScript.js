@@ -26,7 +26,7 @@ $('#my-editor').trumbowyg({
   removeformatPasted: true,
   lang : 'ko',
   tagsToRemove: ['script', 'link'],
-  svgPath : chrome.runtime.getURL('/js/Trumbowyg-master/dist/ui/icons.svg'),
+  svgPath : chrome.runtime.getURL('/apis/Trumbowyg-master/dist/ui/icons.svg'),
   autogrow: true,
   btnsDef: {
     // Create a new dropdown
@@ -330,7 +330,7 @@ async function saveHtml_Server(){
   var title = '';
   while(true){
     if(title==''){
-      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', '' );
+      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', $('#extGBE-titleArea').attr('value') );
     }else if(title == null){
       return;
     }else{
@@ -372,6 +372,10 @@ function getMyGuideBooks(){
         $('#myGuideBookList').append("<li class='extGBE-guideBook' value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
         //console.log(item, index);
       });
+      let guidebook2 = JSON.parse(myGuideBooks[0]);
+      $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guidebook2.title+"")
+      $('#extGBE-titleArea').attr('value', guidebook2.title);
+      $('#my-editor').html(guidebook2.html)
       setGuideBookListener()
     }
   })
@@ -446,15 +450,6 @@ $('#extGBE-saveToServer').click(function(){
   // saveHtml_Server(title)
 })
 
-//목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
-function setGuideBookListener(){
-  $('.extGBE-guideBook').click(function(){
-    let index = $(this).attr('value');
-    let guideBook = JSON.parse(myGuideBooks[index]);
-    $('#my-editor').html(guideBook.html)
-  })
-}
-
 $('#extGBE-saveToLocal').click(function(){
 })
 
@@ -466,6 +461,35 @@ $('#extGBE-saveToPDF').click(function(){
   printHtmlToPdf(html);
   printHtmlToPdf(html)
 })
+
+$('#extGBE-title').click(function(){
+  var title = '';
+  while(true){
+    if(title==''){
+      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', $('#extGBE-titleArea').attr('value') );
+    }else if(title == null){
+      return;
+    }else{
+      break;
+    }
+  }
+  alert(inputString);
+})
+
+$('#extGBE-imageEditorPopup').click(function(){
+  
+})
+
+//목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
+function setGuideBookListener(){
+  $('.extGBE-guideBook').click(function(){
+    let index = $(this).attr('value');
+    let guideBook = JSON.parse(myGuideBooks[index]);
+    $('#my-editor').html(guideBook.html)
+    $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guideBook.title+"")
+  })
+}
+
 
 $('#btn10').click(function(){
 

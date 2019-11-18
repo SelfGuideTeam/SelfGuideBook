@@ -8,7 +8,7 @@
     },
 	"browser_action": {
 		"default_icon": "icon3.png",
-		"__default_popup": "js/capture-plugin/view/popup.html",
+		"__default_popup": "apis/capture-plugin/view/popup.html",
 		"__default_title": "Clicked Me"
 	},
 	"icons": { 
@@ -16,29 +16,29 @@
     "__content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["js/jquery/jquery.min.js",
-				"js/quill/quill.js",
+			"js": ["apis/jquery/jquery.min.js",
+				"apis/quill/quill.js",
 				"script.js",
-				"js/capture-plugin/js/contentscript.js"
+				"apis/capture-plugin/js/contentscript.js"
 			],
-			"css": ["js/quill/quill-snow.css"]
+			"css": ["apis/quill/quill-snow.css"]
 		}
 	],
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["js/jquery/jquery.min.js",
-				"js/Trumbowyg-master/dist/trumbowyg.min.js",
-				"js/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
-				"js/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
-				"js/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
-				"js/Trumbowyg-master/dist/langs/ko.js",
-				"js/capture-plugin/js/contentscript.js",
-				"js/html2pdf.js",
-				"js/arrayList.js",
+			"js": ["apis/jquery/jquery.min.js",
+				"apis/Trumbowyg-master/dist/trumbowyg.min.js",
+				"apis/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
+				"apis/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
+				"apis/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
+				"apis/Trumbowyg-master/dist/langs/ko.js",
+				"apis/capture-plugin/js/contentscript.js",
+				"apis/html2pdf.js",
+				"apis/arrayList.js",
 				"editorHTML.js"
 			],
-			"css": ["js/Trumbowyg-master/dist/ui/trumbowyg.min.css",
+			"css": ["apis/Trumbowyg-master/dist/ui/trumbowyg.min.css",
 					"editorCSS.css"],
 			"all_frames": false
 		}

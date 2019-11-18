@@ -140,6 +140,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 });
 
+chrome.tabs.onActivated.addListener(function (tab){
+	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+	//alert('tabChanged!')
+})
 
 
 
@@ -331,7 +335,7 @@ var screenshot = {
 			case "edit":
 			default:
 				screenshot.setScreenName(), chrome.tabs.create({
-					url: "/js/capture-plugin/view/edit.html" + ("edit" == t ? "" : "?" + t)
+					url: "/apis/capture-plugin/view/edit.html" + ("edit" == t ? "" : "?" + t)
 				}, function() {})
 		}
 	},
@@ -445,7 +449,7 @@ var screenshot = {
 			r && r(e, a, n)
 		})), chrome.tabs.getSelected(null, function(t) {
 			chrome.tabs.executeScript(t.id, {
-				file: "/js/capture-plugin/js/page.js"
+				file: "/apis/capture-plugin/js/page.js"
 			}, function() {
 				e(t)
 			})
@@ -454,16 +458,16 @@ var screenshot = {
 	scrollSelected: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/jquery.Jcrop.css"
+				file: "/apis/capture-plugin/css/jquery.Jcrop.css"
 			}), 
 			chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/stylecrop.css"
+				file: "/apis/capture-plugin/css/stylecrop.css"
 			}), 
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.Jcrop.js"
+				file: "/apis/capture-plugin/js/jquery.Jcrop.js"
 			}, function() {
 				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/scrolltoCrop.js"
+					file: "/apis/capture-plugin/js/scrolltoCrop.js"
 				}, function() {
 					chrome.tabs.sendRequest(e.id, {
 						type: "setOptions",
@@ -477,15 +481,15 @@ var screenshot = {
 	destroyscrollSelected: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/jquery.Jcrop.css"
+				file: "/apis/capture-plugin/css/jquery.Jcrop.css"
 			}), chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/stylecrop.css"
+				file: "/apis/capture-plugin/css/stylecrop.css"
 			}), 
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.Jcrop.js"
+				file: "/apis/capture-plugin/js/jquery.Jcrop.js"
 			}, function() {
 				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/scrolltoCrop.js"
+					file: "/apis/capture-plugin/js/scrolltoCrop.js"
 				}, function() {
 					chrome.tabs.sendRequest(e.id, {
 						type: "destroy_selected",
@@ -498,7 +502,7 @@ var screenshot = {
 	domcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/contentscript.js"
+				file: "/apis/capture-plugin/js/contentscript.js"
 			}, function() {
 				chrome.tabs.sendRequest(e.id, {
 					type: "start",
@@ -510,7 +514,7 @@ var screenshot = {
 	destroydomcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/contentscript.js"
+				file: "/apis/capture-plugin/js/contentscript.js"
 			}, function() {
 				chrome.tabs.sendRequest(e.id, {
 					type: "destroy",

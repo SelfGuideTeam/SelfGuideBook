@@ -966,6 +966,11 @@
 	font-size: 13px;
 	line-height: 35px;
 }
+
+.pcss3mm .container1{
+	width : 95px;
+}
+
 .pcss3mm a {
 	color: #a6a6a6;
 }
