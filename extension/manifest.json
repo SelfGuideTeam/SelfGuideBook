@@ -33,6 +33,7 @@
 				"apis/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
 				"apis/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
 				"apis/Trumbowyg-master/dist/langs/ko.js",
+				"apis/tui-image-editor/tui-image-editor.js",
 				"apis/capture-plugin/js/contentscript.js",
 				"apis/html2pdf.js",
 				"apis/arrayList.js",

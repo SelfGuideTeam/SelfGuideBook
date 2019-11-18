@@ -84,6 +84,7 @@ function toggleSidebar() {
 		// </nav>\
 		sidebar.id = "mySidebar";
 		sidebar.innerHTML = "\
+		<div id='tui-image-editor'></div>\
 		<ul id='pcss3mm' class='pcss3mm'>\
 				<!-- home -->\
 				<li class='container1' >\
