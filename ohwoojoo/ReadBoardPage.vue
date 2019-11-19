@@ -3,19 +3,25 @@
     <v-layout>
         <h1>게시글 읽기</h1>
     </v-layout>
-    <v-divider></v-divider>
-  <v-card>
+  <v-card class="mt-5">
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="headline">{{items[0].title}}</v-list-item-title>
-        <v-list-item-subtitle>{{items[0].writeDate}}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{category}}</v-list-item-subtitle>
+        <v-list-item-title class="headline mt-5">{{title}}</v-list-item-title>
+        <v-list-item-subtitle>
+          <v-row wrap>
+            <v-col>{{writeDate}}</v-col>
+            <v-spacer></v-spacer>
+            <v-col>{{writer}}</v-col>
+          </v-row>
+          </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
     <v-img></v-img>
 
     <v-card-text>
-      {{items[0].content}}
+      {{content}}
     </v-card-text>
 
     <v-card-actions>
@@ -23,12 +29,14 @@
       <v-btn
         text
         color="deep-purple accent-4"
+        @click="moveToUpdate(id)"
       >
         수정
       </v-btn>
       <v-btn
         text
         color="deep-purple accent-4"
+        @click="del(id)"
       >
         삭제
       </v-btn>
@@ -40,10 +48,13 @@
 <script>
 export default {
   data () {
-    const boardID = this.$route.params.id
     return {
-      items: [],
-      id: boardID
+      id: this.$route.params.id,
+      title: '',
+      content: '',
+      writer: '',
+      category: '',
+      date: ''
     }
   },
   created () {
@@ -58,17 +69,29 @@ export default {
           console.log('No such document!')
         } else {
           console.log('Document data:', doc.data())
-          const date = new Date(doc.data().date.seconds * 1000)
-          this.items.push({
-            title: doc.data().title,
-            content: doc.data().content,
-            writeDate: date
-          })
+          this.title = doc.data().title
+          this.writer = doc.data().writer
+          this.content = doc.data().content
+          this.writeDate = doc.data().date
+          this.id = doc.id
+          this.category = doc.data().category
         }
       })
       .catch(err => {
         console.log('Error getting document', err)
       })
+  },
+  methods: {
+    moveToUpdate (id) {
+      this.$router.push({
+        name: 'updateBoard', params: { id }
+      })
+    },
+    del (id) {
+      this.$firebase.firestore().collection('notes').doc(id).delete()
+      console.log('성공')
+      this.$router.push('../board-page')
+    }
   }
 }
 </script>

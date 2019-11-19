@@ -19,21 +19,29 @@ const routes = [
   },
   // 게시글 작성 페이지
   {
-    path: '/write-board-page',
+    path: '/write-board-page/:id?',
     name: 'writeBoard',
     component: () => import('../views/WriteBoardPage')
   },
 
-  /// //////////////////////////////////////////////////////
-  /// //////////////////////////////////////////////////////
   // 게시글 읽기 -> 수정, 삭제
   {
-    path: `/read-board-page/:id`,
+    path: `/read-board-page/:id?`,
     name: 'readBoard',
     component: () => import('../views/ReadBoardPage')
   },
-  /// //////////////////////////////////////////////////////
-  /// //////////////////////////////////////////////////////
+  // 게시글 수정
+  {
+    path: `/update-board-page/:id?`,
+    name: 'updateBoard',
+    component: () => import('../views/UpdateBoardPage')
+  },
+  // 검색 결과
+  {
+    path: '/search-board/:type?/:keyword?',
+    name: 'searchBoard',
+    component: () => import('../views/SearchBoard')
+  },
   // 인증
   {
     path: '/sign-in',
@@ -63,6 +71,10 @@ const routes = [
   {
     path: '/vuex',
     component: () => import('../views/vuex')
+  },
+  {
+    path: '/storage',
+    component: () => import('../views/storage')
   },
   // 그 외 페이지
   {

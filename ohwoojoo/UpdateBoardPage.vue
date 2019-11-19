@@ -10,7 +10,7 @@
               v-model="selectedCategory"
               :items="category"
               label="카테고리 선택"
-            ></v-overflow-btn>
+            >{{selectedCategory}}</v-overflow-btn>
           </v-col>
       </v-layout>
         <v-layout column="column">
@@ -19,7 +19,7 @@
                     <v-subheader>제목</v-subheader>
                 </v-col>
                 <v-col cols="8">
-                    <v-text-field v-model="title"></v-text-field>
+                    <v-text-field v-model="title">{{title}}</v-text-field>
                 </v-col>
             </v-row>
             <!-- <v-row>
@@ -29,14 +29,13 @@
             </v-row> -->
             <v-row>
                 <v-col cols="10" offset="1">
-                    <v-textarea v-model="content" outlined="outlined" no-resize="no-resize" rows="25"></v-textarea>
+                    <v-textarea v-model="content" outlined="outlined" no-resize="no-resize" rows="25">{{content}}</v-textarea>
                 </v-col>
             </v-row>
             <v-row>
                 <v-spacer></v-spacer>
                 <v-col cols="4">
-                    <v-btn text @click="post">작성</v-btn>
-                    <v-btn text @click="rewrite">재작성</v-btn>
+                    <v-btn text @click="update(id)">수정</v-btn>
                     <v-btn text @click="moveToBoard">취소</v-btn>
                 </v-col>
             </v-row>
@@ -52,51 +51,42 @@ export default {
       selectedCategory: '',
       title: '',
       content: '',
-      date: '',
       writer: '',
+      date: '',
       fileUpload: [],
-      id: this.$route.params.id,
-      month: '',
-      hour: '',
-      minutes: ''
+      id: this.$route.params.id
     }
   },
-  mounted: {
-
+  created () {
+    this
+      .$firebase
+      .firestore()
+      .collection('notes')
+      .doc(this.$route.params.id)
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log('No such document!')
+        } else {
+          console.log('Document data:', doc.data())
+          this.title = doc.data().title
+          this.date = doc.data().date
+          this.content = doc.data().content
+          this.writer = doc.data().writer
+          this.selectedCategory = doc.data().category
+        }
+      })
+      .catch(err => {
+        console.log('Error getting document', err)
+      })
   },
   methods: {
-    async post () {
-      const d = new Date()
-      this.month = d.getMonth() + 1
-      if (d.getHours() < 10) {
-        this.hour = '0' + d.getHours()
-      } else {
-        this.hour = d.getHours()
-      }
-      if (d.getMinutes() < 10) {
-        this.minutes = '0' + d.getMinutes()
-      } else {
-        this.minutes = d.getMinutes()
-      }
-      const date = d.getFullYear() + '-' + this.month + '-' + d.getDate() + ' ' + this.hour + ':' + this.minutes
-
-      const r = await this.$firebase.firestore().collection('notes').add({
-        title: this.title,
-        content: this.content,
-        date: date,
-        category: this.selectedCategory
+    async update (id) {
+      const r = await this.$firebase.firestore().collection('notes').doc(id).set({
+        title: this.title, content: this.content, category: this.selectedCategory, writer: this.writer, date: this.date
       })
       console.log(r)
-      this.title = ''
-      this.content = ''
-      this.fileUpload = ''
-      this.$router.push('board-page')
-      console.log('성공')
-    },
-    async rewrite () {
-      this.title = ''
-      this.fileUpload = ''
-      this.content = ''
+      this.$router.push({ name: 'Board' })
     },
     moveToBoard () {
       this.$router.push('board-page')

@@ -1,63 +1,74 @@
 <template>
-  <v-container>
-    <v-layout>
-      <h1>게시판</h1>
-    </v-layout>
-    <template>
-      <v-simple-table fixed-header height="500px">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-center">Title</th>
-              <th class="text-center">Writer</th>
-              <th class="text-center">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in items" :key="item.id">
-              <td @click="moveToRead(item.id)">{{ item.title }}</td>
-              <td>{{ item.id }}</td>
-              <td>{{ item.date }}</td>
-            </tr>
-          </tbody>
+<v-container>
+  <v-card>
+    <v-card-title>
+      게시판
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="검색"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :search="search"
+    >
+        <template v-slot:item="{item}">
+          <tr>
+            <td @click="moveToRead(item.id)">{{ item.title }}</td>
+            <td>{{ item.writer }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.hits }}</td>
+            <td>{{ item.comments }}</td>
+          </tr>
         </template>
-      </v-simple-table>
-    </template>
-    <v-layout>
+    </v-data-table>
+  </v-card>
+  <v-layout>
         <v-spacer></v-spacer>
-        <v-btn text @click="moveToWrite">작성</v-btn>
+        <v-btn text class="mt-5" @click="moveToWrite">작성</v-btn>
     </v-layout>
-  </v-container>
+</v-container>
 </template>
-
 <script>
-// import EventBus from '../eventBus.js'
 export default {
-  data: () => ({
-    items: [],
-    title: '',
-    content: ''
-  }),
+  data () {
+    return {
+      search: '',
+      headers: [
+        {
+          text: '제목',
+          align: 'left',
+          sortable: false,
+          value: 'title'
+        },
+        { text: '작성자', value: 'writer' },
+        { text: '날짜', value: 'date' },
+        { text: '조회수', value: 'hits' },
+        { text: '댓글', value: 'comments' }
+      ],
+      items: []
+    }
+  },
   mounted () {
     this.get()
   },
   methods: {
     async get () {
       const snapshot = await this.$firebase.firestore().collection('notes').get()
-      this.items = []
+      // this.items = []
       snapshot.forEach(board => {
-        const date = new Date(board.data().date.seconds * 1000)
-        const { title, content } = board.data()
+        const { title, writer, hits, comments } = board.data()
         this.items.push({
-          title, content, id: board.id, date
+          title, writer, id: board.id, date: board.data().date, hits, comments
         })
       })
       console.log(snapshot)
     },
-    // sendID (payload) {
-    //   EventBus.$emit('receiveID', payload)
-    //   this.$router.push('read-board-page')
-    // },
     moveToRead (id) {
       console.log(id)
       this.$router.push({
