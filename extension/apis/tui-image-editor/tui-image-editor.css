@@ -83,6 +83,13 @@ body > textarea {
   border-color: #fdba3b;
   color: #fff;
 }
+
+.tui-image-editor-container .tui-image-editor-append-btn {
+  background-color: #fdba3b;
+  border-color: #fdba3a;
+  color: #fff;
+}
+
 .tui-image-editor-container .tui-image-editor-load-btn {
   position: absolute;
   left: 0;

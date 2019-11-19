@@ -1,12 +1,106 @@
 $(document).ready(function() {
-    var e = "Unknown OS"; - 1 != navigator.appVersion.indexOf("Win") && (e = "Windows"), -1 != navigator.appVersion.indexOf("Mac") && (e = "MacOS"), "Windows" == e && ($("#save-to-voila").remove(), $(".theme-btn").css({
-        width: "96%"
-    }), $(".save-btn .icon").css({
-        margin: "0px 0px 0px 50px"
-    }), $("#iframe").attr("src", "https://www.globaldelight.net/voila_web_extension/advertise_for_windows.php")), $("#iframe").on("load", function() {
-        $("#loader").hide()
+    // Image editor
+    var imageEditor = new tui.ImageEditor('#tui-image-editor-container', {
+        includeUI: {
+            loadImage: {
+                path: localStorage.imgdata,
+                name: localStorage.screenname
+            },
+            theme: whiteTheme, // or whiteTheme
+            initMenu: 'filter',
+            menuBarPosition: 'bottom'
+        },
+        cssMaxWidth: 1920,
+        cssMaxHeight: 1280,
+        usageStatistics: false,
+        selectionStyle: {
+            cornerSize: 20,
+            rotatingPointOffset: 70
+        }
+    });
+
+    $('.tui-image-editor-append-btn').click(function(){
+        // $("#iframe").css({
+        //     "margin-bottom": "178px"
+        // });
+        // var e = document.getElementsByClassName("lower-canvas"),
+        //     a = document.getElementsByClassName("upper-canvas");
+        // var e = $('.lower-canvas');
+        // var a = $('.lower-canvas');
+        // var t = document.createElement("canvas");
+        // t.width = e.width, t.height = e.height;
+        // var n = t.getContext("2d");
+        // n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
+        var e = document.getElementById("canvasfon"),
+        a = document.getElementById("canvasbg"),
+        t = document.createElement("canvas");
+        t.width = e.width, t.height = e.height;
+        var n = t.getContext("2d");
+        n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
+
+        var o = (localStorage.screenname + "screenshot."),
+            r = localStorage.format || "png";
+        o += r, 
+
+        c = t.toDataURL("image/" + r, localStorage.imageQuality / 100) 
+        c = c.substring(22)
+
+        var i = chrome.extension.getBackgroundPage().screenshot;
+        // ,l = i.getFileName(g, !0);
+        l = $("#image_name_text").val() + $("#filename_ext").text();
+        $.ajax({
+            url: "https://api.imgur.com/3/image",
+            headers: {
+                'Authorization': 'Client-ID 1264088c861551b'
+            },
+            type: "POST",
+            data: {
+                'image': c,
+                'type': 'base64', 
+                'title': 'image'
+            },
+            success: function(data) {
+                // imageSelected = null;
+                // chrome.tabs.create({
+                //     url: data.data.link
+                // });
+
+                var e = chrome.extension.getBackgroundPage().screenshot;
+                e.insertImage({
+                    url: data.data.link
+                })
+                chrome.tabs.getCurrent(function(tab) {
+                    chrome.tabs.remove(tab.id, function() { });
+                });
+            },
+            error: function(e) {
+                var a = $.parseJSON(e.responseText);
+                alert(a.error);
+            }
+        });
     })
-}), $(function() {
+
+    
+
+    // var e = "Unknown OS"; - 1 != navigator.appVersion.indexOf("Win") && (e = "Windows"), -1 != navigator.appVersion.indexOf("Mac") && (e = "MacOS"), "Windows" == e && ($("#save-to-voila").remove(), $(".theme-btn").css({
+    //     width: "96%"
+    // }), $(".save-btn .icon").css({
+    //     margin: "0px 0px 0px 50px"
+    // }), $("#iframe").attr("src", "https://www.globaldelight.net/voila_web_extension/advertise_for_windows.php")), $("#iframe").on("load", function() {
+    //     $("#loader").hide()
+    // })
+
+
+}), 
+$(function() {
+    var r, i = localStorage.imgdata,
+    g = (localStorage.screenname, JSON.parse(localStorage.pageinfo || "{}")),
+    c = null,
+    l = $("#lower-canvas");
+    ! function() {
+        var e = window.location.href.match(/\?(\w+)$/);
+        return e && e[1] || ""
+    }()
     function e() {
         $("#editcanva").width(l.width()).height(l.height()), r = $("#editcanva").canvasPaint(), r.loadBackgroundImage(i, function() {
             $("#loadingDiv").hide();
@@ -43,123 +137,120 @@ $(document).ready(function() {
         })
     }
 
-    function a() {
-        $("#save-img"), $("#background");
-        $("#save-image").click(function() {
-            var e = document.getElementById("canvasfon"),
-                a = document.getElementById("canvasbg"),
-                t = document.createElement("canvas");
-            t.width = e.width, t.height = e.height;
-            var n = t.getContext("2d");
-            n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
-            var o = $("#imgfordownload"),
-                r = (new Date).getTime() + "screenshot.",
-                i = localStorage.format || "png";
-            r += i, c = t.toDataURL("image/" + i, localStorage.imageQuality / 100);
-            var g = chrome.extension.getBackgroundPage().screenshot,
-                l = g.path + r;
-            g.createBlob(c, r, function() {
-                o.attr("href", l);
-                var e = chrome.extension.getBackgroundPage().screenshot;
-                e.download({
-                    url: $("#imgfordownload").attr("href"),
-                    pageinfo: $("#image_name_text").val() + $("#filename_ext").text()
-                })
-            })
-        }), 
-        $("#insert-image").click(function() {
-        }), 
-        $("#save-to-imgur").click(function() {
-            $("#iframe").css({
-                "margin-bottom": "178px"
-            });
-            var e = document.getElementById("canvasfon"),
-                a = document.getElementById("canvasbg"),
-                t = document.createElement("canvas");
-            t.width = e.width, t.height = e.height;
-            var n = t.getContext("2d");
-            n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
-            var o = ($("#imgfordownload"), (new Date).getTime() + "screenshot."),
-                r = localStorage.format || "png";
-            o += r, 
+    e();
 
-            c = t.toDataURL("image/" + r, localStorage.imageQuality / 100) 
-            c = c.substring(22)
+    // function a() {
+    //     $("#save-img"), $("#background");
+    //     $("#save-image").click(function() {
+    //         var e = document.getElementById("canvasfon"),
+    //             a = document.getElementById("canvasbg"),
+    //             t = document.createElement("canvas");
+    //         t.width = e.width, t.height = e.height;
+    //         var n = t.getContext("2d");
+    //         n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
+    //         var o = $("#imgfordownload"),
+    //             r = (new Date).getTime() + "screenshot.",
+    //             i = localStorage.format || "png";
+    //         r += i, c = t.toDataURL("image/" + i, localStorage.imageQuality / 100);
+    //         var g = chrome.extension.getBackgroundPage().screenshot,
+    //             l = g.path + r;
+    //         g.createBlob(c, r, function() {
+    //             o.attr("href", l);
+    //             var e = chrome.extension.getBackgroundPage().screenshot;
+    //             e.download({
+    //                 url: $("#imgfordownload").attr("href"),
+    //                 pageinfo: $("#image_name_text").val() + $("#filename_ext").text()
+    //             })
+    //         })
+    //     }), 
+    //     $("#insert-image").click(function() {
+    //     }), 
+    //     $("#save-to-imgur").click(function() {
+    //         $("#iframe").css({
+    //             "margin-bottom": "178px"
+    //         });
+    //         var e = document.getElementById("canvasfon"),
+    //             a = document.getElementById("canvasbg"),
+    //             t = document.createElement("canvas");
+    //         t.width = e.width, t.height = e.height;
+    //         var n = t.getContext("2d");
+    //         n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
+    //         var o = ($("#imgfordownload"), (new Date).getTime() + "screenshot."),
+    //             r = localStorage.format || "png";
+    //         o += r, 
 
-            var i = chrome.extension.getBackgroundPage().screenshot,
-                l = i.getFileName(g, !0);
-            l = $("#image_name_text").val() + $("#filename_ext").text();
-            $.ajax({
-                url: "https://api.imgur.com/3/image",
-                headers: {
-                    'Authorization': 'Client-ID 1264088c861551b'
-                },
-                type: "POST",
-                data: {
-                    'image': c,
-                    'type': 'base64', 
-                    'title': 'image'
-                },
-                success: function(data) {
-                    // imageSelected = null;
-                    // chrome.tabs.create({
-                    //     url: data.data.link
-                    // });
+    //         c = t.toDataURL("image/" + r, localStorage.imageQuality / 100) 
+    //         c = c.substring(22)
 
-                    var e = chrome.extension.getBackgroundPage().screenshot;
-                    e.insertImage({
-                        url: data.data.link
-                    })
-                    chrome.tabs.getCurrent(function(tab) {
-                        chrome.tabs.remove(tab.id, function() { });
-                    });
-                },
-                error: function(e) {
-                    var a = $.parseJSON(e.responseText);
-                    alert(a.error);
-                }
-            });
-        })
-    }
+    //         var i = chrome.extension.getBackgroundPage().screenshot,
+    //             l = i.getFileName(g, !0);
+    //         l = $("#image_name_text").val() + $("#filename_ext").text();
+    //         $.ajax({
+    //             url: "https://api.imgur.com/3/image",
+    //             headers: {
+    //                 'Authorization': 'Client-ID 1264088c861551b'
+    //             },
+    //             type: "POST",
+    //             data: {
+    //                 'image': c,
+    //                 'type': 'base64', 
+    //                 'title': 'image'
+    //             },
+    //             success: function(data) {
+    //                 // imageSelected = null;
+    //                 // chrome.tabs.create({
+    //                 //     url: data.data.link
+    //                 // });
 
-    function t(e) {
-        var e = $.trim(e),
-            a = e.split("/"),
-            t = a[0] + "//" + a[2];
-        return t
-    }
+    //                 var e = chrome.extension.getBackgroundPage().screenshot;
+    //                 e.insertImage({
+    //                     url: data.data.link
+    //                 })
+    //                 chrome.tabs.getCurrent(function(tab) {
+    //                     chrome.tabs.remove(tab.id, function() { });
+    //                 });
+    //             },
+    //             error: function(e) {
+    //                 var a = $.parseJSON(e.responseText);
+    //                 alert(a.error);
+    //             }
+    //         });
+    //     })
+    // }
 
-    function n() {
-        var e = new Date,
-            a = e.getHours(),
-            t = e.getMinutes(),
-            n = a >= 12 ? " pm" : " am";
-        a %= 12, a = a ? a : 12, t = 10 > t ? "0" + t : t;
-        var o = a + ":" + t + n;
-        return o
-    }
+    // function t(e) {
+    //     var e = $.trim(e),
+    //         a = e.split("/"),
+    //         t = a[0] + "//" + a[2];
+    //     return t
+    // }
 
-    function o() {
-        var e = new XMLHttpRequest,
-            a = "http://www.globaldelight.com/",
-            t = Math.round(1e4 * Math.random());
-        e.open("HEAD", a + "?rand=" + t, !1);
-        try {
-            return e.send(), e.status >= 200 && e.status < 304 ? !0 : !1
-        } catch (n) {
-            return !1
-        }
-    } {
-        var r, i = localStorage.imgdata,
-            g = (localStorage.screenname, JSON.parse(localStorage.pageinfo || "{}")),
-            c = null,
-            l = $("#imageedit");
-        ! function() {
-            var e = window.location.href.match(/\?(\w+)$/);
-            return e && e[1] || ""
-        }()
-    }
-    1 == o() ? ($("#iframe").show(), $("#bannerNoConnection").hide()) : 0 == o() && ($("#iframe, #loader").hide(), $("#bannerNoConnection").show()), l.load(function() {
-        e()
-    }), l.attr("src", i)
+    // function n() {
+    //     var e = new Date,
+    //         a = e.getHours(),
+    //         t = e.getMinutes(),
+    //         n = a >= 12 ? " pm" : " am";
+    //     a %= 12, a = a ? a : 12, t = 10 > t ? "0" + t : t;
+    //     var o = a + ":" + t + n;
+    //     return o
+    // }
+
+    // function o() {
+    //     var e = new XMLHttpRequest,
+    //         a = "http://www.globaldelight.com/",
+    //         t = Math.round(1e4 * Math.random());
+    //     e.open("HEAD", a + "?rand=" + t, !1);
+    //     try {
+    //         return e.send(), e.status >= 200 && e.status < 304 ? !0 : !1
+    //     } catch (n) {
+    //         return !1
+    //     }
+    // } 
+    //$("#iframe").show(), $("#bannerNoConnection").hide()
+    // 1 == o() ? () 
+    // : 
+    // 0 == o() && ($("#iframe, #loader").hide(), $("#bannerNoConnection").show()), 
+    // l.load(function() {
+    //     e()
+    // }), l.attr("src", i)
 });

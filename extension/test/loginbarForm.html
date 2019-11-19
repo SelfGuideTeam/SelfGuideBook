@@ -1,103 +1,28 @@
-<ul id='pcss3mm' class='pcss3mm'>\
-    <!-- home -->\
-    <li>\
-        <a href='#'><i class='icon-home'></i>Home</a>\
-    </li>\
-    <!--/ home -->\
-    <!-- portfolio -->\
-    <li class='dropdown'>\
-        <a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
-        <div class='grid-container3'>\
-            <ul>\
-                <li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
-                <li><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
-                <li><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
-            </ul>\
-        </div>\
-    </li>\
-    <li class='dropdown'>\
-        <a href='#'><i class='icon-briefcase'></i>내 가이드북</a><b></b>\
-        <div class='grid-container3'>\
-            <ul>\
-                <li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
-                <li><a href='#'><i class='icon-globe'></i>서버저장</a></li>\
-                <li><a href='#'><i class='icon-th-large'></i>PDF저장</a></li>\
-            </ul>\
-        </div>\
-    </li>\
-    <!--/ portfolio -->\
-    <!-- about -->\
-    <li class='dropdown'>\
-        <a href='#' class='active'><i class='icon-star'></i>저장</a><b></b>\
-        <div class='grid-container3'>\
-            <ul>\
-                <li class='dropdown'>\
-                    <a href='#' class='active'><i class='icon-bullhorn'></i>News</a>\
-                    <div class='grid-container3'>\
-                        <ul>\
-                            <li><a href='#'><i class='icon-ok'></i>Company</a></li>\
-                            <li><a href='#'><i class='icon-ok'></i>Products</a></li>\
-                            <li><a href='#'><i class='icon-ok'></i>Specials</a></li>\
-                        </ul>\
-                    </div>\
-                </li>\
-                <li><a href='#'><i class='icon-globe'></i>Mission</a></li>\
-                <li class='dropdown'>\
-                    <a href='#'><i class='icon-group'></i><b></b>Our Team</a>\
-                    <div class='grid-container3'>\
-                        <ul>\
-                            <li class='dropdown'>\
-                                <a href='#'>Markus Fisher</a>\
-                                <div class='grid-container3'>\
-                                    <ul>\
-                                        <li><a href='#'>About</a></li>\
-                                        <li><a href='#'>Skills</a></li>\
-                                        <li><a href='#'>Contacts</a></li>\
-                                    </ul>\
-                                </div>\
-                            </li>\
-                            <li class='dropdown'>\
-                                <a href='#'>Leyla Sparks</a>\
-                                <div class='grid-container3'>\
-                                    <ul>\
-                                        <li><a href='#'>About</a></li>\
-                                        <li><a href='#'>Skills</a></li>\
-                                        <li><a href='#'>Contacts</a></li>\
-                                    </ul>\
-                                </div>\
-                            </li>\
-                            <li><a href='#'>Gleb Ismailov</a></li>\
-                            <li><a href='#'>Viktoria Gibbers</a></li>\
-                        </ul>\
-                    </div>\
-                </li>\
-                <li><a href='#'><i class='icon-trophy'></i>Rewards</a></li>\
-                <li><a href='#'><i class='icon-certificate'></i>Certificates</a></li>\
-            </ul>\
-        </div>\
-    </li>\
-    <!--/ about -->\
-    <!-- contacts -->\
-    <li>\
-        <a href='#'><i class='icon-phone'></i>Contacts</a><b></b>\
-    </li>\
-    <!--/ contacts -->\
-    <!-- share -->\
-    <li class='right dropdown'>\
-        <a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
-        <div class='grid-container3'>\
-            <ul>\
-                <li><a href='#'><i class='icon-twitter'></i>Twitter</a></li>\
-                <li><a href='#'><i class='icon-facebook-sign'></i>Facebook</a></li>\
-                <li><a href='#'><i class='icon-pinterest'></i>Pinterest</a></li>\
-                <li><a href='#'><i class='icon-envelope-alt'></i>Email</a></li>\
-            </ul>\
-        </div>\
-    </li>\
-    <!--/ share -->\
-    <!-- pin or unpin -->\
-    <li class='right'>\
-        <a href='#' onclick='getElementById('pcss3mm').className = (getElementById('pcss3mm').className == 'pcss3mm' ? 'pcss3mm pcss3mm-fixed' : 'pcss3mm'); return false;'><i class='icon-pushpin'></i>Pin/Unpin</a>\
-    </li>\
-    <!--/ pin or unpin -->\
-</ul>\
+<div class="tui-image-editor-controls">\n <div class="tui-image-editor-controls-logo">\n <img src="' + biImage + '" />\n
+    </div>\n <ul class="tui-image-editor-menu">\n <li id="tie-btn-undo" class="tui-image-editor-item">\n <svg
+                class="svg_ic-menu">\n
+                <use xlink:href="' + normal.path + '#' + normal.name + '-ic-undo" class="enabled" />\n
+                <use xlink:href="' + disabled.path + '#' + disabled.name + '-ic-undo" class="normal" />\n
+                <use xlink:href="' + hover.path + '#' + hover.name + '-ic-undo" class="hover" />\n </svg>\n </li>\n <li
+            id="tie-btn-redo" class="tui-image-editor-item">\n <svg class="svg_ic-menu">\n
+                <use xlink:href="' + normal.path + '#' + normal.name + '-ic-redo" class="enabled" />\n
+                <use xlink:href="' + disabled.path + '#' + disabled.name + '-ic-redo" class="normal" />\n
+                <use xlink:href="' + hover.path + '#' + hover.name + '-ic-redo" class="hover" />\n </svg>\n </li>\n <li
+            id="tie-btn-reset" class="tui-image-editor-item">\n <svg class="svg_ic-menu">\n
+                <use xlink:href="' + normal.path + '#' + normal.name + '-ic-reset" class="enabled" />\n
+                <use xlink:href="' + disabled.path + '#' + disabled.name + '-ic-reset" class="normal" />\n
+                <use xlink:href="' + hover.path + '#' + hover.name + '-ic-reset" class="hover" />\n </svg>\n </li>\n <li
+            class="tui-image-editor-item">\n <div class="tui-image-editor-icpartition"></div>\n </li>\n <li
+            id="tie-btn-delete" class="tui-image-editor-item">\n <svg class="svg_ic-menu">\n
+                <use xlink:href="' + normal.path + '#' + normal.name + '-ic-delete" class="enabled" />\n
+                <use xlink:href="' + disabled.path + '#' + disabled.name + '-ic-delete" class="normal" />\n
+                <use xlink:href="' + hover.path + '#' + hover.name + '-ic-delete" class="hover" />\n </svg>\n </li>\n
+        <li id="tie-btn-delete-all" class="tui-image-editor-item">\n <svg class="svg_ic-menu">\n
+                <use xlink:href="' + normal.path + '#' + normal.name + '-ic-delete-all" class="enabled" />\n
+                <use xlink:href="' + disabled.path + '#' + disabled.name + '-ic-delete-all" class="normal" />\n
+                <use xlink:href="' + hover.path + '#' + hover.name + '-ic-delete-all" class="hover" />\n </svg>\n </li>
+        \n <li class="tui-image-editor-item">\n <div class="tui-image-editor-icpartition"></div>\n </li>\n </ul>\n\n
+    <div class="tui-image-editor-controls-buttons">\n <div style="' + loadButtonStyle + '">\n ' +
+            locale.localize('Load') + '\n <input type="file" class="tui-image-editor-load-btn" />\n </div>\n <button
+            class="tui-image-editor-download-btn" style="' + downloadButtonStyle + '">\n ' + locale.localize('Download')
+            + '\n </button>\n </div>\n </div>\n';

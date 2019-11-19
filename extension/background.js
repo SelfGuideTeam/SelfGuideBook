@@ -128,7 +128,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}else if(message=='refresh_page'){
 		chrome.tabs.reload();
 	}else{
-		alert('저장');
+		//alert('저장');
 		console.log(message);
 	}
 
