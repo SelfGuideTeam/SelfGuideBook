@@ -13,36 +13,31 @@
 // }
 
 
-// chrome.tabs.onUpdated.addListener(function(tabId) {
-// 	if (chrome.runtime.lastError) {
-//         //console.log(chrome.runtime.lastError.message);
-//     } else {
-//         // Tab exists
-// 		chrome.pageAction.show(tabId);
-//     }
-// 	//console.log('tabID : '+tabId)
-// });
+chrome.tabs.onUpdated.addListener(function(tabId) {
+	chrome.pageAction.show(tabId);
+});
 
-// chrome.tabs.getSelected(null, function(tab) {
-// 	chrome.pageAction.show(tab.id);
-// });
+chrome.tabs.getSelected(null, function(tab) {
+	chrome.pageAction.show(tab.id);
+});
 
-
-var config = {
-	apiKey: "AIzaSyAsuqJ-7DH6YCl3zoi90u7DqsD6vIL_PV0",
-	authDomain: "fir-ex-63c1a.firebaseapp.com",
-};
-firebase.initializeApp(config);
-
-
-var provider = new firebase.auth.GoogleAuthProvider();
-
-var toggleStatus = false;
-chrome.browserAction.onClicked.addListener(toggleSidebar);
+chrome.pageAction.onClicked.addListener(function(tab) {
+	chrome.tabs.getSelected(null, function(tab) {
+		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
+	});
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
 	if(message=='sidebar'){
+		// chrome.windows.create({
+		// 	url: chrome.runtime.getURL("credentials.html"),
+		// 	type: "popup"
+		//   }, function(win) {
+		// 	// win represents the Window object from windows API
+		// 	// Do something after opening
+		//   });
+
 		chrome.tabs.executeScript(null, {file: "editorScript.js"}, null);
 	}else if(message=='selectCapture'){
 		localStorage.firstuse = !1, screenshot.destroydomcapture(), screenshot.scrollSelected()
@@ -61,76 +56,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             .then(text => sendResponse(text))
             .catch(error => catchError())
 			return true;  // Will respond asynchronously.
-	}else if(message=='login'){ 
-		firebase.auth().signInWithPopup(provider).then(function(result) {
-			sendResponse(result);
-		  }).catch(function(error) {
-			sendResponse(error);
-		});
-		return true;
-	}else if(message=='guideBookSaveRequest'){
-		// content-type을 설정하고 데이터 송신
-		// var xhr = new XMLHttpRequest();
-		// xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
-		// xhr.setRequestHeader('Content-type', "application/json");
-		// xhr.send(request.data);
-		
-		// // 데이터 수신이 완료되면 표시
-		// xhr.addEventListener('load', function(){
-		// 	var result = JSON.parse(xhr.responseText);
-		// 	sendResponse(result.result);
-		// });
-		guideBookSaveRequest(sendResponse, request.data);
-		return true;
-	}else if(message=='logoutRequest'){
-		// content-type을 설정하고 데이터 송신
-		setChromeStg('accessToken', '')
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout');
-		xhr.setRequestHeader('Content-type', "application/json");
-		var data = {'uid' : request.data
-					};
-		data = JSON.stringify(data);
-		xhr.send(data);
-		
-		// 데이터 수신이 완료되면 표시
-		xhr.addEventListener('load', function(){
-			var result = JSON.parse(xhr.responseText);
-			sendResponse(result.result);
-			// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			// 	toggleSidebar(tabs[0])
-			// });
-		});
-		return true;
-	}else if(message=='tokenValidRequest'){
-		tokenValid(sendResponse);
-		return true;
-	}else if(message == 'guideBookListRequest'){
-		guideBookListRequest(sendResponse);
-		return true;
-		//   //로컬에 저장된 토큰 가져오기
-		//   var accessToken = '';
-		//   accessToken = await getChromeStg('loginToken');
-		//   if(accessToken.loginToken){
-		// 	accessToken = accessToken.loginToken.stsTokenManager.accessToken;
-		// 	//console.log(accessToken)
-		//   }else{
-		// 	alert('로그인을 먼저 해주세요.');
-		// 	chrome.runtime.sendMessage({message: 'refresh_page'}, null);
-		// 	return;
-		//   }
-
-		// return true;
-	}else if(message=='toggle'){
-		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			toggleSidebar(tabs[0]);
-		});
-	}else if(message=='refresh_page'){
-		chrome.tabs.reload();
-	}else{
-		alert('저장');
-		console.log(message);
-	}
+	  	}
 
 	function catchError(){
 		console.log('errr')
@@ -139,111 +65,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 });
-
-
-
-
-function getChromeStg(key){
-	return new Promise((resolve, reject) => {
-	  chrome.storage.sync.get([key], result => {
-		resolve(result)
-	  });
-	});
-}
-
-function setChromeStg(key, value){
-chrome.storage.sync.set({key: value}, null);
-}
-
-async function tokenValid(sendResponse){
-	try{
-		let accessToken = (await getChromeStg('authInfo')).authInfo.user.stsTokenManager.accessToken
-		let result =  await tokenValidRequest(accessToken);
-		sendResponse(result.result);
-	} catch(error){
-		sendResponse('fail')
-	}
-	return true;
-}
-
-async function guideBookSaveRequest(sendResponse, data){
-	try{
-		let user = (await getChromeStg('authInfo')).authInfo.user;
-		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
-		if(result.result=='success'){
-			var email = {'email' : user.email};
-			var data2 = Object.assign(email, data)
-			data2 = JSON.stringify(data2);
-			let result = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/setGuideBook', data2);
-			sendResponse(result.result);
-		}else{
-			sendResponse('fail')
-		}
-	} catch(err){
-
-	}
-}
-
-async function guideBookListRequest(sendResponse){
-	try{
-		let user = (await getChromeStg('authInfo')).authInfo.user;
-		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
-		console.log(result)
-		// console.log(user.email)
-		if(result.result=='success'){
-			var data = {'email' : user.email};
-			data = JSON.stringify(data);
-			let guideBooks = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/getGuideBookList', data);
-			//console.log(text)
-			sendResponse(guideBooks);
-		}else{
-			sendResponse('fail')
-		}
-	} catch(err){
-		console.log(err);
-	}
-	return true;
-}
-
-function ajaxSend(url, data){
-	return new Promise((resolve, reject) => {
-		// content-type을 설정하고 데이터 송신
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', url);
-		xhr.setRequestHeader('Content-type', "application/json");
-		xhr.send(data);
-		
-		// 데이터 수신이 완료되면 표시
-		xhr.addEventListener('load', function(){
-			var result = JSON.parse(xhr.responseText);
-			resolve(result)
-		});
-	});
-}
-
-function tokenValidRequest(accessToken){
-	return new Promise((resolve, reject) => {
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/verifyIdToken');
-		xhr.setRequestHeader('Content-type', "application/json");
-		var data = {'accessToken' : accessToken
-					};
-		//console.log(data)
-		data = JSON.stringify(data);
-		xhr.send(data);
-	
-		// 데이터 수신이 완료되면 표시
-		xhr.addEventListener('load', function(){
-			//console.log(xhr)
-			var result = JSON.parse(xhr.responseText);
-			resolve(result)
-		});
-	});
-}
-  
-async function toggleSidebar(tab) {
-	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
-}
 
 
 
@@ -555,15 +376,15 @@ var screenshot = {
 		});
 	}
 };
-// chrome.tabs.onUpdated.addListener(function(e, t, o) {
-// chrome.browserAction.setPopup(screenshot.testValidURLs(o.url) ? {
-// 	tabId: o.id,
-// 	popup: "/js/capture-plugin/view/popup.html"
-// } : {
-// 	tabId: o.id,
-// 	popup: "/js/capture-plugin/view/invalidUrl.html"
-// })
-// }), 
+chrome.tabs.onUpdated.addListener(function(e, t, o) {
+chrome.browserAction.setPopup(screenshot.testValidURLs(o.url) ? {
+	tabId: o.id,
+	popup: "/js/capture-plugin/view/popup.html"
+} : {
+	tabId: o.id,
+	popup: "/js/capture-plugin/view/invalidUrl.html"
+})
+}), 
 chrome.runtime.onInstalled.addListener(function() {}), chrome.extension.onMessage.addListener(function(e, t, o) {
 if ("openpage" === e.msg) screenshot.openPage(e.url);
 else if ("getformat" === e.msg) o({
@@ -606,5 +427,6 @@ else if ("up" == e.type) {
 	w: 400,
 	h: 200
   }), window.onload = function() {
+	initApp();
 	screenshot.init()
   };

@@ -2,23 +2,41 @@
 페이지 자체의 style이 확장에서 쓴 글의 style과 겹침(버튼)
 확장프로그램이 페이지를 가림
 
+
+
+
 페이징 기능
 
+
 html clean
+
+
 
 한글 폰트를 쓰려면 pdf html에 포함해주어야함
   <head>
     <link href="https://fonts.googleapis.com/css?family=Spicy+Rice" rel="stylesheet">
   </head>
 
-대시보드
-https://chrome.google.com/webstore/devconsole/g00976188104004256733/bffmniloojjiimonaijhekakbihghpph/edit/listing?hl=ko
+
+
+
+
+
+
+
+
+
+
+
+
 
 이미지 resize
 확장프로그램 height 조절
 
+
 Trumbowyg 에디터 사용
 https://alex-d.github.io/Trumbowyg/demos/#plugins-resizimg
+
 
 image resize api
 https://imageresizer.io/demo
@@ -31,6 +49,9 @@ https://www.sejda.com/html-pdf-api
 
 https://www.api2pdf.com/using-custom-fonts-with-wkhtmltopdf-and-headless-chrome/
 
+
+
+
 필요한 이미지
 확장프로그램 메인아이콘 128X128
 SVG이미지 아이콘 - 선택캡처, 전체캡처, 영역캡처, PDF저장, 페이지삭제, 페이지추가, 에디터초기화
@@ -38,13 +59,27 @@ SVG이미지 아이콘 - 선택캡처, 전체캡처, 영역캡처, PDF저장, �
 
 
 https://ahribori.com/article/5a2032f5014bc70f303f77b4
-https://gomdoreepooh.github.io/notes/ajax-by-nodejs
 
 
 
 
-해야될것
-로그인/안했을때 구분하는 상단바
-가이드북을 여러개 저장하는 기능
-여러개 저장된 가이드북을 보여주고 선택할 수 있는 리스트
-내가 보고있는 가이드북 이름 띄워주기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

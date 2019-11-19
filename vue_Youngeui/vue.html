@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+
+        <div id="app">
+            {{ message }}
+        </div>
+        <div id="app2">
+            <span v-bind:title="message">
+                <!-- v-bind : src = "변수" == 엘리먼트의 상태값을 바꿔줄 때 사용 ( attr 처럼 ) -->
+                내 위에 마우스
+            </span>
+        </div>
+        <div id="app3">
+            <p v-if="seen">
+                보다
+            </p>
+        </div>
+        <div id="app4">
+            <ol>
+                <li v-for="todo in todos">
+                    {{ todo.text }}
+                </li>
+            </ol>
+        </div>
+        <div id="app5">
+            <p>{{message}}</p>
+            <button v-on:click="reverseMessage">메시지뒤집기</button>
+        </div>
+        <div id="app6">
+            <p>{{message}}</p>
+            <input v-model="message">
+        </div>
+        <script>
+            var asd = new Vue({
+                el: '#app',
+                data: {
+                    message: 'hello vue.js'
+                }
+            })
+            var app2 = new Vue({
+                el: '#app2',
+                data: {
+                    message: "로드 : " + new Date()
+                }
+            })
+            var app3 = new Vue({
+                el: '#app3',
+                data: {
+                    seen: true
+                }
+            })
+            var app4 = new Vue({
+                el: '#app4',
+                data: {
+                    todos: [
+                        {
+                            text: '자바스크립트배우기 '
+                        }, {
+                            text: 'Vue 배우기'
+                        }, {
+                            text: '무언가 멋진 것을 만들기 '
+                        }
+                    ]
+                }
+            })
+            var app5 = new Vue({
+                el: '#app5',
+                data: {
+                    message: "안녕하세요! vue.js!"
+                },
+                methods: {
+                    reverseMessage: function () {
+                        this.message = this
+                            .message
+                            .split('')
+                            .reverse()
+                            .join('');
+                    }
+                }
+            })
+            var app6 = new Vue({
+                el: '#app6',
+                data: {
+                    message: "안녕하세요 vue!"
+                }
+            })
+        </script>
+    </body>
+</html>
