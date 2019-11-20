@@ -126,7 +126,8 @@ function toggleSidebar() {
 				<!-- pin or unpin -->\
 				"+loginOutHtml+"\
 				<!--/ pin or unpin -->\
-			</ul>\
+		</ul>\
+		<h1 style='padding-left:10px; padding:3px;'>2박3일 호주여행&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 최신상태</h1>\
 		<div id='my-editor'></div>\
 		";
 		sidebar.style.cssText = "\
@@ -163,7 +164,7 @@ function toggleSidebar() {
 
 var saveHtml2 = "\
 <!-- title -->\
-<li id='extGBE-title' class='container1'>\
+<li id='extGBE-title' class='container1' style='display:none'>\
 <a id='extGBE-titleArea' href='' onclick='return false'><i class='icon-home'></i>...</a>\
 </li>\
 <!--/ title -->\
@@ -192,7 +193,7 @@ var saveHtml2 = "\
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
 <li class='dropdown'>\
-	<a href='#'><i class='icon-saveOk' id='icon-saveOk'>내 가이드북</a><b></b>\
+	<a href='#'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
 		</ul>\

@@ -218,7 +218,7 @@ var currentPage = 1;
 
 function setData(){
   //alert($('#my-editor').html())
-  $('#icon-saveOk').attr('class', 'icon-saveNok');
+  //$('#icon-saveOk').attr('class', 'icon-saveNok');
   pages.setByIndex(currentPage-1, $('#my-editor').html());
   //alert(pages.toArray());
   chrome.storage.sync.set({editorPages: pages.toArray()}, function() {
@@ -428,19 +428,19 @@ function getMyGuideBooks(){
       //   //console.log(guidebook2);
       // }
       //불러오고나서 처음에 보여줄 가이드북
-      let guidebook2 = JSON.parse(myGuideBooks[0]);
-      $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guidebook2.title+"")
-      $('#extGBE-titleArea').attr('value', guidebook2.title);
-      $('#my-editor').html(guidebook2.html)
-      //첫번째 가이드북에서 수정중일 때
-      if( $('#extGBE-titleArea').attr('value') != guidebook2.title){
-        //예전 가이드북에서 수정하고있을때
-        //최신 가이드북에서 수정하고있을때
-      }else{
-        //예전 가이드북에서 수정하고있을때
-        //최신 가이드북에서 수정하고있을때
-        //alert로 최신으로 바꿀건지 알려줘야되나?
-      }
+      // let guidebook2 = JSON.parse(myGuideBooks[0]);
+      // $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guidebook2.title+"")
+      // $('#extGBE-titleArea').attr('value', guidebook2.title);
+      // $('#my-editor').html(guidebook2.html)
+      // //첫번째 가이드북에서 수정중일 때
+      // if( $('#extGBE-titleArea').attr('value') != guidebook2.title){
+      //   //예전 가이드북에서 수정하고있을때
+      //   //최신 가이드북에서 수정하고있을때
+      // }else{
+      //   //예전 가이드북에서 수정하고있을때
+      //   //최신 가이드북에서 수정하고있을때
+      //   //alert로 최신으로 바꿀건지 알려줘야되나?
+      // }
       setGuideBookListener()
     }
   })

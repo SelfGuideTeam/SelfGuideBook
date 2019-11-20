@@ -59,9 +59,9 @@
 	display: block;
 	float: left;
 	margin-right: 4px;
-  font-family: Georgia, "Malgun Gothic", serif;
-  font-style: normal;
-  font-size: 17px;
+	font-family: Georgia, "Malgun Gothic", serif;
+	font-style: normal;
+	font-size: 17px;
   -webkit-font-smoothing: antialiased;
 }
 .pcss3mm li:first-child {
@@ -711,8 +711,7 @@
 }
 
 .icon-saveOk {
-	padding-top: 3px;
-	margin-right: 1px;
+	margin-top: 3px;
 }
 
 /*custom icon*/
@@ -720,10 +719,6 @@
 	content: url('chrome-extension://goomelalmnfndoikigfklcjjfonbgfdh/view/img/cancel-16.png');
 }
 
-.icon-saveNok {
-	padding-top: 3px;
-	margin-right: 1px;
-}
 
 
 /*----------------------------------------------------------------------------*/
