@@ -103,6 +103,13 @@ function toggleSidebar() {
 		// 		</ul>\
 		// 	</div>\
 		// </nav>\
+
+		// <iframe id='my_iframe' style='display:none;'></iframe>\
+		// <ul class='pagination' id='pageNaviii'>\
+		// <li class='active'><a href='#' >1</a></li>\
+		// <li id='createPage'><a href='#'>+</a></li>\
+		// </ul>\
+
 		sidebar.id = "mySidebar";
 		sidebar.innerHTML = "\
 		<ul id='pcss3mm' class='pcss3mm'>\
@@ -120,11 +127,6 @@ function toggleSidebar() {
 				"+loginOutHtml+"\
 				<!--/ pin or unpin -->\
 			</ul>\
-		<iframe id='my_iframe' style='display:none;'></iframe>\
-		<ul class='pagination' id='pageNaviii'>\
-		<li class='active'><a href='#' >1</a></li>\
-		<li id='createPage'><a href='#'>+</a></li>\
-		</ul>\
 		<div id='my-editor'></div>\
 		";
 		sidebar.style.cssText = "\
@@ -166,13 +168,13 @@ var saveHtml2 = "\
 </li>\
 <!--/ title -->\
 <li class='dropdown'>\
-<a href='#'><i class='icon-briefcase'></i>저장</a><b></b>\
+<a href='' onclick='return false'><i class='icon-briefcase'></i>저장</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
+		<li id='extGBE-refreshGuideBook'><a href='' onclick='return false'><i class='icon-lemon'></i>새로고침</a></li>\
 		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
 		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
 		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
-		<li id='extGBE-imageEditorPopup'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
 	</ul>\
 </div>\
 </li>\
@@ -190,7 +192,7 @@ var saveHtml2 = "\
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
 <li class='dropdown'>\
-	<a href='#'><i class='icon-briefcase'></i>내 가이드북</a><b></b>\
+	<a href='#'><i class='icon-saveOk' id='icon-saveOk'>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
 		</ul>\

@@ -133,12 +133,12 @@ $('#my-editor').trumbowyg({
     ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
     ['unorderedList', 'orderedList'],
     ['horizontalRule'], 
+    ['lineheight'],
     ['fontfamily'],
     ['link'],
+    ['removeformat'],
     ['image'],
     ['superscript', 'subscript'],
-    ['lineheight'],
-    ['removeformat'],
     ['fullscreen']
   ],
   plugins: {
@@ -218,6 +218,7 @@ var currentPage = 1;
 
 function setData(){
   //alert($('#my-editor').html())
+  $('#icon-saveOk').attr('class', 'icon-saveNok');
   pages.setByIndex(currentPage-1, $('#my-editor').html());
   //alert(pages.toArray());
   chrome.storage.sync.set({editorPages: pages.toArray()}, function() {

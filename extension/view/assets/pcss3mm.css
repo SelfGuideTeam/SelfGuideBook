@@ -58,7 +58,7 @@
 .pcss3mm i {
 	display: block;
 	float: left;
-	margin-right: 7px;
+	margin-right: 4px;
   font-family: Georgia, "Malgun Gothic", serif;
   font-style: normal;
   font-size: 17px;
@@ -705,6 +705,25 @@
 .icon-folder-close-alt:before {content: '\f114';}
 .icon-folder-open-alt:before {content: '\f115';}
 
+/*custom icon*/
+.icon-saveOk:before{
+	content: url('chrome-extension://goomelalmnfndoikigfklcjjfonbgfdh/view/img/ok-16.png');
+}
+
+.icon-saveOk {
+	padding-top: 3px;
+	margin-right: 1px;
+}
+
+/*custom icon*/
+.icon-saveNok:before{
+	content: url('chrome-extension://goomelalmnfndoikigfklcjjfonbgfdh/view/img/cancel-16.png');
+}
+
+.icon-saveNok {
+	padding-top: 3px;
+	margin-right: 1px;
+}
 
 
 /*----------------------------------------------------------------------------*/
@@ -779,8 +798,8 @@
 /**/
 @media screen and (max-width: 767px) {
 	body {
-    -webkit-text-size-adjust: none;
-  }  
+    	-webkit-text-size-adjust: none;
+  	}  
 	.pcss3mm li {
 		display: block;
 		float: none;
