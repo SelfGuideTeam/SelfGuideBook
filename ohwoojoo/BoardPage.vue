@@ -1,6 +1,6 @@
 <template>
 <v-container>
-  <v-card>
+  <v-card width="1200">
     <v-card-title>
       게시판
       <v-spacer></v-spacer>
@@ -19,10 +19,11 @@
     >
         <template v-slot:item="{item}">
           <tr>
+            <td>{{ item.num }}</td>
             <td @click="moveToRead(item.id)">{{ item.title }}</td>
             <td>{{ item.writer }}</td>
             <td>{{ item.date }}</td>
-            <td>{{ item.hits }}</td>
+            <td>{{ item.view }}</td>
             <td>{{ item.comments }}</td>
           </tr>
         </template>
@@ -40,6 +41,7 @@ export default {
     return {
       search: '',
       headers: [
+        { text: '번호', value: 'num' },
         {
           text: '제목',
           align: 'left',
@@ -48,7 +50,7 @@ export default {
         },
         { text: '작성자', value: 'writer' },
         { text: '날짜', value: 'date' },
-        { text: '조회수', value: 'hits' },
+        { text: '조회수', value: 'view' },
         { text: '댓글', value: 'comments' }
       ],
       items: []
@@ -59,18 +61,17 @@ export default {
   },
   methods: {
     async get () {
-      const snapshot = await this.$firebase.firestore().collection('notes').get()
-      // this.items = []
+      const snapshot = await this.$firebase.firestore().collection('notes').orderBy('num', 'desc').get()
       snapshot.forEach(board => {
-        const { title, writer, hits, comments } = board.data()
+        const { num, title, writer, view, comments } = board.data()
         this.items.push({
-          title, writer, id: board.id, date: board.data().date, hits, comments
+          num, title, writer, id: board.id, date: board.data().date, view, comments
         })
       })
       console.log(snapshot)
     },
     moveToRead (id) {
-      console.log(id)
+      // readBoard 페이지로 이동
       this.$router.push({
         name: 'readBoard', params: { id }
       })

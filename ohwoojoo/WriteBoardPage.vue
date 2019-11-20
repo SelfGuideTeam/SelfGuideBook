@@ -7,8 +7,8 @@
       <v-layout>
           <v-col cols="3" offset="1">
             <v-overflow-btn
-              v-model="selectedCategory"
-              :items="category"
+              v-model="category"
+              :items="continent"
               label="카테고리 선택"
             ></v-overflow-btn>
           </v-col>
@@ -48,21 +48,33 @@
 export default {
   data () {
     return {
-      category: ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa'],
-      selectedCategory: '',
+      continent: ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa'],
+      category: '',
       title: '',
       content: '',
       date: '',
-      writer: '',
+      writer: 'A',
       fileUpload: [],
       id: this.$route.params.id,
       month: '',
       hour: '',
-      minutes: ''
+      minutes: '',
+      num: 1,
+      view: 0
     }
   },
-  mounted: {
-
+  created () {
+    this.$firebase.firestore().collection('notes')
+      .orderBy('num', 'desc')
+      .limit(1)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          if (doc.data().num >= 1) {
+            this.num = doc.data().num + 1
+          }
+        })
+      })
   },
   methods: {
     async post () {
@@ -78,25 +90,27 @@ export default {
       } else {
         this.minutes = d.getMinutes()
       }
-      const date = d.getFullYear() + '-' + this.month + '-' + d.getDate() + ' ' + this.hour + ':' + this.minutes
+      const date = d.getFullYear() + '.' + this.month + '.' + d.getDate() + ' ' + this.hour + ':' + this.minutes
 
       const r = await this.$firebase.firestore().collection('notes').add({
         title: this.title,
         content: this.content,
         date: date,
-        category: this.selectedCategory
+        category: this.category,
+        fileUpload: this.fileUpload,
+        num: this.num,
+        view: this.view,
+        writer: this.writer
       })
       console.log(r)
-      this.title = ''
-      this.content = ''
-      this.fileUpload = ''
       this.$router.push('board-page')
       console.log('성공')
     },
     async rewrite () {
       this.title = ''
-      this.fileUpload = ''
       this.content = ''
+      this.category = ''
+      this.fileUpload = ''
     },
     moveToBoard () {
       this.$router.push('board-page')

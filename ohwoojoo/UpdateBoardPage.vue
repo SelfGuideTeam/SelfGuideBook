@@ -7,10 +7,10 @@
       <v-layout>
           <v-col cols="3" offset="1">
             <v-overflow-btn
-              v-model="selectedCategory"
-              :items="category"
+              v-model="category"
+              :items="continent"
               label="카테고리 선택"
-            >{{selectedCategory}}</v-overflow-btn>
+            >{{category}}</v-overflow-btn>
           </v-col>
       </v-layout>
         <v-layout column="column">
@@ -34,7 +34,7 @@
             </v-row>
             <v-row>
                 <v-spacer></v-spacer>
-                <v-col cols="4">
+                <v-col cols="3">
                     <v-btn text @click="update(id)">수정</v-btn>
                     <v-btn text @click="moveToBoard">취소</v-btn>
                 </v-col>
@@ -47,14 +47,16 @@
 export default {
   data () {
     return {
-      category: ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa'],
-      selectedCategory: '',
+      continent: ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa'],
+      category: '',
       title: '',
       content: '',
       writer: '',
       date: '',
       fileUpload: [],
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      view: '',
+      num: ''
     }
   },
   created () {
@@ -73,7 +75,10 @@ export default {
           this.date = doc.data().date
           this.content = doc.data().content
           this.writer = doc.data().writer
-          this.selectedCategory = doc.data().category
+          this.category = doc.data().category
+          this.num = doc.data().num
+          this.view = doc.data().view
+          this.fileUpload = doc.data().fileUpload
         }
       })
       .catch(err => {
@@ -83,7 +88,7 @@ export default {
   methods: {
     async update (id) {
       const r = await this.$firebase.firestore().collection('notes').doc(id).set({
-        title: this.title, content: this.content, category: this.selectedCategory, writer: this.writer, date: this.date
+        title: this.title, content: this.content, category: this.category, writer: this.writer, date: this.date, fileUpload: this.fileUpload, num: this.num, view: this.view
       })
       console.log(r)
       this.$router.push({ name: 'Board' })
