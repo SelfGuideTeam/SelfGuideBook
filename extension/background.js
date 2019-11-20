@@ -142,7 +142,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 chrome.tabs.onActivated.addListener(function (tab){
 	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
-	//alert('tabChanged!')
 })
 
 

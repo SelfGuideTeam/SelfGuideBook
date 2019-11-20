@@ -21,6 +21,30 @@
 // }	
 
 
+// class statusVar{
+//   constructor(isLogined) {
+//     this.isLogined = isLogined;
+//   }
+//   var isLogined;
+
+
+
+// }
+
+
+// let statusVars = class {
+//   constructor() {
+//       this.login = false;
+//       this.guideBookIdx = '-1';
+
+//   }
+// };
+
+//let status = new statusVars();
+//var isLogined = false;
+var guideBookIdx = -1
+
+
 $('#my-editor').trumbowyg({
   resetCss: true,
   removeformatPasted: true,
@@ -311,7 +335,7 @@ function deletePage(){
 
 function savePages(){
 
-}
+}   
 
 function ajaxTest(){
 
@@ -359,25 +383,28 @@ async function saveHtml_Server(){
 }
 
 function getMyGuideBooks(){
-  chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){
-    if(response=='fail'){ //수정
-      alert('로그인 먼저 해주세요')
+  chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){ 
+    if(isLogined==false){ //수정
+      console.log('로그인 먼저 해주세요')
+      //alert('로그인 먼저 해주세요')
+      return;
     }else{
+      $('#extGBE-titleArea').html("<i class='icon-home'></i>...")
       try {
         myGuideBooks[0]
+        $('#myGuideBookList').empty();
         response.forEach(function (item, index, array) {
           let guidBook = JSON.parse(item);
+          let guidebook2 = JSON.parse(myGuideBooks[index]);
           //서버에서 가져온 가이드북의 수정일이 현재 가지고 있는 가이드북의 수정일 보다 크면(최신) 업데이트
-          alert(guidBook.modifiyed_date);
-          alert(JSON.parse(myGuideBooks[index]).modifiyed_date);
           if( guidBook.modifiyed_date > (JSON.parse(myGuideBooks[index]).modifiyed_date)){
-            // myGuideBooks[index] = item;
-            $('#extGBE-list-idx'+index).replaceWith("<li class='extGBE-guideBook' id="+"extGBE-list-idx"+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>")
-            //.$('#myGuideBookList').append("<li class='extGBE-guideBook' id="+"extGBE-list-idx"+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
+            myGuideBooks[index] = item;
+            $('#myGuideBookList').append("<li class='extGBE-guideBook' id="+"extGBE-list-idx"+index+" value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
+          }else{ //가지고 있는 가이드북들이 최신상태면 그냥 기존거를 추가
+            $('#myGuideBookList').append("<li class='extGBE-guideBook' id="+"extGBE-list-idx"+index+" value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidebook2.title+"</a></li>")
           }
         });
       } catch (e) {
-        alert('catch')
           if (e instanceof ReferenceError) {
             myGuideBooks = response;
             $('#myGuideBookList').empty();
@@ -385,7 +412,7 @@ function getMyGuideBooks(){
               //id='myGuideBookList'
               // <li><a href='#'><i class='icon-lemon'></i>로컬저장</a></li>\
               let guidBook = JSON.parse(item);
-              $('#myGuideBookList').append("<li class='extGBE-guideBook' id="+"extGBE-list-idx"+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
+              $('#myGuideBookList').append("<li class='extGBE-guideBook' id="+"extGBE-list-idx"+index+" value="+index+"><a href='' onclick='return false'><i class='icon-lemon'></i>"+guidBook.title+"</a></li>")
               //console.log(item, index);
             });
           }else{
@@ -401,6 +428,9 @@ function getMyGuideBooks(){
       // }
       //불러오고나서 처음에 보여줄 가이드북
       let guidebook2 = JSON.parse(myGuideBooks[0]);
+      $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guidebook2.title+"")
+      $('#extGBE-titleArea').attr('value', guidebook2.title);
+      $('#my-editor').html(guidebook2.html)
       //첫번째 가이드북에서 수정중일 때
       if( $('#extGBE-titleArea').attr('value') != guidebook2.title){
         //예전 가이드북에서 수정하고있을때
@@ -409,9 +439,6 @@ function getMyGuideBooks(){
         //예전 가이드북에서 수정하고있을때
         //최신 가이드북에서 수정하고있을때
         //alert로 최신으로 바꿀건지 알려줘야되나?
-        $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guidebook2.title+"")
-        $('#extGBE-titleArea').attr('value', guidebook2.title);
-        $('#my-editor').html(guidebook2.html)
       }
       setGuideBookListener()
     }
@@ -456,11 +483,15 @@ getMyGuideBooks()
 
 $('#extGBE-login').click(function(){
   chrome.runtime.sendMessage({message: 'login'}, function (response) {
-    console.log(response)
-    chrome.storage.sync.set({authInfo: response}, function() {
-      chrome.runtime.sendMessage({message: 'toggle'}, null);
-      chrome.runtime.sendMessage({message: 'toggle'}, null);
-    })
+    if(response.code=="auth/popup-closed-by-user"){ //로그인 안하고 팝업을 껐을때
+      isLogined = false;
+    }else{
+      isLogined = true;
+      chrome.storage.sync.set({authInfo: response}, function() {
+        chrome.runtime.sendMessage({message: 'toggle'}, null);
+        chrome.runtime.sendMessage({message: 'toggle'}, null);
+      })
+    }
   });
 })
 
@@ -478,6 +509,7 @@ $('#extGBE-logout').click(async function(){
       alert('로그아웃 실패')
     }
   });
+  isLogined = false;
 })
 
 $('#extGBE-saveToServer').click(function(){
@@ -521,9 +553,12 @@ $('#extGBE-imageEditorPopup').click(function(){
 function setGuideBookListener(){
   $('.extGBE-guideBook').click(function(){
     let index = $(this).attr('value');
+    //console.log(myGuideBooks)
+    //console.log(myGuideBooks[index])
     let guideBook = JSON.parse(myGuideBooks[index]);
     $('#my-editor').html(guideBook.html)
     $('#extGBE-titleArea').html("<i class='icon-home'></i>"+guideBook.title+"")
+    guideBookIdx = index;
   })
 }
 

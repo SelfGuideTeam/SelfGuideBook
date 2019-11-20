@@ -1,6 +1,6 @@
 
 var sidebarOpen = false;
-function handleRequest(request){
+function handleRequest(request, sender, sendResponse){
 	
 	if (request.callFunction == "toggleSidebar") {
 		if(sidebarOpen){
@@ -11,10 +11,12 @@ function handleRequest(request){
 					saveHtml = saveHtml2
 					myGuideBookHtml = myGuideBookHtml2
 					loginOutHtml = logoutHtml;
+					isLogined = true;
 				}else{
 					saveHtml = '';
 					myGuideBookHtml = '';
 					loginOutHtml = loginHtml;
+					isLogined = false
 				}
 				toggleSidebar();
 			});
@@ -46,14 +48,14 @@ function toggleSidebar() {
 		var pdfTestCss = chrome.runtime.getURL('/view/assets/pdfTest.css');
 		var extViewJs = chrome.runtime.getURL('/view/js/bootstrap3.3.6.js');
 
-		var tuiColorPicker_css= chrome.runtime.getURL('/apis/tui-image-editor/css/tui-color-picker.css');
-		var tuiImageEditor_css= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.css')
-		var fabric_js = chrome.runtime.getURL('/apis/tui-image-editor/js/fabric3.3.2.js');
-		var tuiCodeSnippet_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-code-snippet.min1.5.0.js');
-		var tuiColorPicker_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-color-picker2.2.3.js');
-		var FileSaver_js = chrome.runtime.getURL('/apis/tui-image-editor/js/FileSaver.min1.3.0.js');
-		var tuiImageEditor_js= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.js')
-		var tuiBlackTheme_js = chrome.runtime.getURL('/apis/tui-image-editor/js/theme/black-theme.js')
+		// var tuiColorPicker_css= chrome.runtime.getURL('/apis/tui-image-editor/css/tui-color-picker.css');
+		// var tuiImageEditor_css= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.css')
+		// var fabric_js = chrome.runtime.getURL('/apis/tui-image-editor/js/fabric3.3.2.js');
+		// var tuiCodeSnippet_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-code-snippet.min1.5.0.js');
+		// var tuiColorPicker_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-color-picker2.2.3.js');
+		// var FileSaver_js = chrome.runtime.getURL('/apis/tui-image-editor/js/FileSaver.min1.3.0.js');
+		// var tuiImageEditor_js= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.js')
+		// var tuiBlackTheme_js = chrome.runtime.getURL('/apis/tui-image-editor/js/theme/black-theme.js')
 
 
 		$('head').append($('<link>')
@@ -64,14 +66,14 @@ function toggleSidebar() {
 			.attr("type","text/javascript")
 			.attr("charset","utf-8")
 			.attr("src", extViewJs));
-		$('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiColorPicker_css))
-		$('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiImageEditor_css))
-		$('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", fabric_js))
-		$('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiCodeSnippet_js))
-		$('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiColorPicker_js))
-		$('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", FileSaver_js))
-		$('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiImageEditor_js))
-		$('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiBlackTheme_js))
+		// $('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiColorPicker_css))
+		// $('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiImageEditor_css))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", fabric_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiCodeSnippet_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiColorPicker_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", FileSaver_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiImageEditor_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiBlackTheme_js))
 		// $('head').append($('<script>')
 		// 	.attr("type","text/css")
 		// 	.attr("charset","utf-8")
