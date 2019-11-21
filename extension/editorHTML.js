@@ -4,6 +4,7 @@ function handleRequest(request, sender, sendResponse){
 	
 	if (request.callFunction == "toggleSidebar") {
 		if(sidebarOpen){
+			myGuideBooks = undefined;
 			toggleSidebar();
 		}else{
 			chrome.runtime.sendMessage({message: 'tokenValidRequest'}, function(response){
@@ -127,7 +128,7 @@ function toggleSidebar() {
 				"+loginOutHtml+"\
 				<!--/ pin or unpin -->\
 		</ul>\
-		<h1 style='padding-left:10px; padding:3px;'>2박3일 호주여행&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 최신상태</h1>\
+		<h1 style='padding-left:10px; padding:3px;'></h1>\
 		<div id='my-editor'></div>\
 		";
 		sidebar.style.cssText = "\
@@ -172,7 +173,6 @@ var saveHtml2 = "\
 <a href='' onclick='return false'><i class='icon-briefcase'></i>저장</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
-		<li id='extGBE-refreshGuideBook'><a href='' onclick='return false'><i class='icon-lemon'></i>새로고침</a></li>\
 		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
 		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
 		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
@@ -180,7 +180,7 @@ var saveHtml2 = "\
 </div>\
 </li>\
 <li class='dropdown'>\
-<a href='#'><i class='icon-briefcase'></i>삭제</a><b></b>\
+<a href='' onclick='return false'><i class='icon-briefcase'></i>삭제</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
 		<li id='extGBE-deleteOnePage'><a href='' onclick='return false'><i class='icon-lemon'></i>현재 페이지</a></li>\
@@ -188,12 +188,22 @@ var saveHtml2 = "\
 	</ul>\
 </div>\
 </li>\
+<!-- 새로고침 -->\
+<li class='dropdown'>\
+<a href='' onclick='return false' id='extGBE-refreshOneGB'>새로고침</a><b></b>\
+<div class='grid-container2'>\
+	<ul>\
+		<li id='extGBE-refreshAllGB'><a href='' onclick='return false'><i class='icon-lemon'></i>전체 새로고침</a></li>\
+	</ul>\
+</div>\
+</li>\
+<!--/ 새로고침 -->\
 "
 
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
 <li class='dropdown'>\
-	<a href='#'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
+	<a href='#' id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
 		</ul>\
