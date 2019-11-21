@@ -63,7 +63,7 @@
     </v-card-actions>
   </v-card>
   <span>
-    <comments></comments>
+    <comments :val="id"></comments>
   </span>
 </v-container>
 </template>
