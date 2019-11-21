@@ -326,6 +326,7 @@ async function loginCheck(){
 
 
 getMyGuideBooks()
+// if(!isLogined). 로그인안하면 disable
 
 // loginCheck();
 //listener -----------------------------------------------------
@@ -380,7 +381,7 @@ $('#extGBE-saveToPDF').click(function(){
   //   html+=element;
   // });
   printHtmlToPdf(html);
-  printHtmlToPdf(html)
+  //printHtmlToPdf(html)
 })
 
 $('#extGBE-title').click(function(){
@@ -404,6 +405,7 @@ $('#extGBE-imageEditorPopup').click(function(){
 function setGuideBookListener(){
   $('.extGBE-guideBook').click(function(){
     let index = $(this).attr('value');
+    let className = $('#extGBE-list-icon-idx'+index).attr('class')
     //console.log(myGuideBooks)
     //console.log(myGuideBooks[index])
     let guideBook = JSON.parse(myGuideBooks[index]);
@@ -411,7 +413,7 @@ function setGuideBookListener(){
 
     var title = guideBook.title;
     if(title.length > 8) title=(title.substring(0, 8))+'...'
-    $('#extGBE-guideBookTitleArea').html("<i class='icon-saveOk' id='icon-saveOk'></i>"+title+"")
+    $('#extGBE-guideBookTitleArea').html("<i class='"+className+"' id='extGBE-title-icon-saveOk'></i>"+title+"")
     //id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a>
     //$('#extGBE-titleArea').html("")
     guideBookIdx = index;
@@ -419,12 +421,19 @@ function setGuideBookListener(){
 }
 
 $('#extGBE-refreshOneGB').click(function(){
-  if(guideBookIdx==-1){
+  if(guideBookIdx!=-1){
     $('.extGBE-circle3').remove();
     $('#extGBE-refreshOneGB').html('<div class="extGBE-circle3"></div>'+$('#extGBE-refreshOneGB').html())
     setTimeout(function(){
       $('.extGBE-circle3').remove();
     }, 1000)
+  
+    $('#extGBE-title-icon-saveOk').attr('class', 'icon-saveOk')
+    myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
+    $('#my-editor').html(JSON.parse(myGuideBooks[guideBookIdx]).html);
+    $('#extGBE-list-icon-idx'+guideBookIdx).attr('class', 'icon-saveOk')
+
+
   }
 })
 
