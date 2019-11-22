@@ -1,8 +1,10 @@
 
 var sidebarOpen = false;
+let tab;
+
 function handleRequest(request, sender, sendResponse){
-	
 	if (request.callFunction == "toggleSidebar") {
+		tab = request.tab;
 		if(sidebarOpen){
 			myGuideBooks = undefined;
 			toggleSidebar();
@@ -22,7 +24,6 @@ function handleRequest(request, sender, sendResponse){
 				toggleSidebar();
 			});
 		}
-		
 	}else if(request.callFunction == "insertImage"){
 		//https://imgur링크를 src에 넣으면 pdf에 이미지가 저장이 안됨   http:// 는 됨 --?
 		var imgsrc = (request.url).replace('https://','http://');
@@ -36,6 +37,24 @@ function handleRequest(request, sender, sendResponse){
 }
 
 chrome.extension.onRequest.addListener(handleRequest);
+
+
+function changeLoginHtml(){
+	$('#pcss3mm').empty();
+	$('#pcss3mm').html(homtHtml+loginHtml);
+	$('#extGBE-login').click(login);
+}
+
+function changeLogoutHtml(){
+	$('#pcss3mm').empty();
+	$('#pcss3mm').html(homtHtml+myGuideBookHtml2+saveHtml2+logoutHtml);
+	$('#extGBE-logout').click(logout);
+}
+
+
+
+
+
 function toggleSidebar() {
 	if(sidebarOpen) {
 		var el = document.getElementById('mySidebar');
@@ -127,19 +146,15 @@ function toggleSidebar() {
 		<!-- pdf다운로드 -->\
 		<iframe id='my_iframe' style='display:none'></iframe>\
 		<ul id='pcss3mm' class='pcss3mm'>\
-				<!-- home -->\
-				<li class='container1' >\
-					<a href='https://fir-ex-63c1a.firebaseapp.com/' target='_blank'><i class='icon-home'></i>Home</a>\
-				</li>\
-				<!--/ home -->\
-				<!-- 저장 -->\
-				"+myGuideBookHtml+"\
-				<!-- 저장 -->\
-				"+saveHtml+"\
-				<!--/ share -->\
-				<!-- pin or unpin -->\
-				"+loginOutHtml+"\
-				<!--/ pin or unpin -->\
+			"+homtHtml+"\
+			<!-- 저장 -->\
+			"+myGuideBookHtml+"\
+			<!-- 저장 -->\
+			"+saveHtml+"\
+			<!--/ share -->\
+			<!-- pin or unpin -->\
+			"+loginOutHtml+"\
+			<!--/ pin or unpin -->\
 		</ul>\
 		<h1 style='padding-left:10px; padding:3px;'></h1>\
 		<div id='my-editor'></div>\
@@ -175,6 +190,17 @@ function toggleSidebar() {
 // <input type='button' id='btn110' value='파이어베이스 요청'>\
 // <input type='button' id='sendMessage' value='메세지 보내기'>\
 
+
+var myGuideBookHtml2 = "\
+<!-- 내 가이드북 -->\
+<li class='dropdown'>\
+	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
+	<div class='grid-container3'>\
+		<ul id='myGuideBookList'>\
+		</ul>\
+	</div>\
+</li>\
+"
 
 var saveHtml2 = "\
 <!-- title -->\
@@ -213,16 +239,7 @@ var saveHtml2 = "\
 <!--/ 새로고침 -->\
 "
 
-var myGuideBookHtml2 = "\
-<!-- 내 가이드북 -->\
-<li class='dropdown'>\
-	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
-	<div class='grid-container3'>\
-		<ul id='myGuideBookList'>\
-		</ul>\
-	</div>\
-</li>\
-"
+
 // <!--/ 공유 -->\
 // <li class='right dropdown'>\
 // 	<a href='#'><i class='icon-bullhorn'></i>Share</a><b></b>\
@@ -235,6 +252,11 @@ var myGuideBookHtml2 = "\
 // 		</ul>\
 // 	</div>\
 // </li>\
+var homtHtml = "<!-- home -->\
+<li class='container1' >\
+	<a href='https://fir-ex-63c1a.firebaseapp.com/' target='_blank'><i class='icon-home'></i>Home</a>\
+</li>\
+<!--/ home -->";
 
 var loginHtml = "<li class='right' id='extGBE-login'>\
 <a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그인</a><b></b>\

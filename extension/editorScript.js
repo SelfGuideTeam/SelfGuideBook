@@ -124,6 +124,11 @@ if(isLogined){
   //$('#my-editor').trumbowyg('disable')
 }
 $('#my-editor').trumbowyg('disable')
+
+
+
+
+
 //한페이지당 최대 사이즈는 850px 
 //현재 자식의 자식까지 계산해버림 상위 자식만 계산하도록
 function getTotalContentHeight(){
@@ -237,6 +242,21 @@ function getMyGuideBooks(refresh, init){
       $('#extGBE-titleArea').html("<i class='icon-home'></i>...")
       try {
         if(refresh) throw 'refresh';
+
+
+
+
+
+
+        //일단 한번 켜놓은 상태에서 다시 껐다 키면 throw되서 아래로 감 다시 추가해야되는데 
+
+
+
+
+        
+
+
+
         myGuideBooks[0]
         myGuideBooks2 = response;
         var length = myGuideBooks.length;
@@ -335,6 +355,40 @@ async function loginCheck(){
   //alert(tab);
 }
 
+function login(){
+  chrome.runtime.sendMessage({message: 'login'}, function (response) {
+    if(response.code=="auth/popup-closed-by-user"){ //로그인 안하고 팝업을 껐을때
+      isLogined = false;
+    }else{
+      isLogined = true;
+      chrome.storage.sync.set({authInfo: response}, function() {
+        //chrome.runtime.sendMessage({message: 'toggle', tab : tab}, null);
+        //chrome.runtime.sendMessage({message: 'toggle', tab : tab}, null);
+        changeLogoutHtml();
+        getMyGuideBooks(false, true)
+      })
+    }
+  });
+}
+
+async function logout(){
+  // $("#firebase2").remove();
+  // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
+  $('#my-editor').trumbowyg('disable')
+  let uid = (await getChromeStg('authInfo')).authInfo.user.uid;
+  chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
+  function (response) {
+    if(response=='success'){
+      //alert('로그아웃 완료')
+      //console.log(tab)
+      //chrome.runtime.sendMessage({message: 'toggle', tab : tab}, null);  
+    }else{
+      alert('로그아웃 실패')
+    }
+    changeLoginHtml();
+  });
+  isLogined = false;
+}
 
 // if(!isLogined). 로그인안하면 disable
 
@@ -344,36 +398,9 @@ async function loginCheck(){
 
 
 
-$('#extGBE-login').click(function(){
-  chrome.runtime.sendMessage({message: 'login'}, function (response) {
-    if(response.code=="auth/popup-closed-by-user"){ //로그인 안하고 팝업을 껐을때
-      isLogined = false;
-    }else{
-      isLogined = true;
-      chrome.storage.sync.set({authInfo: response}, function() {
-        chrome.runtime.sendMessage({message: 'toggle'}, null);
-        chrome.runtime.sendMessage({message: 'toggle'}, null);
-      })
-    }
-  });
-})
+$('#extGBE-login').click(login)
 
-$('#extGBE-logout').click(async function(){
-  // $("#firebase2").remove();
-  // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
-  $('#my-editor').trumbowyg('disable')
-  let uid = (await getChromeStg('authInfo')).authInfo.user.uid;
-  chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
-  function (response) {
-    if(response=='success'){
-      //alert('로그아웃 완료')
-      chrome.runtime.sendMessage({message: 'toggle'}, null);  
-    }else{
-      alert('로그아웃 실패')
-    }
-  });
-  isLogined = false;
-})
+$('#extGBE-logout').click(logout)
 
 $('#extGBE-saveToServer').click(function(){
   $('#my-editor').trumbowyg('disable')

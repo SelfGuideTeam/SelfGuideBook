@@ -38,7 +38,8 @@ firebase.initializeApp(config);
 var provider = new firebase.auth.GoogleAuthProvider();
 
 var toggleStatus = false;
-chrome.browserAction.onClicked.addListener(toggleSidebar);
+var currentTabId = '';
+chrome.browserAction.onClicked.addListener(toggleSidebar2);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
@@ -64,7 +65,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}else if(message=='login'){ 
 		firebase.auth().signInWithPopup(provider).then(function(result) {
 			sendResponse(result);
-		  }).catch(function(error) {
+		}).catch(function(error) {
 			sendResponse(error);
 		});
 		return true;
@@ -122,11 +123,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 		// return true;
 	}else if(message=='toggle'){
-		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			toggleSidebar(tabs[0]);
-		});
+		toggleSidebar(request.tab);
+		// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+		// });
 	}else if(message=='refresh_page'){
 		chrome.tabs.reload();
+	}else if(message='getCurrentTabId'){
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			sendResponse(tabs[0]);
+		});
+		return true;
 	}else{
 		//alert('저장');
 		console.log(message);
@@ -142,6 +148,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 chrome.tabs.onActivated.addListener(function (tab){
 	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+	currentTabId = tab.id;
 })
 
 
@@ -246,6 +253,10 @@ function tokenValidRequest(accessToken){
   
 async function toggleSidebar(tab) {
 	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
+}
+
+async function toggleSidebar2(tab) {
+	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
 }
 
 
