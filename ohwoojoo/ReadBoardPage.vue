@@ -63,7 +63,7 @@
     </v-card-actions>
   </v-card>
   <span>
-    <comments :val="id"></comments>
+    <comments :val="id" v-model="comments"></comments>
   </span>
 </v-container>
 </template>
@@ -82,7 +82,8 @@ export default {
       date: '',
       view: 0,
       num: '',
-      fileUpload: []
+      fileUpload: [],
+      comments: ''
     }
   },
   created () {
