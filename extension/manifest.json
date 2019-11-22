@@ -28,7 +28,7 @@
 		{
 			"matches": ["<all_urls>"],
 			"js": ["apis/jquery/jquery.min.js",
-				"apis/Trumbowyg-master/dist/trumbowyg.min.js",
+				"apis/Trumbowyg-master/dist/trumbowyg.js",
 				"apis/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
 				"apis/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
 				"apis/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
@@ -38,8 +38,7 @@
 				"apis/arrayList.js",
 				"editorHTML.js"
 			],
-			"css": ["apis/Trumbowyg-master/dist/ui/trumbowyg.min.css",
-					"editorCSS.css"],
+			"css": [],
 			"all_frames": false
 		}
 	],

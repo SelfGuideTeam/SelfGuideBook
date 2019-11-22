@@ -49,6 +49,9 @@ function toggleSidebar() {
 		var pdfTestCss = chrome.runtime.getURL('/view/assets/pdfTest.css');
 		var extViewJs = chrome.runtime.getURL('/view/js/bootstrap3.3.6.js');
 
+		var trumbowygCss = chrome.runtime.getURL("apis/Trumbowyg-master/dist/ui/trumbowyg.css")
+		var editorCss = chrome.runtime.getURL("editorCSS.css")
+
 		// var tuiColorPicker_css= chrome.runtime.getURL('/apis/tui-image-editor/css/tui-color-picker.css');
 		// var tuiImageEditor_css= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.css')
 		// var fabric_js = chrome.runtime.getURL('/apis/tui-image-editor/js/fabric3.3.2.js');
@@ -63,6 +66,14 @@ function toggleSidebar() {
 			.attr("rel","stylesheet")
 			.attr("type","text/css")
 			.attr("href", extViewCss_pcc));
+		$('head').append($('<link>')
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href", trumbowygCss));
+		$('head').append($('<link>')
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href", editorCss));
 		$('head').append($('<script>')
 			.attr("type","text/javascript")
 			.attr("charset","utf-8")
@@ -113,6 +124,8 @@ function toggleSidebar() {
 
 		sidebar.id = "mySidebar";
 		sidebar.innerHTML = "\
+		<!-- pdf다운로드 -->\
+		<iframe id='my_iframe' style='display:none'></iframe>\
 		<ul id='pcss3mm' class='pcss3mm'>\
 				<!-- home -->\
 				<li class='container1' >\
@@ -203,7 +216,7 @@ var saveHtml2 = "\
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
 <li class='dropdown'>\
-	<a href='#' id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
+	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
 		</ul>\

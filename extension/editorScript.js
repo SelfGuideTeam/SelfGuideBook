@@ -1,8 +1,8 @@
 
 var guideBookIdx = -1
 
-
 $('#my-editor').trumbowyg({
+  disabled: false, 
   resetCss: true,
   removeformatPasted: true,
   lang : 'ko',
@@ -119,6 +119,11 @@ $('#my-editor').trumbowyg({
   }
 });
 
+if(isLogined){
+  getMyGuideBooks(false, true)
+  //$('#my-editor').trumbowyg('disable')
+}
+$('#my-editor').trumbowyg('disable')
 //한페이지당 최대 사이즈는 850px 
 //현재 자식의 자식까지 계산해버림 상위 자식만 계산하도록
 function getTotalContentHeight(){
@@ -163,8 +168,10 @@ function printHtmlToPdf(html) {
     success: function (data) {
       console.log(data.pdf); //this is the url to the pdf
       document.getElementById('my_iframe').src = data.pdf;
+      $('#my-editor').trumbowyg('enable')
     },
     error: function (jqXHR, textStatus, errorThrown) {
+      $('#my-editor').trumbowyg('enable')
     }
   });
 }
@@ -183,10 +190,14 @@ function ajaxTest(){
 
 async function saveHtml_Server(){
   // 입력값을 변수에 담고 문자열 형태로 변환
+  if(guideBookIdx==-1){
+    return;
+  }
+
   var title = '';
   while(true){
     if(title==''){
-      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', $('#extGBE-titleArea').attr('value') );
+      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', $('#extGBE-guideBookTitleArea').attr('value') );
     }else if(title == null){
       return;
     }else{
@@ -201,7 +212,6 @@ async function saveHtml_Server(){
   chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
   function (response) {
     if(response=='success'){
-      alert('서버저장 완료')
       try{
         myGuideBooks2[0]; //존재여부 체크
         myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
@@ -217,7 +227,7 @@ async function saveHtml_Server(){
 
 }
 
-function getMyGuideBooks(refresh){
+function getMyGuideBooks(refresh, init){
   chrome.runtime.sendMessage({message: 'guideBookListRequest'}, function(response){ 
     if(isLogined==false){ //수정
       console.log('로그인 먼저 해주세요')
@@ -292,7 +302,8 @@ function getMyGuideBooks(refresh){
       //   //최신 가이드북에서 수정하고있을때
       //   //alert로 최신으로 바꿀건지 알려줘야되나?
       // }
-      setGuideBookListener()
+
+      setGuideBookListener(init)
     }
   })
 }
@@ -325,7 +336,6 @@ async function loginCheck(){
 }
 
 
-getMyGuideBooks()
 // if(!isLogined). 로그인안하면 disable
 
 // loginCheck();
@@ -351,7 +361,7 @@ $('#extGBE-login').click(function(){
 $('#extGBE-logout').click(async function(){
   // $("#firebase2").remove();
   // $('#mySidebar').append("<iframe id='firebase2' src='https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout-google' style='height:0;width:0;border:0;border:none;visibility:hidden;'></iframe>")
-
+  $('#my-editor').trumbowyg('disable')
   let uid = (await getChromeStg('authInfo')).authInfo.user.uid;
   chrome.runtime.sendMessage({message: 'logoutRequest', data : uid}, 
   function (response) {
@@ -366,7 +376,7 @@ $('#extGBE-logout').click(async function(){
 })
 
 $('#extGBE-saveToServer').click(function(){
-
+  $('#my-editor').trumbowyg('disable')
   saveHtml_Server();
   // getChromeStg('loginToken', saveHtml_Server)
   // saveHtml_Server(title)
@@ -376,6 +386,7 @@ $('#extGBE-saveToLocal').click(function(){
 })
 
 $('#extGBE-saveToPDF').click(function(){
+  $('#my-editor').trumbowyg('disable')
   var html = $('#my-editor').html();
   // pages.toArray().forEach(function(element){
   //   html+=element;
@@ -402,7 +413,8 @@ $('#extGBE-imageEditorPopup').click(function(){
 })
 
 //목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
-function setGuideBookListener(){
+function setGuideBookListener(init){
+  
   $('.extGBE-guideBook').click(function(){
     let index = $(this).attr('value');
     let className = $('#extGBE-list-icon-idx'+index).attr('class')
@@ -414,13 +426,18 @@ function setGuideBookListener(){
     var title = guideBook.title;
     if(title.length > 8) title=(title.substring(0, 8))+'...'
     $('#extGBE-guideBookTitleArea').html("<i class='"+className+"' id='extGBE-title-icon-saveOk'></i>"+title+"")
+    $('#extGBE-guideBookTitleArea').attr('value', title);
     //id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a>
     //$('#extGBE-titleArea').html("")
     guideBookIdx = index;
+    $('#my-editor').trumbowyg('enable')
   })
+  if(!init)
+    $('#my-editor').trumbowyg('enable')
 }
 
 $('#extGBE-refreshOneGB').click(function(){
+  $('#my-editor').trumbowyg('disable')
   if(guideBookIdx!=-1){
     $('.extGBE-circle3').remove();
     $('#extGBE-refreshOneGB').html('<div class="extGBE-circle3"></div>'+$('#extGBE-refreshOneGB').html())
@@ -435,6 +452,8 @@ $('#extGBE-refreshOneGB').click(function(){
 
 
   }
+
+  $('#my-editor').trumbowyg('enable')
 })
 
 
