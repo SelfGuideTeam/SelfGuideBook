@@ -59,7 +59,7 @@
 	display: block;
 	float: left;
 	margin-right: 4px;
-	font-family: Georgia, "Malgun Gothic", serif;
+	font-family: Georgia, "Malgun Gothic", sans-serif;
 	font-style: normal;
 	font-size: 17px;
 	
@@ -90,7 +90,7 @@
 	width: 0;
 	height: 0;
 	margin-top: -1px;
-	border-top: 4px solid #a6a6a6;
+	border-top: 4px solid #242729;
 	border-right: 3px solid transparent;
 	border-left: 3px solid transparent;
 }
@@ -972,7 +972,7 @@
 .pcss3mm input,
 .pcss3mm textarea,
 .pcss3mm button {
-	font-family: Georgia, "Malgun Gothic", serif;
+	font-family: arial, "Malgun Gothic", sans-serif;
 }
 .pcss3mm {
 	background: #ffffff;
@@ -989,7 +989,7 @@
 }
 
 .pcss3mm a {
-	color: #a6a6a6;
+	color: #242729;
 }
 .pcss3mm a:hover {
 	background: #f2f2f2;
@@ -1002,7 +1002,7 @@
 	background: #ffffff;
 }
 .pcss3mm .dropdown > a:after {
-	border-top-color: #a6a6a6;
+	border-top-color: #242729;
 }
 .pcss3mm .dropdown > a.active:after {
 	border-top-color: #2b82d9;
@@ -1026,6 +1026,15 @@
 }
 .pcss3mm .grid-column {
 	border-color: #d9d9d9;
+}
+
+.disabled {
+    pointer-events:none; 
+    opacity:0.6;         
+}
+
+.disabled a{
+	color : #a6a6a6
 }
 
 .extGBE-circle3 {

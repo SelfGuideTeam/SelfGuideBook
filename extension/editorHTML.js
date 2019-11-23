@@ -48,7 +48,8 @@ function changeLoginHtml(){
 function changeLogoutHtml(){
 	$('#pcss3mm').empty();
 	$('#pcss3mm').html(homtHtml+myGuideBookHtml2+saveHtml2+logoutHtml);
-	$('#extGBE-logout').click(logout);
+	setListeners();
+	//$('#extGBE-logout').click(logout);
 }
 
 
@@ -193,7 +194,7 @@ function toggleSidebar() {
 
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
-<li class='dropdown'>\
+<li class='dropdown' id='extGBE-myGuideBooksli'>\
 	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
