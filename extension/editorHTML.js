@@ -2,6 +2,11 @@
 var sidebarOpen = false;
 let tab;
 
+function getShadowEl(element){
+	return shadow.querySelector(element);
+}
+
+
 function handleRequest(request, sender, sendResponse){
 	if (request.callFunction == "toggleSidebar") {
 		tab = request.tab;
@@ -29,7 +34,7 @@ function handleRequest(request, sender, sendResponse){
 		var imgsrc = (request.url).replace('https://','http://');
 		var img = document.createElement('img'); 
         img.setAttribute('src', imgsrc);
-		document.getElementById('my-editor').appendChild(img)
+		getShadowEl('#my-editor').appendChild(img)
 	}else if(request.callFunction == "getMyGuideBooks"){
 		if(sidebarOpen) getMyGuideBooks();
 	}
@@ -40,14 +45,14 @@ chrome.extension.onRequest.addListener(handleRequest);
 
 
 function changeLoginHtml(){
-	$('#pcss3mm').empty();
-	$('#pcss3mm').html(homtHtml+loginHtml);
-	$('#extGBE-login').click(login);
+	$(getShadowEl('#pcss3mm')).empty();
+	$(getShadowEl('#pcss3mm')).html(homtHtml+loginHtml);
+	$(getShadowEl('#extGBE-login')).click(login);
 }
 
 function changeLogoutHtml(){
-	$('#pcss3mm').empty();
-	$('#pcss3mm').html(homtHtml+myGuideBookHtml2+saveHtml2+logoutHtml);
+	$(getShadowEl('#pcss3mm')).empty();
+	$(getShadowEl('#pcss3mm')).html(homtHtml+myGuideBookHtml2+saveHtml2+logoutHtml);
 	setListeners();
 	//$('#extGBE-logout').click(logout);
 }
@@ -72,78 +77,18 @@ function toggleSidebar() {
 		var trumbowygCss = chrome.runtime.getURL("apis/Trumbowyg-master/dist/ui/trumbowyg.css")
 		var editorCss = chrome.runtime.getURL("editorCSS.css")
 
-		// var tuiColorPicker_css= chrome.runtime.getURL('/apis/tui-image-editor/css/tui-color-picker.css');
-		// var tuiImageEditor_css= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.css')
-		// var fabric_js = chrome.runtime.getURL('/apis/tui-image-editor/js/fabric3.3.2.js');
-		// var tuiCodeSnippet_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-code-snippet.min1.5.0.js');
-		// var tuiColorPicker_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-color-picker2.2.3.js');
-		// var FileSaver_js = chrome.runtime.getURL('/apis/tui-image-editor/js/FileSaver.min1.3.0.js');
-		// var tuiImageEditor_js= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.js')
-		// var tuiBlackTheme_js = chrome.runtime.getURL('/apis/tui-image-editor/js/theme/black-theme.js')
-
-
-		$('head').append($('<link>')
-			.attr("rel","stylesheet")
-			.attr("type","text/css")
-			.attr("href", extViewCss_pcc));
-		$('head').append($('<link>')
-			.attr("rel","stylesheet")
-			.attr("type","text/css")
-			.attr("href", trumbowygCss));
-		$('head').append($('<link>')
-			.attr("rel","stylesheet")
-			.attr("type","text/css")
-			.attr("href", editorCss));
-		$('head').append($('<script>')
-			.attr("type","text/javascript")
-			.attr("charset","utf-8")
-			.attr("src", extViewJs));
-		// $('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiColorPicker_css))
-		// $('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiImageEditor_css))
-		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", fabric_js))
-		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiCodeSnippet_js))
-		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiColorPicker_js))
-		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", FileSaver_js))
-		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiImageEditor_js))
-		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiBlackTheme_js))
-		// $('head').append($('<script>')
-		// 	.attr("type","text/css")
-		// 	.attr("charset","utf-8")
-		// 	.attr("media", "screen,print")
-		// 	.attr("src", pdfTestCss));
 		
-		// <nav class='navbar navbar-default'>\
-		// 	<div class='container-fluid'>\
-		// 		<div class='navbar-header'>\
-		// 		<a class='navbar-brand' href='#'>SPLessons</a>\
-		// 		</div>\
-		// 		<ul class='nav navbar-nav'>\
-		// 		<li><a href='#'>Home</a></li>\
-		// 		<li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' href='#' >Web Designing <span class='caret'></span></a>\
-		// 			<ul class='dropdown-menu'>\
-		// 			<li><a href='#'>HTML</a></li>\
-		// 			<li><a href='#'>JavaScript</a></li>\
-		// 			<li><a href='#'>Bootstrap</a></li>\
-		// 			</ul>\
-		// 		</li>\
-		// 		<li><a href='#'>Web Development</a></li>\
-		// 		<li><a href='#'>Databases</a></li>\
-		// 		</ul>\
-		// 		<ul class='nav navbar-nav navbar-right'>\
-		// 		<li><a href='#'><span class='glyphicon glyphicon-user'></span> Sign Up</a></li>\
-		// 		<li><a href='#'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>\
-		// 		</ul>\
-		// 	</div>\
-		// </nav>\
-
-		// <iframe id='my_iframe' style='display:none;'></iframe>\
-		// <ul class='pagination' id='pageNaviii'>\
-		// <li class='active'><a href='#' >1</a></li>\
-		// <li id='createPage'><a href='#'>+</a></li>\
-		// </ul>\
 
 		sidebar.id = "mySidebar";
-		sidebar.innerHTML = "\
+		document.body.appendChild(sidebar);
+		
+
+		shadowEl = document.querySelector("#mySidebar");
+		shadow = shadowEl.attachShadow({mode: 'open'});
+		// const link = document.createElement("ul");
+		// link.innerHTML = $('#pcss3mm').html();
+		//shadow.appendChild(link);
+		shadow.innerHTML = "\
 		<!-- pdf다운로드 -->\
 		<iframe id='my_iframe' style='display:none'></iframe>\
 		<ul id='pcss3mm' class='pcss3mm'>\
@@ -169,14 +114,31 @@ function toggleSidebar() {
 		background:white;\
 		z-index:999999;\
 		";
-		document.body.appendChild(sidebar);
-		sidebarOpen = true;
+
+		$(shadow).append($('<link>')
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href", extViewCss_pcc));
+		$(shadow).append($('<link>')
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href", trumbowygCss));
+		$(shadow).append($('<link>')
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href", editorCss));
+		$(shadow).append($('<script>')
+			.attr("type","text/javascript")
+			.attr("charset","utf-8")
+			.attr("src", extViewJs));
+			
+
 		
 		chrome.runtime.sendMessage({message: "sidebar"}, null);
+		sidebarOpen = true;
 
 		//확장이 로딩되는 모습을 안보여주기 위함
-		$('#mySidebar').hide();		
-		
+		//$('#mySidebar').hide();		
 	}
 }
 
@@ -271,7 +233,85 @@ var logoutHtml = "<li class='right' id='extGBE-logout'>\
 
 
 
+// var tuiColorPicker_css= chrome.runtime.getURL('/apis/tui-image-editor/css/tui-color-picker.css');
+		// var tuiImageEditor_css= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.css')
+		// var fabric_js = chrome.runtime.getURL('/apis/tui-image-editor/js/fabric3.3.2.js');
+		// var tuiCodeSnippet_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-code-snippet.min1.5.0.js');
+		// var tuiColorPicker_js = chrome.runtime.getURL('/apis/tui-image-editor/js/tui-color-picker2.2.3.js');
+		// var FileSaver_js = chrome.runtime.getURL('/apis/tui-image-editor/js/FileSaver.min1.3.0.js');
+		// var tuiImageEditor_js= chrome.runtime.getURL('/apis/tui-image-editor/tui-image-editor.js')
+		// var tuiBlackTheme_js = chrome.runtime.getURL('/apis/tui-image-editor/js/theme/black-theme.js')
 
+
+		// $('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiColorPicker_css))
+		// $('head').append($('<link>').attr("type", "text/css").attr("rel", "stylesheet").attr("href", tuiImageEditor_css))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", fabric_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiCodeSnippet_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiColorPicker_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", FileSaver_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiImageEditor_js))
+		// $('head').append($('<script>').attr("type", "text/javascript").attr("charset", "utf-8").attr("src", tuiBlackTheme_js))
+		// $('head').append($('<script>')
+		// 	.attr("type","text/css")
+		// 	.attr("charset","utf-8")
+		// 	.attr("media", "screen,print")
+		// 	.attr("src", pdfTestCss));
+		
+		// <nav class='navbar navbar-default'>\
+		// 	<div class='container-fluid'>\
+		// 		<div class='navbar-header'>\
+		// 		<a class='navbar-brand' href='#'>SPLessons</a>\
+		// 		</div>\
+		// 		<ul class='nav navbar-nav'>\
+		// 		<li><a href='#'>Home</a></li>\
+		// 		<li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' href='#' >Web Designing <span class='caret'></span></a>\
+		// 			<ul class='dropdown-menu'>\
+		// 			<li><a href='#'>HTML</a></li>\
+		// 			<li><a href='#'>JavaScript</a></li>\
+		// 			<li><a href='#'>Bootstrap</a></li>\
+		// 			</ul>\
+		// 		</li>\
+		// 		<li><a href='#'>Web Development</a></li>\
+		// 		<li><a href='#'>Databases</a></li>\
+		// 		</ul>\
+		// 		<ul class='nav navbar-nav navbar-right'>\
+		// 		<li><a href='#'><span class='glyphicon glyphicon-user'></span> Sign Up</a></li>\
+		// 		<li><a href='#'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>\
+		// 		</ul>\
+		// 	</div>\
+		// </nav>\
+
+		// <iframe id='my_iframe' style='display:none;'></iframe>\
+		// <ul class='pagination' id='pageNaviii'>\
+		// <li class='active'><a href='#' >1</a></li>\
+		// <li id='createPage'><a href='#'>+</a></li>\
+		// </ul>\
+// sidebar.innerHTML = "\
+		// <!-- pdf다운로드 -->\
+		// <iframe id='my_iframe' style='display:none'></iframe>\
+		// <ul id='pcss3mm' class='pcss3mm'>\
+		// 	"+homtHtml+"\
+		// 	<!-- 저장 -->\
+		// 	"+myGuideBookHtml+"\
+		// 	<!-- 저장 -->\
+		// 	"+saveHtml+"\
+		// 	<!--/ share -->\
+		// 	<!-- pin or unpin -->\
+		// 	"+loginOutHtml+"\
+		// 	<!--/ pin or unpin -->\
+		// </ul>\
+		// <h1 style='padding-left:10px; padding:3px;'></h1>\
+		// <div id='my-editor'></div>\
+		// ";
+		// sidebar.style.cssText = "\
+		// position:fixed;\
+		// top:0px;\
+		// right:0px;\
+		// width:350px;\
+		// height:100%;\
+		// background:white;\
+		// z-index:999999;\
+		// ";
 
 
 
