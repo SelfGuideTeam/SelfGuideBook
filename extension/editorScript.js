@@ -120,7 +120,7 @@ $('#my-editor').trumbowyg({
 });
 
 if(isLogined){
-  getMyGuideBooks(false)
+  getMyGuideBooks(false, 'init')
   //$('#my-editor').trumbowyg('disable')
   $('#pcss3mm').children('li').not('#extGBE-myGuideBooksli').not('#extGBE-logout').addClass('disabled');
 }else{
@@ -283,10 +283,13 @@ function getMyGuideBooks(refresh, type){
       if(type=='login'){
         $('#pcss3mm').removeClass('disabled');
         $('#pcss3mm').children('li').not('#extGBE-myGuideBooksli').not('#extGBE-logout').addClass('disabled');
-        $('#my-editor').trumbowyg('enable')
+        //$('#my-editor').trumbowyg('enable')
       }else if(type=='save'){
           $('#my-editor').trumbowyg('enable')
           $('#pcss3mm').removeClass('disabled')
+      }else if(type=='init'){
+        $('#pcss3mm').removeClass('disabled');
+        $('#pcss3mm').children('li').not('#extGBE-myGuideBooksli').not('#extGBE-logout').addClass('disabled');
       }
     }
   })
