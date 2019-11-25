@@ -83,6 +83,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// });
 		guideBookSaveRequest(sendResponse, request.data);
 		return true;
+	}else if(message=='guideBookDeleteRequest'){
+		guideBookDeleteRequest(sendResponse, request.data);
 	}else if(message=='logoutRequest'){
 		// content-type을 설정하고 데이터 송신
 		setChromeStg('accessToken', '')
@@ -190,7 +192,26 @@ async function guideBookSaveRequest(sendResponse, data){
 			sendResponse('fail')
 		}
 	} catch(err){
+		console.log(err)
+	}
+}
 
+async function guideBookDeleteRequest(sendResponse, data){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		if(result.result=='success'){
+			var email = {'email' : user.email};
+			var titles = {'titles' : data}
+			var data2 = Object.assign(email, titles)
+			data2 = JSON.stringify(data2);
+			let result = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/deleteGuideBook', data2);
+			sendResponse(result.result);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err)
 	}
 }
 

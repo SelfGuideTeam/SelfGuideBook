@@ -160,6 +160,76 @@ router.post('/setGuideBook', async function(req, res, next){
     }
 });
 
+router.post('/deleteGuideBook', async function(req, res, next){
+    console.log('req body : ')
+    console.log((req.body.titles).length)
+    // try{
+    //     let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
+    //     let getDoc = guideBookRef.get()
+    //     .then(doc => {
+    //         if (!doc.exists) {
+    //             guideBookRef.set({
+    //                 html : req.body.htmlCode,
+    //                 created_date : Date.now(),
+    //                 modifiyed_date : Date.now()
+    //             }).then(function(error) {
+    //                 console.log(error)
+    //                 var responseData = {'result' : 'success'}
+    //                 res.json(responseData)
+    //                 return;
+    //             }).catch(function(error){
+    //                 return;
+    //             })
+    //         } else {
+    //             guideBookRef.update({
+    //                 html : req.body.htmlCode,
+    //                 modifiyed_date : Date.now()
+    //             }).then(function(error) {
+    //                 console.log(error)
+    //                 var responseData = {'result' : 'success'}
+    //                 res.json(responseData)
+    //                 return;
+    //             }).catch(function(error){
+    //                 return;
+    //             })
+    //         }
+    //         return;
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //         res.json(err)
+    //         return;
+    //     });
+    //     // console.log('콘솔  :   '+db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title))
+    //     // let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title).set({
+    //     //     html : req.body.htmlCode,
+    //     //     created_date : Date.now(),
+    //     //     modifiyed_date : Date.now()
+    //     // }).then(function(error) {
+    //     //     console.log(error)
+    //     //     var responseData = {'result' : 'success'}
+    //     //     res.json(responseData)
+    //     //     return;
+    //     // });
+
+    //     // let setSf = guideBookRef.doc(req.body.email).set({
+    //     //     title : req.body.title,
+    //     //     html : req.body.htmlCode,
+    //     //     created_date : Date.now(),
+    //     //     modifiyed_date : Date.now()
+    //     // }).then(function(error) {
+    //     //     console.log(error)
+    //     //     var responseData = {'result' : 'success'}
+    //     //     res.json(responseData)
+    //     //     return;
+    //     // });
+    // } catch(err){
+    //     console.log(err);
+    //     res.json(err)
+    //     return;
+    // }
+});
+
 router.post('/getGuideBookList', async function(req, res, next){
     try{    
         var guideBooks = new Array();
@@ -167,7 +237,7 @@ router.post('/getGuideBookList', async function(req, res, next){
         let getDoc = guideBookRef.orderBy('created_date').get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
-                console.log(doc.id, " => ", doc.data());
+                //console.log(doc.id, " => ", doc.data());
                 var title = {'title' : doc.id};
                 var data2 = Object.assign(title, doc.data());
                 data2 = JSON.stringify(data2);

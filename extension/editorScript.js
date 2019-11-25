@@ -245,35 +245,44 @@ async function saveHtml_Server(){
 }
 
 async function deleteGB_server(type){
-  $(getShadowEl('#my-editor')).trumbowyg('disable')
-  $(getShadowEl('#pcss3mm')).addClass('disabled')
-  if(guideBookIdx==-1){
-    return;
-  }
+  // $(getShadowEl('#my-editor')).trumbowyg('disable')
+  // $(getShadowEl('#pcss3mm')).addClass('disabled')
+  // if(guideBookIdx==-1){
+  //   return;
+  // }
 
-  var title = $(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('value');
-  var inputTitle = '';
-  while(true){
-    if(inputTitle==''){
-      inputTitle = prompt( "삭제하시려면 가이드북 제목을 입력해 주세요(공백X).\n "+$(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('value') );
-    }else if(inputTitle == null){
-      $(getShadowEl('#my-editor')).trumbowyg('enable')
-      $(getShadowEl('#pcss3mm')).removeClass('disabled')
-      return;
-    }else{
-      if(title==inputTitle){
-        
-        break;
-      }else{
-        alert('같지 않습니다.')
-      }
-    }
-  }
+  // var title = $(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('value');
+  // var inputTitle = '';
+  // while(true){
+  //   if(inputTitle==''){
+  //     inputTitle = prompt( "삭제하시려면 가이드북 제목을 입력해 주세요(공백X).\n "+$(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('value') );
+  //   }else if(inputTitle == null){
+  //     $(getShadowEl('#my-editor')).trumbowyg('enable')
+  //     $(getShadowEl('#pcss3mm')).removeClass('disabled')
+  //     return;
+  //   }else{
+  //     if(title==inputTitle){
+
+  //       break;
+  //     }else{
+  //       alert('같지 않습니다.')
+  //     }
+  //   }
+  // }
 
   if(type=='one'){
 
   }else if(type=='all'){
+    var guidebookTitles = new Array();
+    myGuideBooks.forEach(function (item, index, array) {
+      let guidBook = JSON.parse(item);
+      var title = guidBook.title;
+      guidebookTitles.push(title)
+    });
+    console.log(guidebookTitles);
+    chrome.runtime.sendMessage({message: 'guideBookDeleteRequest', data:guidebookTitles}, function(response){ 
 
+    });
   }else{
 
   }
