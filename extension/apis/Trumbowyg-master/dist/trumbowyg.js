@@ -517,6 +517,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             var t = this,
                 prefix = t.o.prefix,
                 html = '';
+            //console.log(t)
 
             t.$box = $('<div/>', {
                 class: prefix + 'box ' + prefix + 'editor-visible ' + prefix + t.o.lang + ' trumbowyg'
@@ -596,6 +597,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             t.$ed
                 .on('dblclick', 'img', t.o.imgDblClickHandler)
                 .on('keydown', function (e) {
+                    //console.log(e);
+                    //console.log(this)
                     if ((e.ctrlKey || e.metaKey) && !e.altKey) {
                         ctrl = true;
                         var key = t.keys[String.fromCharCode(e.which).toUpperCase()];
@@ -605,8 +608,9 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                             return false;
                         } catch (c) {}
                     } else {
+                        //console.log('keydown')
                         if (t.o.tabToIndent && e.key === 'Tab') {
-                            try {
+                            try {   
                                 if (e.shiftKey) {
                                     t.execCmd('outdent', true, null);
                                 } else {
@@ -645,13 +649,14 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     }
 
                     setTimeout(function () {
-                        ctrl = false;
+                        ctrl = true;        //초기값 false -> 키보드 꾹 누르면 에디터 커서가 풀림
                     }, 50);
                 })
                 .on('mouseup keydown keyup', function (e) {
+                    //console.log('mouseup keydown keyup')
                     if ((!e.ctrlKey && !e.metaKey) || e.altKey) {
                         setTimeout(function () { // "hold on" to the ctrl key for 50ms
-                            ctrl = false;
+                            ctrl = true;         //초기값 false -> 한글자쓸때마다 에디터 커서가 풀림
                         }, 50);
                     }
                     clearTimeout(debounceButtonPaneStatus);
@@ -678,7 +683,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                         }
                     }
                 })
-                .on('cut drop', function () {
+                .on('cut drop', function (e) {
+                    console.log(e)
                     setTimeout(function () {
                         t.semanticCode(false, true);
                         t.$c.trigger('tbwchange');
@@ -806,7 +812,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     type: 'button',
                     class: prefix + btnName + '-button ' + (btn.class || '') + (!hasIcon ? ' ' + prefix + 'textual-button' : ''),
                     html: t.hasSvg && hasIcon ?
-                        '<svg><use xlink:href="' + t.svgPath + '#' + prefix + (btn.ico || btnName).replace(/([A-Z]+)/g, '-$1').toLowerCase() + '"/></svg>' :
+                        '<svg><use href="' + t.svgPath + '#' + prefix + (btn.ico || btnName).replace(/([A-Z]+)/g, '-$1').toLowerCase() + '"/></svg>' :
                         t.hideButtonTexts ? '' : (btn.text || btn.title || t.lang[btnName] || btnName),
                     title: (btn.title || btn.text || textDef) + (btn.key ? ' (' + (t.isMac ? 'Cmd' : 'Ctrl') + ' + ' + btn.key + ')' : ''),
                     tabindex: -1,
@@ -826,7 +832,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                         return false;
                     }
                 });
-
+                
             if (isDropdown) {
                 $btn.addClass(prefix + 'open-dropdown');
                 var dropdownPrefix = prefix + 'dropdown',
@@ -875,7 +881,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 type: 'button',
                 class: prefix + btnName + '-dropdown-button ' + (btn.class || '') + (btn.ico ? ' ' + prefix + btn.ico + '-button' : ''),
                 html: t.hasSvg && hasIcon ?
-                  '<svg><use xlink:href="' + t.svgPath + '#' + prefix + (btn.ico || btnName).replace(/([A-Z]+)/g, '-$1').toLowerCase() + '"/></svg>' + (btn.text || btn.title || t.lang[btnName] || btnName) :
+                  '<svg><use href="' + t.svgPath + '#' + prefix + (btn.ico || btnName).replace(/([A-Z]+)/g, '-$1').toLowerCase() + '"/></svg>' + (btn.text || btn.title || t.lang[btnName] || btnName) :
                   (btn.text || btn.title || t.lang[btnName] || btnName),
                 title: (btn.key ? '(' + (t.isMac ? 'Cmd' : 'Ctrl') + ' + ' + btn.key + ')' : null),
                 style: btn.style || null,

@@ -23,9 +23,6 @@ function validToken(accessToken){
     return new Promise((resolve, reject) => {
         admin.auth().verifyIdToken(accessToken, checkRevoked)
         .then(function(decodedToken) {
-            console.log(decodedToken)
-            let uid = decodedToken.uid;
-            // ...
             console.log('유효')
             resolve(decodedToken);
             return;
