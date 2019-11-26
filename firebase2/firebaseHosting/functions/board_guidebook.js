@@ -309,7 +309,42 @@ router.post('/insertFromExtension', function(req, res, next){
 });
 
 
+router.post('/getMainBoard', function(req, res, next){
+    try{    
+        var guideBooks = new Array();
+        const criteriaDate = (Date.now())-1209600000; //2주 전의 날짜
+        console.log('criteriaDate : ' +  criteriaDate)
+        let guideBookRef = db.collection('notes').where('date', '>', criteriaDate).orderBy('date', 'desc');
 
+        guideBookRef.get().then(function(querySnapshot){
+            querySnapshot.forEach(function(doc) {
+                if(guideBooks.length<3){
+                    guideBooks.push(doc.data());
+                }else{
+                    guideBooks.every(function (doc2, index){
+                        if(doc2.view<doc.data().view){
+                            guideBooks[index] = doc.data();
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    });
+                }
+            });
+            console.log(guideBooks);
+            res.json({'result' : guideBooks});
+            return;
+        }).catch(err => {
+            console.log('Error getting documents', err);
+            return;
+        })
+
+    } catch(err){
+        res.json({'result' : 'fail'});
+        console.log(err);
+        return;
+    }
+});
 
 
 
