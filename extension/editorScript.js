@@ -14,7 +14,6 @@ $(getShadowEl('#my-editor')).trumbowyg({
   removeformatPasted: true,
   lang : 'ko',
   tagsToRemove: ['script', 'link'],
-  svgPath : chrome.runtime.getURL('/apis/Trumbowyg-master/dist/ui/icons.svg'),
   autogrow: true,
   btnsDef: {
     // Create a new dropdown
@@ -25,12 +24,12 @@ $(getShadowEl('#my-editor')).trumbowyg({
     capture: {
       dropdown : ['SelectedArea', 'EntirePage', 'VisiblePage'],
       title: '캡처',
-      ico: 'justifyLeft',
+      ico: 'capture',
       hasIcon: true
     },
     SelectedArea : {
       title: '선택 캡처',
-      ico: 'justifyLeft',
+      ico: 'capture-select',
       hasIcon: true,
       fn: function(){
         chrome.runtime.sendMessage({message: "selectCapture"}, null);
@@ -38,7 +37,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
     },
     EntirePage : {
       title: '전체 캡처',
-      ico: 'justifyLeft',
+      ico: 'capture-all',
       hasIcon: true,
       fn: function(){
         chrome.runtime.sendMessage({message: "entireCapture"}, null);
@@ -46,7 +45,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
     },
     VisiblePage : {
       title: '영역 캡처',
-      ico: 'justifyLeft',
+      ico: 'capture-dom',
       hasIcon: true,
       fn: function(){
         chrome.runtime.sendMessage({message: "domCapture"}, null);
@@ -202,7 +201,7 @@ function ajaxTest(){
     }
 }
 
-async function saveHtml_Server(){
+async function saveHtml_Server(init){
   $(getShadowEl('#pcss3mm')).addClass('disabled')
   // 입력값을 변수에 담고 문자열 형태로 변환
   if(guideBookIdx==-1){
@@ -211,18 +210,27 @@ async function saveHtml_Server(){
 
   var title = '';
   while(true){
-    if(title==''){
+    //alert(title)
+    if(title=='' || title.includes(' ')){
       title = prompt( '가이드북 제목을 입력해 주세요(공백X).', $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value') );
     }else if(title == null){
-      $(getShadowEl('#my-editor')).trumbowyg('enable')
+      alert('null')
+      if(!init){
+        $(getShadowEl('#my-editor')).trumbowyg('enable')
+      }
       $(getShadowEl('#pcss3mm')).removeClass('disabled')
       return;
     }else{
+      alert('title')
       break;
     }
   }
 
-  var html =$(getShadowEl('#my-editor')).html();
+  if(init){
+    var html = ''
+  }else{
+    var html =$(getShadowEl('#my-editor')).html();
+  }
   var data = {'title' : title,
               'htmlCode' : html };
 
@@ -235,7 +243,13 @@ async function saveHtml_Server(){
       } catch(err){
         console.log(err)
       }
-      getMyGuideBooks(true, 'save');
+
+      if(init){
+        getMyGuideBooks(true, 'initSave');
+      }else{
+        getMyGuideBooks(true, 'save');
+      }
+
     }else{
       alert('서버저장 실패')
     }
@@ -264,6 +278,21 @@ async function deleteGB_server(type){
       }else{
         if(title==inputTitle){
           //삭제 실행
+          var guidebookTitles = new Array();
+          guidebookTitles.push(title);
+          chrome.runtime.sendMessage({message: 'guideBookDeleteRequest', data:guidebookTitles}, function(response){ 
+            if(response=='success'){
+              //$(getShadowEl('#myGuideBookList')).empty();
+              getMyGuideBooks(true, 'delete');
+              $(getShadowEl('#extGBE-guideBookTitleArea')).html('내 가이드북');
+              $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).addClass('disabled');
+              guideBookIdx = -1;
+              $(getShadowEl('#my-editor')).html('')
+              alert(title + '  가이드북이 삭제되었습니다.')
+            }else{
+              alert('삭제 실패')
+            }
+          });
           break;
         }else{
           alert('같지 않습니다.')
@@ -291,9 +320,12 @@ async function deleteGB_server(type){
           console.log(guidebookTitles);
           chrome.runtime.sendMessage({message: 'guideBookDeleteRequest', data:guidebookTitles}, function(response){ 
             if(response=='success'){
-              $(getShadowEl('#myGuideBookList')).empty();
+              //$(getShadowEl('#myGuideBookList')).empty();
               myGuideBooks = null;
-              getMyGuideBooks(true, 'save');
+              getMyGuideBooks(true, 'delete');
+              $(getShadowEl('#extGBE-guideBookTitleArea')).html('내 가이드북');
+              $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).addClass('disabled');
+              guideBookIdx = -1;
               alert('모든 가이드북이 삭제되었습니다.')
             }else{
               alert('삭제 실패')
@@ -352,11 +384,9 @@ function getMyGuideBooks(refresh, type){
           }
         });
       } catch (e) {
-        if(response.length==0){
-          type = 'empty'
-        }
         myGuideBooks = response;
         $(getShadowEl('#myGuideBookList')).empty();
+        $(getShadowEl('#myGuideBookList')).append("<li class='extGBE-addGuideBook'><a href='' onclick='return false'><i class='icon-saveOk' ></i>가이드북 생성</a></li>")
         response.forEach(function (item, index, array) {
           let guidBook = JSON.parse(item);
           var title = guidBook.title;
@@ -366,6 +396,7 @@ function getMyGuideBooks(refresh, type){
         });
       }
 
+      setGuideBookListener();
       if(type=='login'){
         $(getShadowEl('#pcss3mm')).removeClass('disabled');
         $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).addClass('disabled');
@@ -373,16 +404,21 @@ function getMyGuideBooks(refresh, type){
       }else if(type=='save'){
         $(getShadowEl('#my-editor')).trumbowyg('enable')
         $(getShadowEl('#pcss3mm')).removeClass('disabled')
+        //console.log($(getShadowEl('#myGuideBookList')).children('li').last())
       }else if(type=='init'){
         $(getShadowEl('#pcss3mm')).removeClass('disabled');
         $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).addClass('disabled');
-      }else if(type=='empty'){
-        $(getShadowEl('#myGuideBookList')).append("<li class='extGBE-guideBook' id='extGBE-addGuideBook'><a href='' onclick='return false'><i class='icon-saveOk' ></i>가이드북 생성</a></li>")
-        //guideBookIdx = 0;
-        //$(getShadowEl('#my-editor')).trumbowyg('enable');
-        //$(getShadowEl('#pcss3mm')).children('li').filter(getShadowEl('#extGBE-save')).removeClass('disabled');
+      }else if(type=='initSave'){
+        $(getShadowEl('#pcss3mm')).removeClass('disabled');
+        $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).addClass('disabled');
+        $(getShadowEl('#myGuideBookList')).children('li').last().trigger('click');
+      }else if(type=='delete'){
+        $(getShadowEl('#my-editor')).trumbowyg('disable')
       }
-      setGuideBookListener();
+      
+      // if(response.length==0){
+      //   $(getShadowEl('#myGuideBookList')).append("<li class='extGBE-addGuideBook'><a href='' onclick='return false'><i class='icon-saveOk' ></i>가이드북 생성</a></li>")
+      // }
     }
   })
 }
@@ -452,26 +488,34 @@ async function logout(){
   });
 }
 
+function setCurrentGuideBook(){
+  let index = $(this).attr('value');
+  let className = $(getShadowEl('#extGBE-list-icon-idx'+index)).attr('class')
+  //console.log(myGuideBooks)
+  //console.log(myGuideBooks[index])
+  let guideBook = JSON.parse(myGuideBooks[index]);
+  $(getShadowEl('#my-editor')).html(guideBook.html);
+  
+  var title = guideBook.title;
+  if(title.length > 8) title=(title.substring(0, 8))+'...'
+  $(getShadowEl('#extGBE-guideBookTitleArea')).html("<i class='"+className+"' id='extGBE-title-icon-saveOk'></i>"+title+"")
+  $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value', title);
+  //id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a>
+  //$('#extGBE-titleArea').html("")
+  guideBookIdx = index;
+  $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).removeClass('disabled');
+  $(getShadowEl('#my-editor')).trumbowyg('enable');
+}
 
 //목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
 function setGuideBookListener(){
-  $(getShadowElAll('.extGBE-guideBook')).click(function(){
-    let index = $(this).attr('value');
-    let className = $(getShadowEl('#extGBE-list-icon-idx'+index)).attr('class')
-    //console.log(myGuideBooks)
-    //console.log(myGuideBooks[index])
-    let guideBook = JSON.parse(myGuideBooks[index]);
-    $(getShadowEl('#my-editor')).html(guideBook.html);
-    
-    var title = guideBook.title;
-    if(title.length > 8) title=(title.substring(0, 8))+'...'
-    $(getShadowEl('#extGBE-guideBookTitleArea')).html("<i class='"+className+"' id='extGBE-title-icon-saveOk'></i>"+title+"")
-    $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value', title);
-    //id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a>
-    //$('#extGBE-titleArea').html("")
-    guideBookIdx = index;
-    $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).removeClass('disabled');
-    $(getShadowEl('#my-editor')).trumbowyg('enable');
+  $(getShadowElAll('.extGBE-guideBook')).click(setCurrentGuideBook)
+
+  $(getShadowEl('.extGBE-addGuideBook')).click(function(){
+    // $(getShadowEl('#my-editor')).trumbowyg('enable');
+    guideBookIdx = 0;
+    saveHtml_Server(true);
+    //방금만든 가이드북을 선택하는 리스너 트리거해줘야함
   })
 
 }
@@ -543,11 +587,6 @@ function setListeners(){
   $(getShadowEl('#extGBE-deleteAllPage')).click(function(){
     deleteGB_server('all');
   })
-
-  $(getShadowEl('#extGBE-addGuideBook')).click(function(){
-    alert('add1')
-  })
-
 
 }
 

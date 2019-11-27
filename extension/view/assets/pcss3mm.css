@@ -722,6 +722,10 @@
 	content: url('chrome-extension://goomelalmnfndoikigfklcjjfonbgfdh/view/img/cancel-16.png');
 }
 
+.icon-home:before{
+	content:url('chrome-extension://goomelalmnfndoikigfklcjjfonbgfdh/view/img/icon-home-16.png');
+}
+
 
 
 /*----------------------------------------------------------------------------*/
