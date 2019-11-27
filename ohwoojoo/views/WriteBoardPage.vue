@@ -27,6 +27,7 @@
                   <v-file-input
                     v-model="files"
                     label="File input"
+                    multiple
                     small-chips
                     show-size
                     counter
