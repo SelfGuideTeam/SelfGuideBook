@@ -23,12 +23,21 @@
             </v-col>
             <v-col>
               <v-icon class="mr-2">mdi-comment-outline</v-icon>
-              {{comments}}
+              {{numOfComments}}
             </v-col>
           </v-row>
           </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
+    <v-divider/>
+    <v-list-item-content @click="downloadFiles" v-for="filename in filenames" :key="filename">
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col cols="2">
+          <a class="caption">{{filename}}</a>
+        </v-col>
+      </v-row>
+    </v-list-item-content>
     <v-divider/>
 
     <v-img></v-img>
@@ -63,7 +72,7 @@
     </v-card-actions>
   </v-card>
   <span>
-    <comments :val="id" v-model="comments"></comments>
+    <comments :val="id"></comments>
   </span>
 </v-container>
 </template>
@@ -82,8 +91,8 @@ export default {
       date: '',
       view: 0,
       num: '',
-      fileUpload: [],
-      comments: ''
+      filenames: [],
+      numOfComments: 0
     }
   },
   created () {
@@ -99,22 +108,37 @@ export default {
           console.log('No such document!')
         } else {
           console.log('Document data:', doc.data())
+          var d = new Date(doc.data().date)
+          var year = d.getFullYear()
+          var month = '0' + (d.getMonth() + 1)
+          var day = '0' + d.getDate()
+          var hour = '0' + d.getHours()
+          var minute = '0' + d.getMinutes()
+          this.date = year + '.' + month.substr(-2) + '.' + day.substr(-2) + ' ' + hour.substr(-2) + ':' + minute.substr(-2)
           this.title = doc.data().title
           this.writer = doc.data().writer
           this.content = doc.data().content
-          this.date = doc.data().date
           this.id = doc.id
           this.category = doc.data().category
           this.view = doc.data().view
           this.num = doc.data().num
-          this.fileUpload = doc.data().fileUpload
+          this.filenames = doc.data().filenames
+          this.numOfComments = doc.data().numOfComments
 
           // view +1
           this.view += 1
 
           // view 업데이트
           this.$firebase.firestore().collection('notes').doc(this.$route.params.id).set({
-            title: this.title, content: this.content, category: this.category, writer: this.writer, date: this.date, view: this.view, num: this.num, fileUpload: this.fileUpload
+            title: this.title,
+            content: this.content,
+            category: this.category,
+            writer: this.writer,
+            date: this.date,
+            view: this.view,
+            num: this.num,
+            filenames: this.filenames,
+            numOfComments: this.numOfComments
           })
         }
       })
@@ -138,9 +162,33 @@ export default {
     },
     async updateView (id) {
       const r = await this.$firebase.firestore().collection('notes').doc(id).set({
-        title: this.title, content: this.content, category: this.category, writer: this.writer, date: this.date, view: this.view, num: this.num, fileUpload: this.fileUpload
+        title: this.title,
+        content: this.content,
+        category: this.category,
+        writer: this.writer,
+        date: this.date,
+        view: this.view,
+        num: this.num,
+        filenames: this.filenames,
+        numOfComments: this.numOfComments
       })
       console.log(r)
+    },
+    downloadFiles () {
+      const storageRef = this.$firebase.storage().ref()
+      for (var i = 0; i < this.filenames.length; i++) {
+        var starsRef = storageRef.child(`board/${this.num}/${this.filenames[i]}`)
+        starsRef.getDownloadURL().then((url) => {
+          console.log(url)
+          let link = document.createElement('a')
+          link.href = url
+          link.download = url
+          link.click()
+        })
+          .catch((error) => {
+            console.log(error.code)
+          })
+      }
     }
   }
 }

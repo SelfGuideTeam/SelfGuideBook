@@ -24,7 +24,7 @@
             <td>{{ item.writer }}</td>
             <td>{{ item.date }}</td>
             <td>{{ item.view }}</td>
-            <td>{{ item.comments }}</td>
+            <td>{{ item.numOfComments }}</td>
           </tr>
         </template>
     </v-data-table>
@@ -53,7 +53,8 @@ export default {
         { text: '조회수', value: 'view', filterable: false },
         { text: '댓글', value: 'comments', filterable: false }
       ],
-      items: []
+      items: [],
+      date: ''
     }
   },
   mounted () {
@@ -63,9 +64,18 @@ export default {
     async get () {
       const snapshot = await this.$firebase.firestore().collection('notes').orderBy('num', 'desc').get()
       snapshot.forEach(board => {
-        const { num, title, writer, view, comments } = board.data()
+        const { num, title, writer, view, numOfComments } = board.data()
+
+        var d = new Date(board.data().date)
+        var year = d.getFullYear()
+        var month = '0' + (d.getMonth() + 1)
+        var day = '0' + d.getDate()
+        var hour = '0' + d.getHours()
+        var minute = '0' + d.getMinutes()
+        this.date = year + '.' + month.substr(-2) + '.' + day.substr(-2) + ' ' + hour.substr(-2) + ':' + minute.substr(-2)
+
         this.items.push({
-          num, title, writer, id: board.id, date: board.data().date, view, comments
+          num, title, writer, id: board.id, date: this.date, view, numOfComments
         })
       })
       console.log(snapshot)
