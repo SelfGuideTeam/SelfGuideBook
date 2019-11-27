@@ -40,6 +40,16 @@
           </v-col>
       </template>
     </v-data-iterator>
+    <v-layout>
+            <v-row wrap offset="1">
+                <v-col cols="11">
+                    <v-textarea v-model="content" solo rows="3" no-resize="no-resize">{{content}}</v-textarea>
+                </v-col>
+                <v-col cols="1" class="mt-5">
+                    <v-btn text @click="addComment(val)">작성</v-btn>
+                </v-col>
+            </v-row>
+        </v-layout>
     <template>
       <v-layout row justify-center>
         <v-dialog v-model="dialog1" persistent max-width="400">
