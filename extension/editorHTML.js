@@ -183,7 +183,7 @@ var saveHtml2 = "\
 <a id='extGBE-titleArea' href='' onclick='return false'><i class='icon-home'></i>...</a>\
 </li>\
 <!--/ title -->\
-<li class='dropdown'>\
+<li class='dropdown' id='extGBE-save'>\
 <a href='' onclick='return false'><i class='icon-briefcase'></i>저장</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
