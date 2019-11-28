@@ -40,7 +40,6 @@ function handleRequest(request, sender, sendResponse){
         img.setAttribute('src', imgsrc);
 		getShadowEl('#my-editor').appendChild(img)
 	}else if(request.callFunction == "getMyGuideBooks"){
-		alert('get!')
 		if(sidebarOpen) getMyGuideBooks();
 	}
 

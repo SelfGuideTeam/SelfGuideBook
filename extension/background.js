@@ -39,7 +39,9 @@ var provider = new firebase.auth.GoogleAuthProvider();
 
 var toggleStatus = false;
 var currentTabId = '';
-chrome.browserAction.onClicked.addListener(toggleSidebar2);
+var selectedTabId;
+var extOpendTabId = -1;
+
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
@@ -90,7 +92,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// content-type을 설정하고 데이터 송신
 		setChromeStg('accessToken', '')
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/logout');
+		xhr.open('POST', 'https://fir-ex-63c1a.firebaseapp.com/logout');
 		xhr.setRequestHeader('Content-type', "application/json");
 		var data = {'uid' : request.data
 					};
@@ -152,18 +154,46 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 chrome.tabs.onActivated.addListener(function (tab){
 	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
 	currentTabId = tab.id;
+	// console.log(tab.id)
 })
 
-var inFocus = true;  // global boolean to keep track of state
-chrome.windows.onFocusChanged.addListener(function(window) {
-    if (window == chrome.windows.WINDOW_ID_NONE) {
-		alert('focus out')
-        inFocus = false;
-    } else {
-		alert('focus in')
-        inFocus = true;
-    }
-});
+chrome.browserAction.onClicked.addListener(toggleSidebar2);
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
+	if(changeInfo.status=='complete'){
+		if(tabId == extOpendTabId){
+			chrome.browserAction.setIcon({path:"icon3-black.png"});
+			extOpendTabId = -1;
+		}
+	}
+	// console.log(tab.id)
+})
+
+async function toggleSidebar(tab) {
+	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
+}
+
+async function toggleSidebar2(tab) {
+	if(extOpendTabId == -1){ //확장이 켜진탭이 없을 때
+		extOpendTabId = tab.id;
+		chrome.browserAction.setIcon({path:"icon3.png"});
+		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+	}else{ //확장이 켜진탭이 있을 때
+		if(tab.id == extOpendTabId){ //현재페이지에서 껐다켰다 할때
+			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+			chrome.browserAction.setIcon({path:"icon3-black.png"});
+			extOpendTabId = -1;
+		}else{ // 다른탭에서 킬때
+			//var select=prompt('현재 켜져있는 에디터가 저장되어있지 않습니다. 저장하시겠습니까?');
+			chrome.tabs.sendRequest(extOpendTabId,{callFunction: "toggleSidebar", tab : tab});
+			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+			extOpendTabId = tab.id;
+		}
+	}
+	
+}
+
+
 
 
 
@@ -198,7 +228,7 @@ async function guideBookSaveRequest(sendResponse, data){
 			var email = {'email' : user.email};
 			var data2 = Object.assign(email, data)
 			data2 = JSON.stringify(data2);
-			let result = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/setGuideBook', data2);
+			let result = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/setGuideBook', data2);
 			sendResponse(result.result);
 		}else{
 			sendResponse('fail')
@@ -217,7 +247,7 @@ async function guideBookDeleteRequest(sendResponse, data){
 			var titles = {'titles' : data}
 			var data2 = Object.assign(email, titles)
 			data2 = JSON.stringify(data2);
-			let result = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/deleteGuideBook', data2);
+			let result = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/deleteGuideBook', data2);
 			sendResponse(result.result);
 		}else{
 			sendResponse('fail')
@@ -236,7 +266,7 @@ async function guideBookListRequest(sendResponse){
 		if(result.result=='success'){
 			var data = {'email' : user.email};
 			data = JSON.stringify(data);
-			let guideBooks = await ajaxSend('https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/getGuideBookList', data);
+			let guideBooks = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/getGuideBookList', data);
 			//console.log(text)
 			sendResponse(guideBooks);
 		}else{
@@ -267,7 +297,7 @@ function ajaxSend(url, data){
 function tokenValidRequest(accessToken){
 	return new Promise((resolve, reject) => {
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/verifyIdToken');
+		xhr.open('POST', 'https://fir-ex-63c1a.firebaseapp.com/verifyIdToken');
 		xhr.setRequestHeader('Content-type', "application/json");
 		var data = {'accessToken' : accessToken
 					};
@@ -284,18 +314,62 @@ function tokenValidRequest(accessToken){
 	});
 }
   
-async function toggleSidebar(tab) {
-	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
-}
-
-async function toggleSidebar2(tab) {
-	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
-}
 
 
 
 
-var selectedTabId;
+
+
+
+
+
+
+
+
+
+
+
+
+
+// chrome.tabs.onHighlighted.addListener(function (tab){
+// 	console.log(tab)
+// 	// chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+// 	// currentTabId = tab.id;
+// 	// console.log(tab.id)
+// })
+
+// var inFocus = true;  // global boolean to keep track of state
+// chrome.windows.onFocusChanged.addListener(function(window) {
+// 	// chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+// 	// currentTabId = tab.id;
+//     if (window == chrome.windows.WINDOW_ID_NONE) {
+//         inFocus = false;
+//     } else {
+//         inFocus = true;
+// 	}
+// 	console.log(window)
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //capture 
 function getTimeStamp() {
 	var e, t, o, a, n, r, s = new Date;
