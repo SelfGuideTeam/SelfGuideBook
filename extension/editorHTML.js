@@ -136,7 +136,6 @@ function toggleSidebar() {
 			"+loginOutHtml+"\
 			<!--/ pin or unpin -->\
 		</ul>\
-		<h1 style='padding-left:10px; padding:3px;'></h1>\
 		<div id='my-editor'></div>\
 		";
 		sidebar.style.cssText = "\
