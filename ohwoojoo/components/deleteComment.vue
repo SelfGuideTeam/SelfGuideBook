@@ -89,7 +89,27 @@ export default {
         .catch(err => {
           console.log('Error getting document', err)
         })
+    },
+    getSelectedComment (id1, id2) {
+      // 댓글 가져오기
+      this.$firebase.firestore().collection('notes').doc(id1).collection('comments').doc(id2).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document!')
+          } else {
+            console.log('Document data:', doc.data())
+            this.rewriteContent = doc.data().content
+            this.rewriteWriter = doc.data().writer
+            this.date = doc.data().date
+          }
+        })
+        .catch(err => {
+          console.log('Error getting document', err)
+        })
     }
+  },
+  created () {
+    this.getSelectedComment(this.val.id1, this.val.id2)
   }
 }
 </script>

@@ -1,45 +1,25 @@
 <template>
   <v-container fluid>
-    <v-data-iterator
-      :items="comments"
-      :items-per-page.sync="itemsPerPage"
-      :footer-props="{ itemsPerPageOptions }"
-    >
-      <template v-slot="{itmes}">
-          <v-col
-            v-for="comment in comments"
-            :key="comment.date"
-            cols="12"
-          >
-              <v-card>
-              <v-card-text>
-                <v-row wrap>
-                  <v-col cols="2">
-                    {{comment.writer}}
-                  </v-col>
-                  <v-col cols="6">
-                    {{comment.content}}
-                  </v-col>
-                  <v-spacer></v-spacer>
-                  <v-col cols="2">
-                    {{comment.date}}
-                  </v-col>
-                  <v-col cols="1">
-                    <v-btn text color="grey" @click="getSelectedComment(val, comment.id)">
-                      <v-icon>mdi-comment-edit</v-icon>
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="1">
-                    <v-btn text color="grey" @click="deleteComment(val, comment.id)">
-                      <v-icon>mdi-trash-can-outline</v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-      </template>
-    </v-data-iterator>
+      <v-data-table
+    :headers="headers"
+    :items="comments"
+    :items-per-page="10"
+    class="elevation-1"
+  >
+    <template v-slot:item="{item}">
+        <tr>
+        <td>{{ item.writer }}</td>
+        <td>{{ item.content }}</td>
+        <td>{{ item.date }}</td>
+        <td>
+            <v-icon text color="grey" v-model="item.id" @click="getSelectedComment(val, item.id)">mdi-comment-edit</v-icon>
+        </td>
+        <td>
+            <v-icon text color="grey" v-model="item.id" @click="deleteComment(val, item.id)">mdi-trash-can-outline</v-icon>
+        </td>
+        </tr>
+    </template>
+  </v-data-table>
     <v-layout>
             <v-row wrap offset="1">
                 <v-col cols="11">
@@ -74,8 +54,7 @@ export default {
   components: { rewriteComment, deleteComment },
   data () {
     return {
-      itemsPerPageOptions: [5, 10, 15],
-      itemsPerPage: 5,
+      headers: ['writer', 'content', 'date', 'update', 'delete'],
       content: '',
       comments: [],
       writer: 'B',
@@ -152,12 +131,12 @@ export default {
     },
     // 댓글 가져오기
     async getSelectedComment (id1, id2) {
-      this.dialog1 = true
       this.rewrite.id2 = id2
+      this.dialog1 = true
     },
     async deleteComment (id1, id2) {
-      this.dialog2 = true
       this.del.id2 = id2
+      this.dialog2 = true
 
       // const r = await this.$firebase.firestore().collection('notes').doc(id1).collection('comments').doc(id2).delete()
       // await this.getComments(id1)
@@ -208,49 +187,6 @@ export default {
           console.log('Error getting document', err)
         })
     },
-    // // 댓글 수 -1
-    // async minusComments (id) {
-    //   // 게시글 가져오기
-    //   await this
-    //     .$firebase
-    //     .firestore()
-    //     .collection('notes')
-    //     .doc(id)
-    //     .get()
-    //     .then(doc => {
-    //       if (!doc.exists) {
-    //         console.log('No such document!')
-    //       } else {
-    //         console.log('Document data:', doc.data())
-    //         this.notesTitle = doc.data().title
-    //         this.notesDate = doc.data().date
-    //         this.notesContent = doc.data().content
-    //         this.notesWriter = doc.data().writer
-    //         this.notesCategory = doc.data().category
-    //         this.num = doc.data().num
-    //         this.view = doc.data().view
-    //         this.filenames = doc.data().filenames
-    //         this.numOfComments = doc.data().numOfComments
-    //         // 댓글 수 -1
-    //         this.numOfComments -= 1
-    //         // 게시글 도큐먼트 수정
-    //         this.$firebase.firestore().collection('notes').doc(id).set({
-    //           title: this.notesTitle,
-    //           content: this.notesContent,
-    //           category: this.notesCategory,
-    //           writer: this.notesWriter,
-    //           date: this.notesDate,
-    //           filenames: this.filenames,
-    //           num: this.num,
-    //           view: this.view,
-    //           numOfComments: this.numOfComments
-    //         })
-    //       }
-    //     })
-    //     .catch(err => {
-    //       console.log('Error getting document', err)
-    //     })
-    // },
     receiveDialog1 (msg) {
       this.dialog1 = msg
       this.getComments(this.val)
