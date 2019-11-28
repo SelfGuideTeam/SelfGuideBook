@@ -255,6 +255,42 @@ router.post('/getMainBoard', function(req, res, next){
 
 
 
+router.post('/test1', function(req, res, next){
+    try {
+        const criteriaDate = Date.now() - 1209600000; //2주 전의 날짜
+        console.log("criteriaDate : " + criteriaDate);
+        let guideBookRef = db
+        .collection("notes")
+        .where("date", ">", criteriaDate)
+        .orderBy("date", "desc");
+        
+    var guideBooks = new Array();
+    guideBookRef
+        .get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                querySnapshot.forEach(doc => {
+                    guideBooks.push(doc.data());
+                });
+                guideBooks.sort(function(a,b){
+                    return a.view > b.view? -1 : a.view < b.view? 1:0;
+                })
+                res.json({'result' : guideBooks});
+                return;
+            });
+            res.json({'result' : querySnapshot});
+            return;
+        })
+        .catch(err => {
+            console.log("Error getting documents", err);
+            return;
+        });
+    } catch (err) {
+        console.log(err);
+        return;
+    }
+});
+module.exports = router;
 
 
 

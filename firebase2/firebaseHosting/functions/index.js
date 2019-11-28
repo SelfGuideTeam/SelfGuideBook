@@ -6,6 +6,7 @@ var path = require('path');
 app1.set('view engine', 'ejs');
 app1.engine('ejs', require('ejs').__express);
 
+
 app1.use('/guidebook/extension', require('./board_guidebook'));
 
 

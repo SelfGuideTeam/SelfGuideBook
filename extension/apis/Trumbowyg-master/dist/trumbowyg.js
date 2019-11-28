@@ -351,6 +351,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             strong: {
                 fn: 'bold',
                 key: 'B'
+
             },
             em: {
                 fn: 'italic',
@@ -1072,33 +1073,41 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
         // Open dropdown when click on a button which open that
         dropdown: function (name) {
             var t = this,
-                $body = $('body', t.doc),
                 prefix = t.o.prefix,
-                $dropdown = $('[data-' + prefix + 'dropdown=' + name + ']', t.$box),
-                $btn = $('.' + prefix + name + '-button', t.$btnPane),
+                $dropdown = $(getShadowEl('[data-' + prefix + 'dropdown=' + name + ']'), t.$box),
+                $btn = $(getShadowEl('.' + prefix + name + '-button'), t.$btnPane),
+                $body = $(t.doc)    /*shadowEl */,
                 show = $dropdown.is(':hidden');
 
-            $body.trigger('mousedown');
-
             if (show) {
-                var btnOffsetLeft = $btn.offset().left;
+                var btnOffsetLeft = $btn[0].offsetLeft;
+                console.log($btn)
                 $btn.addClass(prefix + 'active');
 
                 $dropdown.css({
                     position: 'absolute',
-                    top: $btn.offset().top - t.$btnPane.offset().top + $btn.outerHeight(),
-                    left: (t.o.fixedFullWidth && t.isFixed) ? btnOffsetLeft : (btnOffsetLeft - t.$btnPane.offset().left)
+                    top: $btn[0].offsetTop - t.$btnPane.offset().top + $btn.outerHeight(),
+                    left: (t.o.fixedFullWidth && t.isFixed) ? btnOffsetLeft : (btnOffsetLeft - t.$btnPane.offset().left)/*   t.$btnPane[0].offsetWidth-(t.$btnPane[0].offsetWidth-$btn[0].offsetWidth)*/
                 }).show();
 
                 $(window).trigger('scroll');
 
                 $body.on('mousedown.' + t.eventNamespace, function (e) {
                     if (!$dropdown.is(e.target)) {
-                        $('.' + prefix + 'dropdown', t.$box).hide();
-                        $('.' + prefix + 'active', t.$btnPane).removeClass(prefix + 'active');
+                        $(getShadowElAll('.' + prefix + 'dropdown'), t.$box).hide();
+                        $(getShadowElAll('.' + prefix + 'active'), t.$btnPane).removeClass(prefix + 'active');
                         $body.off('mousedown.' + t.eventNamespace);
                     }
                 });
+
+                // $(getShadowEl('.' + prefix + name + '-button')).on('mousedown.' + t.eventNamespace, function (e) {
+                //     if (!$dropdown.is(e.target)) {
+                //         $('.' + prefix + 'dropdown', t.$box).hide();
+                //         $('.' + prefix + 'active', t.$btnPane).removeClass(prefix + 'active');
+                //         $body.off('mousedown.' + t.eventNamespace);
+                //     }
+                // });
+
             }
         },
 

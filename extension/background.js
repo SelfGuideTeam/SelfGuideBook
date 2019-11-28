@@ -50,10 +50,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}else if(message=='selectCapture'){
 		localStorage.firstuse = !1, screenshot.destroydomcapture(), screenshot.scrollSelected()
 	}else if(message=='entireCapture'){
-		alert('entire')
 		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.destroydomcapture(), screenshot.captureEntire()
 	}else if(message=='domCapture'){
-		alert('dom')
 		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.domcapture()
 	}else if(request.contentScriptQuery == 'fetchUrl') {
         // WARNING: SECURITY PROBLEM - a malicious web page may abuse
