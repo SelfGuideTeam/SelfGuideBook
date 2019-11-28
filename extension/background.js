@@ -154,6 +154,17 @@ chrome.tabs.onActivated.addListener(function (tab){
 	currentTabId = tab.id;
 })
 
+var inFocus = true;  // global boolean to keep track of state
+chrome.windows.onFocusChanged.addListener(function(window) {
+    if (window == chrome.windows.WINDOW_ID_NONE) {
+		alert('focus out')
+        inFocus = false;
+    } else {
+		alert('focus in')
+        inFocus = true;
+    }
+});
+
 
 
 function getChromeStg(key){

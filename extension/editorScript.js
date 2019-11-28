@@ -210,18 +210,15 @@ async function saveHtml_Server(init){
 
   var title = '';
   while(true){
-    //alert(title)
-    if(title=='' || title.includes(' ')){
-      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value') );
-    }else if(title == null){
-      alert('null')
+    if(title == null){
       if(!init){
         $(getShadowEl('#my-editor')).trumbowyg('enable')
       }
       $(getShadowEl('#pcss3mm')).removeClass('disabled')
       return;
+    }else if(title=='' || title.includes(' ')){
+      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', init?'':$(getShadowEl('#extGBE-guideBookTitleArea')).attr('value'));
     }else{
-      alert('title')
       break;
     }
   }
