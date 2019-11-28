@@ -39,6 +39,7 @@ function handleRequest(request, sender, sendResponse){
 		var img = document.createElement('img'); 
         img.setAttribute('src', imgsrc);
 		getShadowEl('#my-editor').appendChild(img)
+		$('#mySidebar').show();
 	}else if(request.callFunction == "getMyGuideBooks"){
 		if(sidebarOpen) getMyGuideBooks();
 	}
@@ -171,7 +172,7 @@ function toggleSidebar() {
 		sidebarOpen = true;
 
 		//확장이 로딩되는 모습을 안보여주기 위함
-		//$('#mySidebar').hide();		
+		$('#mySidebar').hide();		
 	}
 }
 

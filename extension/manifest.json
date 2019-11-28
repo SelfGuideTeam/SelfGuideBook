@@ -38,7 +38,7 @@
 				"apis/arrayList.js",
 				"editorHTML.js"
 			],
-			"css": [],
+			"css": ["apis/Trumbowyg-master/dist/ui/trumbowyg.css"],
 			"all_frames": false
 		}
 	],

@@ -1070,6 +1070,40 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             }, 0);
         },
 
+        // // Open dropdown when click on a button which open that
+        // dropdown: function (name) {
+        //     var t = this,
+        //         $body = $('body', t.doc),
+        //         prefix = t.o.prefix,
+        //         $dropdown = $('[data-' + prefix + 'dropdown=' + name + ']', t.$box),
+        //         $btn = $('.' + prefix + name + '-button', t.$btnPane),
+        //         show = $dropdown.is(':hidden');
+
+        //     $body.trigger('mousedown');
+
+        //     if (show) {
+        //         var btnOffsetLeft = $btn.offset().left;
+        //         $btn.addClass(prefix + 'active');
+
+        //         $dropdown.css({
+        //             position: 'absolute',
+        //             top: $btn.offset().top - t.$btnPane.offset().top + $btn.outerHeight(),
+        //             left: (t.o.fixedFullWidth && t.isFixed) ? btnOffsetLeft : (btnOffsetLeft - t.$btnPane.offset().left)
+        //         }).show();
+
+        //         $(window).trigger('scroll');
+
+        //         $body.on('mousedown.' + t.eventNamespace, function (e) {
+        //             if (!$dropdown.is(e.target)) {
+        //                 $('.' + prefix + 'dropdown', t.$box).hide();
+        //                 $('.' + prefix + 'active', t.$btnPane).removeClass(prefix + 'active');
+        //                 $body.off('mousedown.' + t.eventNamespace);
+        //             }
+        //         });
+        //     }
+        // },
+
+
         // Open dropdown when click on a button which open that
         dropdown: function (name) {
             var t = this,
@@ -1078,6 +1112,9 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 $btn = $(getShadowEl('.' + prefix + name + '-button'), t.$btnPane),
                 $body = $(t.doc)    /*shadowEl */,
                 show = $dropdown.is(':hidden');
+
+
+            $body.trigger('mousedown');
 
             if (show) {
                 var btnOffsetLeft = $btn[0].offsetLeft;
@@ -1488,7 +1525,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 class: prefix + 'modal ' + prefix + 'fixed-top'
             }).css({
                 top: t.$box.offset().top + t.$btnPane.height(),
-                zIndex: 99999
+                zIndex: 9999999
             }).appendTo($(t.doc.body));
 
             // Click on overlay close modal by cancelling them
@@ -1506,10 +1543,12 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 })
                   .on('submit', function () {
                       $modal.trigger(CONFIRM_EVENT);
+                      $(getShadowEl('.trumbowyg-overlay')).remove();
                       return false;
                   })
                   .on('reset', function () {
                       $modal.trigger(CANCEL_EVENT);
+                      $(getShadowEl('.trumbowyg-overlay')).remove();
                       return false;
                   })
                   .on('submit reset', function () {

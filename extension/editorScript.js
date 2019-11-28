@@ -32,6 +32,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       ico: 'capture-select',
       hasIcon: true,
       fn: function(){
+        $('#mySidebar').hide();
         chrome.runtime.sendMessage({message: "selectCapture"}, null);
       }
     },
@@ -40,6 +41,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       ico: 'capture-all',
       hasIcon: true,
       fn: function(){
+        $('#mySidebar').hide();
         chrome.runtime.sendMessage({message: "entireCapture"}, null);
       }
     },
@@ -48,6 +50,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       ico: 'capture-dom',
       hasIcon: true,
       fn: function(){
+        $('#mySidebar').hide();
         chrome.runtime.sendMessage({message: "domCapture"}, null);
       }
     },
@@ -97,9 +100,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
     ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
     ['unorderedList', 'orderedList'],
     ['horizontalRule'], 
-    ['lineheight'],
     ['fontfamily'],
-    ['link'],
     ['removeformat'],
     ['image'],
     ['superscript', 'subscript'],
@@ -180,7 +181,7 @@ function printHtmlToPdf(html) {
     },
     success: function (data) {
       console.log(data.pdf); //this is the url to the pdf
-      document.getElementById('my_iframe').src = data.pdf;
+      $(getShadowEl('#my_iframe')).attr('src',  data.pdf);
       $(getShadowEl('#my-editor')).trumbowyg('enable')
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -601,9 +602,9 @@ setListeners();
 
 
 
-//로딩이 다 됐을 시점에 다시 보여주기
+// //로딩이 다 됐을 시점에 다시 보여주기
 setTimeout(function(){
-  $(getShadowEl('#mySidebar') ).show();
+  $('#mySidebar').show();
 },200)
 
 
