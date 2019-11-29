@@ -156,6 +156,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	// console.log(tab.id)
 })
 
+chrome.commands.onCommand.addListener(function(command) {
+	if(command=='open'){
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			toggleSidebar2(tabs[0]);
+		});
+	}
+});
+
 async function toggleSidebar(tab) {
 	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
 }

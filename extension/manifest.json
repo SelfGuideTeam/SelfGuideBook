@@ -56,6 +56,15 @@
 		"unlimitedStorage", "<all_urls>",
 		"identity"
 	],
+	"commands": {
+		"open": {
+		  "suggested_key": {
+			"default": "Alt+G",
+			"mac": "Alt+G"
+		  },
+		  "description": "Open Sidebar"
+		}
+	  },
 	"oauth2": {
 		"client_id": "912304737763-o27o5usb5pupg83g0ql0vkpuibl1uhkq.apps.googleusercontent.com",
 		"scopes": [

@@ -99,7 +99,8 @@ function(o) {
         var n = o("<button/>", {
                 html: '<div class="name"></div>',
                 id: "screenshotcn",
-                "class": "edit_btn cancel"
+                "class": "edit_btn cancel",
+
             }),
             t = o("<div/>", {
                 id: "screenshotbutton",
@@ -156,6 +157,7 @@ function(o) {
     //alert('aferon 삭제')
     function s() {
         window.voilaChromeOption = !1, window.thisScrollEr = !1, o("#areafon").remove()
+        $('#mySidebar').show();
     }
 
     function d(e) {

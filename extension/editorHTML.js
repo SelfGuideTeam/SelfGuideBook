@@ -2,6 +2,7 @@
 var sidebarOpen = false;
 let tab;
 
+
 function getShadowEl(element){
 	return shadow.querySelector(element);
 }
