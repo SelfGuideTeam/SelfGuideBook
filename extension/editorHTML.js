@@ -36,6 +36,7 @@ function handleRequest(request, sender, sendResponse){
 		}
 	}else if(request.callFunction == "insertImage"){
 		//https://imgur링크를 src에 넣으면 pdf에 이미지가 저장이 안됨   http:// 는 됨 --?
+		$('#mySidebar').show();
 		var imgsrc = (request.url).replace('https://','http://');
 		var img = document.createElement('img'); 
         img.setAttribute('src', imgsrc);

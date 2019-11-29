@@ -110,6 +110,7 @@ function(o) {
         var i = o(".jcrop-dragbar").first();
         i.before(t), n.bind("click", function() {
             s()
+            $('#mySidebar').show();
         }), t.bind("click", function() {
             "true" === flashSound ? 
             (p(), o(".jcrop-holder div div .jcrop-tracker").css({
@@ -157,7 +158,7 @@ function(o) {
     //alert('aferon 삭제')
     function s() {
         window.voilaChromeOption = !1, window.thisScrollEr = !1, o("#areafon").remove()
-        $('#mySidebar').show();
+        
     }
 
     function d(e) {
