@@ -325,6 +325,7 @@ async function deleteGB_server(type){
               $(getShadowEl('#extGBE-guideBookTitleArea')).html('내 가이드북');
               $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).addClass('disabled');
               guideBookIdx = -1;
+              $(getShadowEl('#my-editor')).html('');
               alert('모든 가이드북이 삭제되었습니다.')
             }else{
               alert('삭제 실패')
@@ -574,20 +575,20 @@ function setListeners(){
   })
   
   $(getShadowEl('#extGBE-refreshOneGB')).click(async function(){
-    var title = await getChromeStg('currentTitle');
-    console.log(title)
-    // if(guideBookIdx!=-1){
-    //   $(getShadowEl('.extGBE-circle3')).remove();
-    //   $(getShadowEl('#extGBE-refreshOneGB')).html('<div class="extGBE-circle3"></div>'+$(getShadowEl('#extGBE-refreshOneGB')).html())
-    //   setTimeout(function(){
-    //     $(getShadowEl('.extGBE-circle3')).remove();
-    //   }, 1000)
+    // var title = await getChromeStg('currentTitle');
+    // console.log(title)
+    if(guideBookIdx!=-1){
+      $(getShadowEl('.extGBE-circle3')).remove();
+      $(getShadowEl('#extGBE-refreshOneGB')).html('<div class="extGBE-circle3"></div>'+$(getShadowEl('#extGBE-refreshOneGB')).html())
+      setTimeout(function(){
+        $(getShadowEl('.extGBE-circle3')).remove();
+      }, 1000)
     
-    //   $(getShadowEl('#extGBE-title-icon-saveOk')).attr('class', 'icon-saveOk')
-    //   myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
-    //   $(getShadowEl('#my-editor')).html(JSON.parse(myGuideBooks[guideBookIdx]).html);
-    //   $(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('class', 'icon-saveOk')
-    // }
+      $(getShadowEl('#extGBE-title-icon-saveOk')).attr('class', 'icon-saveOk')
+      myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
+      $(getShadowEl('#my-editor')).html(JSON.parse(myGuideBooks[guideBookIdx]).html);
+      $(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('class', 'icon-saveOk')
+    }
   })
 
   $(getShadowEl('#extGBE-deleteOnePage')).click(function(){

@@ -5068,7 +5068,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            'deleteAll': this._menuElement.querySelector('#tie-btn-delete-all'),
 	            'download': this._selectedElement.querySelectorAll('.tui-image-editor-download-btn'),
 				'append' : this._selectedElement.querySelectorAll('.tui-image-editor-append-btn'),
-				'load': this._selectedElement.querySelectorAll('.tui-image-editor-load-btn'),
+				//'load': this._selectedElement.querySelectorAll('.tui-image-editor-load-btn'),
 	        };
 
 	        this._makeSubMenu();
@@ -5350,7 +5350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                locale: this._locale,
 	                biImage: this.theme.getStyle('common.bi'),
 	                iconStyle: this.theme.getStyle('menu.icon'),
-	                loadButtonStyle: this.theme.getStyle('loadButton'),
+	                //loadButtonStyle: this.theme.getStyle('loadButton'),
 					downloadButtonStyle: this.theme.getStyle('downloadButton'),
 					appendButtonStyle: this.theme.getStyle('appendButton')
 	            }) + (0, _mainContainer2.default)({
@@ -5358,7 +5358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                biImage: this.theme.getStyle('common.bi'),
 	                commonStyle: this.theme.getStyle('common'),
 	                headerStyle: this.theme.getStyle('header'),
-	                loadButtonStyle: this.theme.getStyle('loadButton'),
+	                //loadButtonStyle: this.theme.getStyle('loadButton'),
 	                downloadButtonStyle: this.theme.getStyle('downloadButton'),
 					submenuStyle: this.theme.getStyle('submenu'),
 					appendButtonStyle : this.theme.getStyle('appendButton')
@@ -5729,7 +5729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        downloadButtonStyle = _ref.downloadButtonStyle,
 			submenuStyle = _ref.submenuStyle,
 			appendButtonStyle = _ref.appendButtonStyle;
-	    return '\n    <div class="tui-image-editor-main-container" style="' + commonStyle + '">\n        <div class="tui-image-editor-header" style="' + headerStyle + '">\n            <div class="tui-image-editor-header-logo">\n                <img src="' + biImage + '" />\n            </div>\n            <div class="tui-image-editor-header-buttons">\n                <div style="' + loadButtonStyle + '">\n                    ' + locale.localize('Load') + '\n                    <input type="file" class="tui-image-editor-load-btn" />\n                </div>\n        <button class="tui-image-editor-append-btn" style="' + appendButtonStyle + '">\n ' + locale.localize('Append') + '\n </button>\n        <button class="tui-image-editor-download-btn" style="' + downloadButtonStyle + '">\n                    ' + locale.localize('Download') + '\n                </button>\n            </div>\n        </div>\n        <div class="tui-image-editor-main">\n            <div class="tui-image-editor-submenu">\n                <div class="tui-image-editor-submenu-style" style="' + submenuStyle + '"></div>\n            </div>\n            <div class="tui-image-editor-wrap">\n                <div class="tui-image-editor-size-wrap">\n                    <div class="tui-image-editor-align-wrap">\n                        <div class="tui-image-editor"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n';
+	    return '\n    <div class="tui-image-editor-main-container" style="' + commonStyle + '">\n        <div class="tui-image-editor-header" style="' + headerStyle + '">\n            <div class="tui-image-editor-header-logo">\n                <img src="' + biImage + '" />\n            </div>\n            <div class="tui-image-editor-header-buttons">\n        <button class="tui-image-editor-append-btn" style="' + appendButtonStyle + '">\n ' + locale.localize('Append') + '\n </button>\n        <button class="tui-image-editor-download-btn" style="' + downloadButtonStyle + '">\n                    ' + locale.localize('Download') + '\n                </button>\n            </div>\n        </div>\n        <div class="tui-image-editor-main">\n            <div class="tui-image-editor-submenu">\n                <div class="tui-image-editor-submenu-style" style="' + submenuStyle + '"></div>\n            </div>\n            <div class="tui-image-editor-wrap">\n                <div class="tui-image-editor-size-wrap">\n                    <div class="tui-image-editor-align-wrap">\n                        <div class="tui-image-editor"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n';
 	};
 
 /***/ }),

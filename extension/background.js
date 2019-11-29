@@ -138,11 +138,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 });
 
-chrome.tabs.onActivated.addListener(function (tab){
-	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
-	currentTabId = tab.id;
-	// console.log(tab.id)
-})
+// chrome.tabs.onActivated.addListener(function (tab){
+// 	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+// 	currentTabId = tab.id;
+// 	// console.log(tab.id)
+// })
 
 chrome.browserAction.onClicked.addListener(toggleSidebar2);
 
