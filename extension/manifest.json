@@ -60,7 +60,7 @@
 		"open": {
 		  "suggested_key": {
 			"default": "Alt+G",
-			"mac": "Alt+G"
+			"mac": "Option+G"
 		  },
 		  "description": "Open Sidebar"
 		}
