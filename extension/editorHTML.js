@@ -215,14 +215,14 @@ var saveHtml2 = "\
 <a href='' onclick='return false'><i class='icon-briefcase'></i>저장</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
-		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>로컬저장</a></li>\
+		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>Test</a></li>\
 		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
 		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
 	</ul>\
 </div>\
 </li>\
 <li class='dropdown'>\
-<a href='' onclick='return false'><i class='icon-briefcase'></i>삭제</a><b></b>\
+<a href='' onclick='return false'><i class='icon-briefcase'></i>삭제`</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
 		<li id='extGBE-deleteOnePage'><a href='' onclick='return false'><i class='icon-lemon'></i>현재 페이지</a></li>\
@@ -232,7 +232,7 @@ var saveHtml2 = "\
 </li>\
 <!-- 새로고침 -->\
 <li class='dropdown'>\
-<a href='' onclick='return false' id='extGBE-refreshOneGB'>새로고침</a><b></b>\
+<a href='' onclick='return false' id='extGBE-refreshOneGB'>testbtn1</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
 		<li id='extGBE-refreshAllGB'><a href='' onclick='return false'><i class='icon-lemon'></i>전체 새로고침</a></li>\

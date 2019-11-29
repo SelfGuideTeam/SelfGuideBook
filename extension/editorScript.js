@@ -203,6 +203,12 @@ function ajaxTest(){
 }
 
 async function saveHtml_Server(init){
+  if(myGuideBooks.length>=15){
+    alert('임시저장은 15개까지 가능합니다.')
+    return;
+  }
+
+
   $(getShadowEl('#pcss3mm')).addClass('disabled')
   // 입력값을 변수에 담고 문자열 형태로 변환
   if(guideBookIdx==-1){
@@ -217,7 +223,7 @@ async function saveHtml_Server(init){
       }
       $(getShadowEl('#pcss3mm')).removeClass('disabled')
       return;
-    }else if(title=='' || title.includes(' ') || title.length<=20){
+    }else if(title=='' || title.includes(' ') || title.length>20){
       title = prompt( '가이드북 제목을 입력해 주세요(20자 이하, 공백X).', init?'':$(getShadowEl('#extGBE-guideBookTitleArea')).attr('value'));
     }else{
       setChromeStg('currentTitle', title);
