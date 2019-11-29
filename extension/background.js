@@ -1,49 +1,378 @@
-chrome.tabs.onUpdated.addListener(function(tabId) {
-	chrome.pageAction.show(tabId);
-});
+// var config = {
+// 	apiKey: '<YOUR_API_KEY>',
+// 	databaseURL: '<YOUR_DATABASE_URL>',
+// 	storageBucket: '<YOUR_STORAGE_BUCKET_NAME>'
+//   };
+// firebase.initializeApp(config);
 
-chrome.tabs.getSelected(null, function(tab) {
-	chrome.pageAction.show(tab.id);
-});
+// function initApp() {
+// 	// Listen for auth state changes.
+// 	firebase.auth().onAuthStateChanged(function(user) {
+// 		console.log('User state change detected from the Background script of the Chrome Extension:', user);
+// 	});
+// }
 
-chrome.pageAction.onClicked.addListener(function(tab) {
-	chrome.tabs.getSelected(null, function(tab) {
-		chrome.tabs.sendRequest(
-			tab.id,
-			{
-				callFunction: "toggleSidebar"
-			}
-		);
-	});
-});
+
+// chrome.tabs.onUpdated.addListener(function(tabId) {
+// 	if (chrome.runtime.lastError) {
+//         //console.log(chrome.runtime.lastError.message);
+//     } else {
+//         // Tab exists
+// 		chrome.pageAction.show(tabId);
+//     }
+// 	//console.log('tabID : '+tabId)
+// });
+
+// chrome.tabs.getSelected(null, function(tab) {
+// 	chrome.pageAction.show(tab.id);
+// });
+
+
+var config = {
+	apiKey: "AIzaSyAsuqJ-7DH6YCl3zoi90u7DqsD6vIL_PV0",
+	authDomain: "fir-ex-63c1a.firebaseapp.com",
+};
+firebase.initializeApp(config);
+
+
+var provider = new firebase.auth.GoogleAuthProvider();
+
+var toggleStatus = false;
+var currentTabId = '';
+var selectedTabId;
+var extOpendTabId = -1;
+
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var message = request.message;
 	if(message=='sidebar'){
-		chrome.tabs.executeScript(null, {
-			file: "editorScript.js"
-		}, function () { // Execute your code
-		});
+		chrome.tabs.executeScript(null, {file: "editorScript.js"}, null);
 	}else if(message=='selectCapture'){
 		localStorage.firstuse = !1, screenshot.destroydomcapture(), screenshot.scrollSelected()
 	}else if(message=='entireCapture'){
-		alert('entire')
-		localStorage.firstuse = !1, bgScreencapture.destroyscrollSelected(), bgScreencapture.destroydomcapture(), bgScreencapture.captureEntire()
+		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.destroydomcapture(), screenshot.captureEntire()
 	}else if(message=='domCapture'){
-		alert('dom')
-		localStorage.firstuse = !1, bgScreencapture.destroyscrollSelected(), bgScreencapture.domcapture()
+		localStorage.firstuse = !1, screenshot.destroyscrollSelected(), screenshot.domcapture()
+	}else if(request.contentScriptQuery == 'fetchUrl') {
+        // WARNING: SECURITY PROBLEM - a malicious web page may abuse
+        // the message handler to get access to arbitrary cross-origin
+        // resources.
+        fetch(request.url)
+            .then(response => response.text())
+            .then(text => sendResponse(text))
+            .catch(error => catchError())
+			return true;  // Will respond asynchronously.
+	}else if(message=='login'){ 
+		firebase.auth().signInWithPopup(provider).then(function(result) {
+			sendResponse(result);
+		}).catch(function(error) {
+			sendResponse(error);
+		});
+		return true;
+	}else if(message=='guideBookSaveRequest'){
+		guideBookSaveRequest(sendResponse, request.data);
+		return true;
+	}else if(message=='guideBookDeleteRequest'){
+		guideBookDeleteRequest(sendResponse, request.data);
+		return true;
+	}else if(message=='logoutRequest'){
+		// content-type을 설정하고 데이터 송신
+		setChromeStg('accessToken', '')
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://fir-ex-63c1a.firebaseapp.com/logout');
+		xhr.setRequestHeader('Content-type', "application/json");
+		var data = {'uid' : request.data
+					};
+		data = JSON.stringify(data);
+		xhr.send(data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			var result = JSON.parse(xhr.responseText);
+			sendResponse(result.result);
+			// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			// 	toggleSidebar(tabs[0])
+			// });
+		});
+		return true;
+	}else if(message=='tokenValidRequest'){
+		tokenValid(sendResponse);
+		return true;
+	}else if(message == 'guideBookListRequest'){
+		guideBookListRequest(sendResponse);
+		return true;
+		//   //로컬에 저장된 토큰 가져오기
+		//   var accessToken = '';
+		//   accessToken = await getChromeStg('loginToken');
+		//   if(accessToken.loginToken){
+		// 	accessToken = accessToken.loginToken.stsTokenManager.accessToken;
+		// 	//console.log(accessToken)
+		//   }else{
+		// 	alert('로그인을 먼저 해주세요.');
+		// 	chrome.runtime.sendMessage({message: 'refresh_page'}, null);
+		// 	return;
+		//   }
+
+		// return true;
+	}else if(message=='toggle'){
+		toggleSidebar(request.tab);
+		// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+		// });
+	}else if(message=='refresh_page'){
+		chrome.tabs.reload();
+	}else if(message='getCurrentTabId'){
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			sendResponse(tabs[0]);
+		});
+		return true;
+	}else{
+		//alert('저장');
+		console.log(message);
+	}
+
+	function catchError(){
+		console.log('errr')
+	}
+
+
+
+});
+
+// chrome.tabs.onActivated.addListener(function (tab){
+// 	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+// 	currentTabId = tab.id;
+// 	// console.log(tab.id)
+// })
+
+chrome.browserAction.onClicked.addListener(toggleSidebar2);
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
+	if(changeInfo.status=='complete'){
+		if(tabId == extOpendTabId){
+			chrome.browserAction.setIcon({path:"icon3-black.png"});
+			extOpendTabId = -1;
+		}
+	}
+	// console.log(tab.id)
+})
+
+chrome.commands.onCommand.addListener(function(command) {
+	if(command=='open'){
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			toggleSidebar2(tabs[0]);
+		});
 	}
 });
 
+async function toggleSidebar(tab) {
+	chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar"});
+}
+
+async function toggleSidebar2(tab) {
+	if(extOpendTabId == -1){ //확장이 켜진탭이 없을 때
+		extOpendTabId = tab.id;
+		chrome.browserAction.setIcon({path:"icon3.png"});
+		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+	}else{ //확장이 켜진탭이 있을 때
+		if(tab.id == extOpendTabId){ //현재페이지에서 껐다켰다 할때
+			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+			chrome.browserAction.setIcon({path:"icon3-black.png"});
+			extOpendTabId = -1;
+		}else{ // 다른탭에서 킬때
+			//var select=prompt('현재 켜져있는 에디터가 저장되어있지 않습니다. 저장하시겠습니까?');
+			chrome.tabs.sendRequest(extOpendTabId,{callFunction: "toggleSidebar", tab : tab});
+			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+			extOpendTabId = tab.id;
+		}
+	}
+	
+}
 
 
 
-var selectedTabId;
+
+
+function getChromeStg(key){
+	return new Promise((resolve, reject) => {
+	  chrome.storage.sync.get([key], result => {
+		resolve(result)
+	  });
+	});
+}
+
+function setChromeStg(key, value){
+	var obj = {};
+	obj[key]=value
+	chrome.storage.sync.set(obj, null);
+  }
+
+async function tokenValid(sendResponse){
+	try{
+		let accessToken = (await getChromeStg('authInfo')).authInfo.user.stsTokenManager.accessToken
+		let result =  await tokenValidRequest(accessToken);
+		sendResponse(result.result);
+	} catch(error){
+		sendResponse('fail')
+	}
+	return true;
+}
+
+async function guideBookSaveRequest(sendResponse, data){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		if(result.result=='success'){
+			var email = {'email' : user.email};
+			var data2 = Object.assign(email, data)
+			data2 = JSON.stringify(data2);
+			let result = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/setGuideBook', data2);
+			sendResponse(result.result);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err)
+	}
+}
+
+async function guideBookDeleteRequest(sendResponse, data){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		if(result.result=='success'){
+			var email = {'email' : user.email};
+			var titles = {'titles' : data}
+			var data2 = Object.assign(email, titles)
+			data2 = JSON.stringify(data2);
+			let result = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/deleteGuideBook', data2);
+			sendResponse(result.result);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err)
+	}
+}
+
+async function guideBookListRequest(sendResponse){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		console.log(result)
+		// console.log(user.email)
+		if(result.result=='success'){
+			var data = {'email' : user.email};
+			data = JSON.stringify(data);
+			let guideBooks = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/getGuideBookList', data);
+			//console.log(text)
+			sendResponse(guideBooks);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err);
+	}
+	return true;
+}
+
+function ajaxSend(url, data){
+	return new Promise((resolve, reject) => {
+		// content-type을 설정하고 데이터 송신
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', url);
+		xhr.setRequestHeader('Content-type', "application/json");
+		xhr.send(data);
+		
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			var result = JSON.parse(xhr.responseText);
+			resolve(result)
+		});
+	});
+}
+
+function tokenValidRequest(accessToken){
+	return new Promise((resolve, reject) => {
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://fir-ex-63c1a.firebaseapp.com/verifyIdToken');
+		xhr.setRequestHeader('Content-type', "application/json");
+		var data = {'accessToken' : accessToken
+					};
+		//console.log(data)
+		data = JSON.stringify(data);
+		xhr.send(data);
+	
+		// 데이터 수신이 완료되면 표시
+		xhr.addEventListener('load', function(){
+			//console.log(xhr)
+			var result = JSON.parse(xhr.responseText);
+			resolve(result)
+		});
+	});
+}
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// chrome.tabs.onHighlighted.addListener(function (tab){
+// 	console.log(tab)
+// 	// chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+// 	// currentTabId = tab.id;
+// 	// console.log(tab.id)
+// })
+
+// var inFocus = true;  // global boolean to keep track of state
+// chrome.windows.onFocusChanged.addListener(function(window) {
+// 	// chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
+// 	// currentTabId = tab.id;
+//     if (window == chrome.windows.WINDOW_ID_NONE) {
+//         inFocus = false;
+//     } else {
+//         inFocus = true;
+// 	}
+// 	console.log(window)
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //capture 
 function getTimeStamp() {
 	var e, t, o, a, n, r, s = new Date;
 	return e = s.getFullYear(), t = s.getMonth() + 1, o = s.getDate(), a = s.getHours(), n = s.getMinutes(), r = s.getSeconds(), 10 > t && (t = "0" + t), 10 > o && (o = "0" + o), 10 > a && (a = "0" + a), 10 > n && (n = "0" + n), 10 > r && (r = "0" + r), e + "-" + t + "-" + o + " " + a + "-" + n + "-" + r
 }
+
 var screenshot = {
 	path: "filesystem:chrome-extension://" + chrome.i18n.getMessage("@@extension_id") + "/temporary/",
 	generated: !1,
@@ -120,7 +449,7 @@ var screenshot = {
 			case "edit":
 			default:
 				screenshot.setScreenName(), chrome.tabs.create({
-					url: "/js/capture-plugin/view/edit.html" + ("edit" == t ? "" : "?" + t)
+					url: "/apis/capture-plugin/view/edit.html" + ("edit" == t ? "" : "?" + t)
 				}, function() {})
 		}
 	},
@@ -234,7 +563,7 @@ var screenshot = {
 			r && r(e, a, n)
 		})), chrome.tabs.getSelected(null, function(t) {
 			chrome.tabs.executeScript(t.id, {
-				file: "/js/capture-plugin/js/page.js"
+				file: "/apis/capture-plugin/js/page.js"
 			}, function() {
 				e(t)
 			})
@@ -243,16 +572,16 @@ var screenshot = {
 	scrollSelected: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/jquery.Jcrop.css"
+				file: "/apis/capture-plugin/css/jquery.Jcrop.css"
 			}), 
 			chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/stylecrop.css"
+				file: "/apis/capture-plugin/css/stylecrop.css"
 			}), 
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.Jcrop.js"
+				file: "/apis/capture-plugin/js/jquery.Jcrop.js"
 			}, function() {
 				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/scrolltoCrop.js"
+					file: "/apis/capture-plugin/js/scrolltoCrop.js"
 				}, function() {
 					chrome.tabs.sendRequest(e.id, {
 						type: "setOptions",
@@ -266,15 +595,15 @@ var screenshot = {
 	destroyscrollSelected: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/jquery.Jcrop.css"
+				file: "/apis/capture-plugin/css/jquery.Jcrop.css"
 			}), chrome.tabs.insertCSS(null, {
-				file: "/js/capture-plugin/css/stylecrop.css"
+				file: "/apis/capture-plugin/css/stylecrop.css"
 			}), 
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/jquery.Jcrop.js"
+				file: "/apis/capture-plugin/js/jquery.Jcrop.js"
 			}, function() {
 				chrome.tabs.executeScript(null, {
-					file: "/js/capture-plugin/js/scrolltoCrop.js"
+					file: "/apis/capture-plugin/js/scrolltoCrop.js"
 				}, function() {
 					chrome.tabs.sendRequest(e.id, {
 						type: "destroy_selected",
@@ -287,7 +616,7 @@ var screenshot = {
 	domcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/contentscript.js"
+				file: "/apis/capture-plugin/js/contentscript.js"
 			}, function() {
 				chrome.tabs.sendRequest(e.id, {
 					type: "start",
@@ -299,7 +628,7 @@ var screenshot = {
 	destroydomcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/js/capture-plugin/js/contentscript.js"
+				file: "/apis/capture-plugin/js/contentscript.js"
 			}, function() {
 				chrome.tabs.sendRequest(e.id, {
 					type: "destroy",
@@ -340,18 +669,19 @@ var screenshot = {
 					url : e.url
 				}
 			);
+			chrome.tabs.update(selectedTabId, {highlighted: true});
 		});
 	}
 };
-chrome.tabs.onUpdated.addListener(function(e, t, o) {
-chrome.browserAction.setPopup(screenshot.testValidURLs(o.url) ? {
-	tabId: o.id,
-	popup: "/js/capture-plugin/view/popup.html"
-} : {
-	tabId: o.id,
-	popup: "/js/capture-plugin/view/invalidUrl.html"
-})
-}), 
+// chrome.tabs.onUpdated.addListener(function(e, t, o) {
+// chrome.browserAction.setPopup(screenshot.testValidURLs(o.url) ? {
+// 	tabId: o.id,
+// 	popup: "/js/capture-plugin/view/popup.html"
+// } : {
+// 	tabId: o.id,
+// 	popup: "/js/capture-plugin/view/invalidUrl.html"
+// })
+// }), 
 chrome.runtime.onInstalled.addListener(function() {}), chrome.extension.onMessage.addListener(function(e, t, o) {
 if ("openpage" === e.msg) screenshot.openPage(e.url);
 else if ("getformat" === e.msg) o({

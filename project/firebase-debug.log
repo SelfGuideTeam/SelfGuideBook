@@ -1,0 +1,112 @@
+[debug] [2019-11-21T00:56:51.692Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T00:56:51.694Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2019-11-21T00:56:51.694Z] CLI Version:   7.8.1
+[debug] [2019-11-21T00:56:51.694Z] Platform:      win32
+[debug] [2019-11-21T00:56:51.694Z] Node Version:  v12.13.0
+[debug] [2019-11-21T00:56:51.695Z] Time:          Thu Nov 21 2019 09:56:51 GMT+0900 (GMT+09:00)
+[debug] [2019-11-21T00:56:51.695Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T00:56:51.695Z] 
+[debug] [2019-11-21T00:56:51.701Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-21T00:56:51.702Z] > authorizing via signed-in user
+[debug] [2019-11-21T00:56:51.702Z] [iam] checking project fir-ex-63c1a for permissions ["firebase.projects.get"]
+[debug] [2019-11-21T00:56:51.703Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-11-21T00:56:51.703Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-11-21T00:56:51.947Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-21T00:56:51.958Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-ex-63c1a:testIamPermissions  
+
+[debug] [2019-11-21T00:56:53.189Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-21T00:56:53.189Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fir-ex-63c1a  
+ 
+[debug] [2019-11-21T00:56:53.979Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'Z:\axios2\axios\project'...
+[info] 
+[debug] [2019-11-21T00:56:53.984Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fir-ex-63c1a/webApps/-/config  
+ 
+[debug] [2019-11-21T00:56:55.590Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "12"
+[info] +  functions: Emulator started at http://localhost:5001
+[info] i  functions: Watching "Z:\axios2\axios\project\functions" for Cloud Functions...
+[debug] [2019-11-21T00:56:56.568Z] [worker-~diagnostic~-d3de45a6-c358-4644-a9c8-0f0a2fe5e64c]: Assigning socketPath: \\?\pipe\Z:\axios2\axios\project\functions\1532
+[debug] [2019-11-21T00:56:56.568Z] [worker-~diagnostic~-d3de45a6-c358-4644-a9c8-0f0a2fe5e64c]: BUSY
+[debug] [2019-11-21T00:56:56.895Z] [runtime-status] [1532] Functions runtime initialized. {"cwd":"Z:\\axios2\\axios\\project\\functions","node_version":"12.13.0"}
+[debug] [2019-11-21T00:56:56.895Z] [runtime-status] [1532] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
+[debug] [2019-11-21T00:56:56.913Z] [worker-~diagnostic~-d3de45a6-c358-4644-a9c8-0f0a2fe5e64c]: exited
+[debug] [2019-11-21T00:56:56.913Z] [worker-~diagnostic~-d3de45a6-c358-4644-a9c8-0f0a2fe5e64c]: FINISHED
+[debug] [2019-11-21T00:59:33.545Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T00:59:33.546Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2019-11-21T00:59:33.546Z] CLI Version:   7.8.1
+[debug] [2019-11-21T00:59:33.546Z] Platform:      win32
+[debug] [2019-11-21T00:59:33.546Z] Node Version:  v12.13.0
+[debug] [2019-11-21T00:59:33.547Z] Time:          Thu Nov 21 2019 09:59:33 GMT+0900 (GMT+09:00)
+[debug] [2019-11-21T00:59:33.547Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T00:59:33.547Z] 
+[debug] [2019-11-21T00:59:33.554Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-21T00:59:33.554Z] > authorizing via signed-in user
+[debug] [2019-11-21T00:59:33.554Z] [iam] checking project fir-ex-63c1a for permissions ["firebase.projects.get"]
+[debug] [2019-11-21T00:59:33.555Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-ex-63c1a:testIamPermissions  
+
+[debug] [2019-11-21T00:59:34.704Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-21T00:59:34.705Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fir-ex-63c1a  
+ 
+[debug] [2019-11-21T00:59:35.467Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'Z:\axios2\axios\project'...
+[info] 
+[debug] [2019-11-21T00:59:35.478Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fir-ex-63c1a/webApps/-/config  
+ 
+[debug] [2019-11-21T00:59:36.943Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "12"
+[info] +  functions: Emulator started at http://localhost:5001
+[info] i  functions: Watching "Z:\axios2\axios\project\functions" for Cloud Functions...
+[debug] [2019-11-21T00:59:38.031Z] [worker-~diagnostic~-ff35e2bb-4bdd-4b40-9a91-fc75a2ce1fa8]: Assigning socketPath: \\?\pipe\Z:\axios2\axios\project\functions\6948
+[debug] [2019-11-21T00:59:38.031Z] [worker-~diagnostic~-ff35e2bb-4bdd-4b40-9a91-fc75a2ce1fa8]: BUSY
+[debug] [2019-11-21T00:59:38.362Z] [runtime-status] [6948] Functions runtime initialized. {"cwd":"Z:\\axios2\\axios\\project\\functions","node_version":"12.13.0"}
+[debug] [2019-11-21T00:59:38.362Z] [runtime-status] [6948] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
+[debug] [2019-11-21T00:59:38.379Z] [worker-~diagnostic~-ff35e2bb-4bdd-4b40-9a91-fc75a2ce1fa8]: exited
+[debug] [2019-11-21T00:59:38.380Z] [worker-~diagnostic~-ff35e2bb-4bdd-4b40-9a91-fc75a2ce1fa8]: FINISHED
+[debug] [2019-11-21T01:11:06.668Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T01:11:06.670Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2019-11-21T01:11:06.670Z] CLI Version:   7.8.1
+[debug] [2019-11-21T01:11:06.670Z] Platform:      win32
+[debug] [2019-11-21T01:11:06.670Z] Node Version:  v12.13.0
+[debug] [2019-11-21T01:11:06.671Z] Time:          Thu Nov 21 2019 10:11:06 GMT+0900 (GMT+09:00)
+[debug] [2019-11-21T01:11:06.671Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T01:11:06.671Z] 
+[debug] [2019-11-21T01:11:06.677Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-21T01:11:06.677Z] > authorizing via signed-in user
+[debug] [2019-11-21T01:11:06.677Z] [iam] checking project fir-ex-63c1a for permissions ["firebase.projects.get"]
+[debug] [2019-11-21T01:11:06.678Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-ex-63c1a:testIamPermissions  
+
+[debug] [2019-11-21T01:11:07.880Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-21T01:11:07.884Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fir-ex-63c1a  
+ 
+[debug] [2019-11-21T01:11:08.664Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'Z:\axios2\axios\project'...
+[info] 
+[debug] [2019-11-21T01:11:08.668Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fir-ex-63c1a/webApps/-/config  
+ 
+[debug] [2019-11-21T01:11:10.611Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "12"
+[info] +  functions: Emulator started at http://localhost:5001
+[info] i  functions: Watching "Z:\axios2\axios\project\functions" for Cloud Functions...
+[debug] [2019-11-21T01:11:11.207Z] [worker-~diagnostic~-a3d98271-83bc-4856-a7ac-54970c8a219b]: Assigning socketPath: \\?\pipe\Z:\axios2\axios\project\functions\5812
+[debug] [2019-11-21T01:11:11.207Z] [worker-~diagnostic~-a3d98271-83bc-4856-a7ac-54970c8a219b]: BUSY
+[debug] [2019-11-21T01:11:11.590Z] [runtime-status] [5812] Functions runtime initialized. {"cwd":"Z:\\axios2\\axios\\project\\functions","node_version":"12.13.0"}
+[debug] [2019-11-21T01:11:11.591Z] [runtime-status] [5812] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
+[debug] [2019-11-21T01:11:11.610Z] [worker-~diagnostic~-a3d98271-83bc-4856-a7ac-54970c8a219b]: exited
+[debug] [2019-11-21T01:11:11.610Z] [worker-~diagnostic~-a3d98271-83bc-4856-a7ac-54970c8a219b]: FINISHED
