@@ -251,6 +251,10 @@
       margin-right: 14px; }
 
 /* Modal box */
+/* .trumbowyg-modal * {
+  all: unset;
+} */
+
 .trumbowyg-modal {
   position: absolute;
   top: 0;

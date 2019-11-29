@@ -220,6 +220,7 @@ async function saveHtml_Server(init){
     }else if(title=='' || title.includes(' ')){
       title = prompt( '가이드북 제목을 입력해 주세요(공백X).', init?'':$(getShadowEl('#extGBE-guideBookTitleArea')).attr('value'));
     }else{
+      setChromeStg('currentTitle', title);
       break;
     }
   }
@@ -421,15 +422,18 @@ function getMyGuideBooks(refresh, type){
   })
 }
 
-function getChromeStg(key, func1){
-  return new Promise((resolve, reject) => {
-    chrome.storage.sync.get([key], result => {
-      resolve(result)
-    });
-  });
-  // chrome.storage.sync.get([key], function (result) {
-  //   func1(result)
-  // });
+function getChromeStg(key){
+	return new Promise((resolve, reject) => {
+	  chrome.storage.sync.get([key], result => {
+		  resolve(result)
+	  });
+	});
+}
+
+function setChromeStg(key, value){
+  var obj = {};
+  obj[key]=value
+  chrome.storage.sync.set(obj, null);
 }
 
 async function loginCheck(){
@@ -495,22 +499,28 @@ function setCurrentGuideBook(){
   $(getShadowEl('#my-editor')).html(guideBook.html);
   
   var title = guideBook.title;
+  setChromeStg('currentTitle', title);
+  $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value', title);
   if(title.length > 8) title=(title.substring(0, 8))+'...'
   $(getShadowEl('#extGBE-guideBookTitleArea')).html("<i class='"+className+"' id='extGBE-title-icon-saveOk'></i>"+title+"")
-  $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value', title);
   //id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a>
   //$('#extGBE-titleArea').html("")
   guideBookIdx = index;
   $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).removeClass('disabled');
   $(getShadowEl('#my-editor')).trumbowyg('enable');
+
+
 }
 
 //목록을 추가시킨다음에 리스너를 추가해줘야되니 함수화 DOM
-function setGuideBookListener(){
+async function setGuideBookListener(){
   $(getShadowElAll('.extGBE-guideBook')).click(setCurrentGuideBook)
 
+  var title = await getChromeStg('currentTitle');
+  if(title != null)
+    $(getShadowEl('#myGuideBookList')).find('[value='+title.currentTitle+']').parent().parent().trigger('click')
+
   $(getShadowEl('.extGBE-addGuideBook')).click(function(){
-    // $(getShadowEl('#my-editor')).trumbowyg('enable');
     guideBookIdx = 0;
     saveHtml_Server(true);
     //방금만든 가이드북을 선택하는 리스너 트리거해줘야함
@@ -563,19 +573,21 @@ function setListeners(){
   $(getShadowEl('#extGBE-imageEditorPopup')).click(function(){
   })
   
-  $(getShadowEl('#extGBE-refreshOneGB')).click(function(){
-    if(guideBookIdx!=-1){
-      $(getShadowEl('.extGBE-circle3')).remove();
-      $(getShadowEl('#extGBE-refreshOneGB')).html('<div class="extGBE-circle3"></div>'+$(getShadowEl('#extGBE-refreshOneGB')).html())
-      setTimeout(function(){
-        $(getShadowEl('.extGBE-circle3')).remove();
-      }, 1000)
+  $(getShadowEl('#extGBE-refreshOneGB')).click(async function(){
+    var title = await getChromeStg('currentTitle');
+    console.log(title)
+    // if(guideBookIdx!=-1){
+    //   $(getShadowEl('.extGBE-circle3')).remove();
+    //   $(getShadowEl('#extGBE-refreshOneGB')).html('<div class="extGBE-circle3"></div>'+$(getShadowEl('#extGBE-refreshOneGB')).html())
+    //   setTimeout(function(){
+    //     $(getShadowEl('.extGBE-circle3')).remove();
+    //   }, 1000)
     
-      $(getShadowEl('#extGBE-title-icon-saveOk')).attr('class', 'icon-saveOk')
-      myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
-      $(getShadowEl('#my-editor')).html(JSON.parse(myGuideBooks[guideBookIdx]).html);
-      $(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('class', 'icon-saveOk')
-    }
+    //   $(getShadowEl('#extGBE-title-icon-saveOk')).attr('class', 'icon-saveOk')
+    //   myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
+    //   $(getShadowEl('#my-editor')).html(JSON.parse(myGuideBooks[guideBookIdx]).html);
+    //   $(getShadowEl('#extGBE-list-icon-idx'+guideBookIdx)).attr('class', 'icon-saveOk')
+    // }
   })
 
   $(getShadowEl('#extGBE-deleteOnePage')).click(function(){

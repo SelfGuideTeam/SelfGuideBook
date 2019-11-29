@@ -70,17 +70,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		});
 		return true;
 	}else if(message=='guideBookSaveRequest'){
-		// content-type을 설정하고 데이터 송신
-		// var xhr = new XMLHttpRequest();
-		// xhr.open('POST', 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/saveHTML');
-		// xhr.setRequestHeader('Content-type', "application/json");
-		// xhr.send(request.data);
-		
-		// // 데이터 수신이 완료되면 표시
-		// xhr.addEventListener('load', function(){
-		// 	var result = JSON.parse(xhr.responseText);
-		// 	sendResponse(result.result);
-		// });
 		guideBookSaveRequest(sendResponse, request.data);
 		return true;
 	}else if(message=='guideBookDeleteRequest'){
@@ -204,8 +193,10 @@ function getChromeStg(key){
 }
 
 function setChromeStg(key, value){
-chrome.storage.sync.set({key: value}, null);
-}
+	var obj = {};
+	obj[key]=value
+	chrome.storage.sync.set(obj, null);
+  }
 
 async function tokenValid(sendResponse){
 	try{
