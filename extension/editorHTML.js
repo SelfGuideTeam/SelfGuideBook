@@ -232,7 +232,7 @@ var saveHtml2 = "\
 </li>\
 <!-- 새로고침 -->\
 <li class='dropdown'>\
-<a href='' onclick='return false' id='extGBE-refreshOneGB'>testbtn1</a><b></b>\
+<a href='' onclick='return false' id='extGBE-refreshOneGB'></a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
 		<li id='extGBE-refreshAllGB'><a href='' onclick='return false'><i class='icon-lemon'></i>전체 새로고침</a></li>\
