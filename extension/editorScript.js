@@ -217,8 +217,8 @@ async function saveHtml_Server(init){
       }
       $(getShadowEl('#pcss3mm')).removeClass('disabled')
       return;
-    }else if(title=='' || title.includes(' ')){
-      title = prompt( '가이드북 제목을 입력해 주세요(공백X).', init?'':$(getShadowEl('#extGBE-guideBookTitleArea')).attr('value'));
+    }else if(title=='' || title.includes(' ') || title.length<=20){
+      title = prompt( '가이드북 제목을 입력해 주세요(20자 이하, 공백X).', init?'':$(getShadowEl('#extGBE-guideBookTitleArea')).attr('value'));
     }else{
       setChromeStg('currentTitle', title);
       break;
