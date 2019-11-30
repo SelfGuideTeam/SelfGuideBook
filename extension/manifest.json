@@ -59,8 +59,8 @@
 	"commands": {
 		"open": {
 		  "suggested_key": {
-			"default": "Alt+T",
-			"mac": "Command+T"
+			"default": "Alt+A",
+			"mac": "Command+A"
 		  },
 		  "description": "Open Sidebar"
 		}

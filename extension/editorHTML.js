@@ -208,39 +208,39 @@ var myGuideBookHtml2 = "\
 var saveHtml2 = "\
 <!-- title -->\
 <li id='extGBE-title' class='container1' style='display:none'>\
-<a id='extGBE-titleArea' href='' onclick='return false'><i class='icon-home'></i>...</a>\
+<a id='extGBE-titleArea' href='' onclick='return false'><i ></i>...</a>\
 </li>\
 <!--/ title -->\
 <li class='dropdown' id='extGBE-save'>\
-<a href='' onclick='return false'><i class='icon-briefcase'></i>저장</a><b></b>\
+<a href='' onclick='return false'><i ></i>저장</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
-		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i class='icon-lemon'></i>Test</a></li>\
-		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i class='icon-globe'></i>서버저장</a></li>\
-		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i class='icon-th-large'></i>PDF저장</a></li>\
+		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i ></i>Test</a></li>\
+		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i ></i>서버저장</a></li>\
+		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i ></i>PDF저장</a></li>\
 	</ul>\
 </div>\
 </li>\
 <li class='dropdown'>\
-<a href='' onclick='return false'><i class='icon-briefcase'></i>삭제`</a><b></b>\
+<a href='' onclick='return false'><i ></i>삭제</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
-		<li id='extGBE-deleteOnePage'><a href='' onclick='return false'><i class='icon-lemon'></i>현재 페이지</a></li>\
-		<li id='extGBE-deleteAllPage'><a href='' onclick='return false'><i class='icon-globe'></i>전체 페이지</a></li>\
+		<li id='extGBE-deleteOnePage'><a href='' onclick='return false'><i ></i>현재 페이지</a></li>\
+		<li id='extGBE-deleteAllPage'><a href='' onclick='return false'><i ></i>전체 페이지</a></li>\
 	</ul>\
 </div>\
 </li>\
-<!-- 새로고침 -->\
-<li class='dropdown'>\
-<a href='' onclick='return false' id='extGBE-refreshOneGB'></a><b></b>\
-<div class='grid-container2'>\
-	<ul>\
-		<li id='extGBE-refreshAllGB'><a href='' onclick='return false'><i class='icon-lemon'></i>전체 새로고침</a></li>\
-	</ul>\
-</div>\
-</li>\
-<!--/ 새로고침 -->\
 "
+// <!-- 새로고침 -->\
+// <li class='dropdown'>\
+// <a href='' onclick='return false' id='extGBE-refreshOneGB'></a><b></b>\
+// <div class='grid-container2'>\
+// 	<ul>\
+// 		<li id='extGBE-refreshAllGB'><a href='' onclick='return false'><i ></i>전체 새로고침</a></li>\
+// 	</ul>\
+// </div>\
+// </li>\
+// <!--/ 새로고침 -->\
 
 
 // <!--/ 공유 -->\
@@ -256,16 +256,16 @@ var saveHtml2 = "\
 // 	</div>\
 // </li>\
 var homtHtml = "<!-- home -->\
-<li class='container1' >\
-	<a href='https://fir-ex-63c1a.firebaseapp.com/' target='_blank'><i class='icon-home'></i>Home</a>\
+<li class='container1' id='extGBE-home'>\
+	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' style='height:76px;'><i ></i>Travel<br> Books</a>\
 </li>\
 <!--/ home -->";
 
 var loginHtml = "<li class='right' id='extGBE-login'>\
-<a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그인</a><b></b>\
+<a href='' onclick='return false' ><i ></i>로그인</a><b></b>\
 </li>";
 var logoutHtml = "<li class='right' id='extGBE-logout'>\
-<a href='' onclick='return false' ><i class='icon-bullhorn'></i>로그아웃</a><b></b>\
+<a href='' onclick='return false' ><i ></i>로그아웃</a><b></b>\
 </li>";
 
 
