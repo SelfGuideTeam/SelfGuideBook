@@ -629,7 +629,13 @@ function setListeners(){
   })
 
   $(getShadowEl('#my-editor')).blur(function(){
-    var title = $(getShadowEl('#extGBE-guideBookTitleArea')).httr('value')
+    var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
+    var content = $(getShadowEl('#my-editor')).html();
+    console.log(title);
+    console.log(content)
+
+
+
   })
 
 }
