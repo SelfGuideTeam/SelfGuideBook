@@ -203,7 +203,7 @@ function toggleSidebar() {
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
 <li class='dropdown' id='extGBE-myGuideBooksli'>\
-	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a><b></b>\
+	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i id='extGBE-title-icon'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
 		</ul>\

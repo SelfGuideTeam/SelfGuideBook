@@ -63,8 +63,10 @@ $(getShadowEl('#my-editor')).trumbowyg({
           $('#mySidebar').css('width', '870px');
           $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Home')
           $(getShadowEl('.container1')).attr('class', 'container1-full')
+          $(getShadowEl('#my-editor')).css('height', '840px')
         }else{
           $('#mySidebar').css('width', '350px');
+          $(getShadowEl('#my-editor')).css('height', '775px')
           if(!isLogined){
 
           }else{
@@ -101,17 +103,16 @@ $(getShadowEl('#my-editor')).trumbowyg({
   },
   btns: [
     ['viewHTML'],
-    ['capture'],
     ['undo', 'redo'], // Only supported in Blink browsers
     ['formatting'],
     ['strong', 'em', 'del'],
-    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+    ['removeformat'],
+    ['justifyLeft', 'justifyCenter', 'justifyRight'/*, 'justifyFull'*/],
     ['unorderedList', 'orderedList'],
     ['horizontalRule'], 
-    ['fontfamily'],
-    ['removeformat'],
-    ['image'],
     ['superscript', 'subscript'],
+    ['fontfamily'],
+    ['capture','image'],
     ['fullscreen']
   ],
   plugins: {
@@ -400,7 +401,7 @@ function getMyGuideBooks(refresh, type){
       } catch (e) {
         myGuideBooks = response;
         $(getShadowEl('#myGuideBookList')).empty();
-        $(getShadowEl('#myGuideBookList')).append("<li class='extGBE-addGuideBook'><a href='' onclick='return false'><i class='icon-saveOk' ></i>가이드북 생성</a></li>")
+        $(getShadowEl('#myGuideBookList')).append("<li class='extGBE-addGuideBook'><a href='' onclick='return false'><i  ></i>가이드북 생성</a></li>")
         response.forEach(function (item, index, array) {
           let guidBook = JSON.parse(item);
           var title = guidBook.title;
@@ -526,7 +527,7 @@ function setCurrentGuideBook(){
   setChromeStg('currentTitle', title);
   $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value', title);
   // if(title.length > 8) title=(title.substring(0, 8))+'...'
-  $(getShadowEl('#extGBE-guideBookTitleArea')).html("<i class='"+className+"' id='extGBE-title-icon-saveOk'></i>"+title+"")
+  $(getShadowEl('#extGBE-guideBookTitleArea')).html("<i class='"+className+"' id='extGBE-title-icon'></i>"+title+"")
   //id='extGBE-guideBookTitleArea'><i class='icon-saveOk' id='icon-saveOk'></i>내 가이드북</a>
   //$('#extGBE-titleArea').html("")
   guideBookIdx = index;
@@ -628,12 +629,50 @@ function setListeners(){
     deleteGB_server('all');
   })
 
-  $(getShadowEl('#my-editor')).blur(function(){
-    var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
-    var content = $(getShadowEl('#my-editor')).html();
-    setChromeStg(title, content);
+  $(getShadowEl('#my-editor')).keyup(function() {
+    delay(function(){
+      var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
+      var content = $(getShadowEl('#my-editor')).html();
+  
+      // var obj = {};
+      // obj[title]={content : content, modifyied_date : Date.now()}
+  
+      // setChromeStg('tempBooks', obj);
+      // myGuideBooks[guideBookIdx].html = content;
+      var data = {'title' : title,
+      'htmlCode' : content };
 
-  })
+      $(getShadowEl('#extGBE-title-icon')).attr('class', 'extGBE-circle3');
+      chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
+        function (response) {
+        if(response=='success'){
+          var guidebook = JSON.parse(myGuideBooks[guideBookIdx]);
+          guidebook.html = content;
+          myGuideBooks[guideBookIdx] = JSON.stringify(guidebook)
+          $(getShadowEl('#extGBE-title-icon')).attr('class', 'icon-saveOk');  
+
+
+          // try{
+          //   myGuideBooks2[0]; //존재여부 체크
+          //   myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
+          // } catch(err){
+          //   // console.log('저장된 가이드북 목록 없음');
+          // }
+
+          // if(init){
+          //   getMyGuideBooks(true, 'initSave');
+          // }else{
+          //   getMyGuideBooks(true, 'save');
+          // }
+        }else{
+          alert('서버저장 실패')
+        }
+      });
+
+
+    }, 1000 );
+  });
+
 
 }
 
@@ -648,7 +687,13 @@ setListeners();
 
 
 
-
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+  clearTimeout (timer);
+  timer = setTimeout(callback, ms);
+ };
+})();
 
 
 // //로딩이 다 됐을 시점에 다시 보여주기
