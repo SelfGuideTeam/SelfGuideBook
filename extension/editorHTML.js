@@ -25,11 +25,17 @@ function handleRequest(request, sender, sendResponse){
 					myGuideBookHtml = myGuideBookHtml2
 					loginOutHtml = logoutHtml;
 					isLogined = true;
+					// if(sidebarOpen && $('#mySidebar').css('width')!='350px'){
+					// 	alert('ooop')
+					// 	$(getShadowEl('#extGBE-homeTitle')).html('<i></i>Home')
+					// 	$(getShadowEl('.container1')).attr('class', 'container1-full')
+					// }
 				}else{
 					saveHtml = '';
 					myGuideBookHtml = '';
 					loginOutHtml = loginHtml;
 					isLogined = false
+					homtHtml = homtLogoutHtml;
 				}
 				toggleSidebar();
 			});
@@ -258,6 +264,12 @@ var saveHtml2 = "\
 var homtHtml = "<!-- home -->\
 <li class='container1' id='extGBE-home'>\
 	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' style='height:76px;'><i ></i>Travel<br> Books</a>\
+</li>\
+<!--/ home -->";
+
+var homtLogoutHtml = "<!-- home -->\
+<li class='container1-full' id='extGBE-home'>\
+	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' style='height:40px;'><i ></i>Home</a>\
 </li>\
 <!--/ home -->";
 

@@ -1013,6 +1013,16 @@
 	border-left-width:1px;
 }
 
+.pcss3mm-full {
+	height: 35px;
+}
+
+.pcss3mm-full li{
+	height: 35px;
+	line-height: 32px;
+	height : 32px;
+}
+
 .pcss3mm a {
 	color: #242729;
 }

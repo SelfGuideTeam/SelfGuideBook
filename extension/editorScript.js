@@ -65,8 +65,12 @@ $(getShadowEl('#my-editor')).trumbowyg({
           $(getShadowEl('.container1')).attr('class', 'container1-full')
         }else{
           $('#mySidebar').css('width', '350px');
-          $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Travel<br> Books')
-          $(getShadowEl('.container1-full')).attr('class', 'container1')
+          if(!isLogined){
+
+          }else{
+            $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Travel<br> Books')
+            $(getShadowEl('.container1-full')).attr('class', 'container1')
+          }
         }
         //alert('ggg')
         //chrome.runtime.sendMessage({message: "domCapture"}, null);
@@ -497,6 +501,7 @@ async function logout(){
     }
     changeLoginHtml();
     $(getShadowEl('#pcss3mm')).removeClass('disabled')
+    
     isLogined = false;
   });
 }
