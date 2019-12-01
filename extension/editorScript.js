@@ -169,7 +169,7 @@ function getTotalContentHeight(){
 
 function printHtmlToPdf(html) {
   var endpoint = 'https://v2018.api2pdf.com/chrome/html';
-  var apikey = 'ab1ce02b-9a63-48c1-b7a5-a2469f2decc9'; //replace this with your own from portal.api2pdf.com
+  var apikey = '4ca7ff53-eafa-425c-aed2-64a7fd1f5a87'; //replace this with your own from portal.api2pdf.com
   //다른 언어도 쓰려면 meta charset 명시
   var payload = {
     "html": "<meta charset='UTF-8'>"+html,
@@ -631,10 +631,7 @@ function setListeners(){
   $(getShadowEl('#my-editor')).blur(function(){
     var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
     var content = $(getShadowEl('#my-editor')).html();
-    console.log(title);
-    console.log(content)
-
-
+    setChromeStg(title, content);
 
   })
 
