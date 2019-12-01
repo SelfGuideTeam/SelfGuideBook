@@ -159,7 +159,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 chrome.commands.onCommand.addListener(function(command) {
 	if(command=='open'){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			toggleSidebar2(tabs[0]);
+			if(tabs[0].status == "complete"){
+				toggleSidebar2(tabs[0]);
+			}
 		});
 	}
 });
@@ -169,23 +171,24 @@ async function toggleSidebar(tab) {
 }
 
 async function toggleSidebar2(tab) {
-	if(extOpendTabId == -1){ //확장이 켜진탭이 없을 때
-		extOpendTabId = tab.id;
-		chrome.browserAction.setIcon({path:"icon3.png"});
-		chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
-	}else{ //확장이 켜진탭이 있을 때
-		if(tab.id == extOpendTabId){ //현재페이지에서 껐다켰다 할때
-			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
-			chrome.browserAction.setIcon({path:"icon3-black.png"});
-			extOpendTabId = -1;
-		}else{ // 다른탭에서 킬때
-			//var select=prompt('현재 켜져있는 에디터가 저장되어있지 않습니다. 저장하시겠습니까?');
-			chrome.tabs.sendRequest(extOpendTabId,{callFunction: "toggleSidebar", tab : tab});
-			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+	if(tab.status == "complete"){
+		if(extOpendTabId == -1){ //확장이 켜진탭이 없을 때
 			extOpendTabId = tab.id;
+			chrome.browserAction.setIcon({path:"icon3.png"});
+			chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+		}else{ //확장이 켜진탭이 있을 때
+			if(tab.id == extOpendTabId){ //현재페이지에서 껐다켰다 할때
+				chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+				chrome.browserAction.setIcon({path:"icon3-black.png"});
+				extOpendTabId = -1;
+			}else{ // 다른탭에서 킬때
+				//var select=prompt('현재 켜져있는 에디터가 저장되어있지 않습니다. 저장하시겠습니까?');
+				chrome.tabs.sendRequest(extOpendTabId,{callFunction: "toggleSidebar", tab : tab});
+				chrome.tabs.sendRequest(tab.id,{callFunction: "toggleSidebar", tab : tab});
+				extOpendTabId = tab.id;
+			}
 		}
 	}
-	
 }
 
 

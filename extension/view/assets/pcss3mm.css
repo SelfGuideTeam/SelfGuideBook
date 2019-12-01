@@ -1013,15 +1013,15 @@
 	border-left-width:1px;
 }
 
-.pcss3mm-full {
-	height: 35px;
+.pcss3mm .container1-full a{
+	height: 40px;
 }
 
-.pcss3mm-full li{
-	height: 35px;
-	line-height: 32px;
-	height : 32px;
+.pcss3mm .container1 #extGBE-homeTitle{
+	height: 76px;
 }
+
+
 
 .pcss3mm a {
 	color: #242729;

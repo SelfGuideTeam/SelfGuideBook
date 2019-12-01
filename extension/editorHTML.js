@@ -263,13 +263,13 @@ var saveHtml2 = "\
 // </li>\
 var homtHtml = "<!-- home -->\
 <li class='container1' id='extGBE-home'>\
-	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' style='height:76px;'><i ></i>Travel<br> Books</a>\
+	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' ><i ></i>Travel<br> Books</a>\
 </li>\
 <!--/ home -->";
 
 var homtLogoutHtml = "<!-- home -->\
 <li class='container1-full' id='extGBE-home'>\
-	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' style='height:40px;'><i ></i>Home</a>\
+	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' ><i ></i>Home</a>\
 </li>\
 <!--/ home -->";
 

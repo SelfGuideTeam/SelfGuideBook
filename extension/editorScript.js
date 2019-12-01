@@ -477,6 +477,12 @@ function login(){
       isLogined = true;
       chrome.storage.sync.set({authInfo: response}, function() {
         changeLogoutHtml();
+        $('#mySidebar').css('width', '350px');
+        if($('#mySidebar').css('width')=='350px'){
+          $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Travel<br> Books')
+          $(getShadowEl('.container1-full')).attr('class', 'container1')
+        }
+
         getMyGuideBooks(true, 'login')
       })
     }
@@ -500,6 +506,8 @@ async function logout(){
       alert('로그아웃 실패')
     }
     changeLoginHtml();
+    $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Home')
+    $(getShadowEl('.container1')).attr('class', 'container1-full')
     $(getShadowEl('#pcss3mm')).removeClass('disabled')
     
     isLogined = false;
@@ -560,6 +568,12 @@ function setListeners(){
   })
   
   $(getShadowEl('#extGBE-saveToLocal')).click(function(){
+    chrome.storage.sync.get(null, function(items){
+      var allKeys = Object.keys(items);
+      chrome.storage.sync.get(allKeys, function(items){
+        console.log(items)
+      })
+    })
   })
   
   $(getShadowEl('#extGBE-saveToPDF')).click(function(){
@@ -612,6 +626,10 @@ function setListeners(){
 
   $(getShadowEl('#extGBE-deleteAllPage')).click(function(){
     deleteGB_server('all');
+  })
+
+  $(getShadowEl('#my-editor')).blur(function(){
+    var title = $(getShadowEl('#extGBE-guideBookTitleArea')).httr('value')
   })
 
 }
