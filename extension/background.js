@@ -253,6 +253,8 @@ async function guideBookSaveRequest(sendResponse, data){
 			data2 = JSON.stringify(data2);
 			let result = await ajaxSend(requestUrlHeader+'setGuideBook', data2);
 			sendResponse(result.result);
+		}else if (result.result=='overlap'){
+			sendResponse('overlap')
 		}else{
 			sendResponse('fail')
 		}

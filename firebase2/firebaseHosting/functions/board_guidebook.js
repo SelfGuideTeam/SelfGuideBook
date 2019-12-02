@@ -111,7 +111,7 @@ router.post('/createGuideBook', async function(req, res, next){
                     return;
                 })
             } else {
-                var responseData = {'result' : 'fail'}
+                var responseData = {'result' : 'overlap'}
                 res.json(responseData)
                 return;
             }
@@ -131,43 +131,65 @@ router.post('/createGuideBook', async function(req, res, next){
 
 router.post('/setGuideBook', async function(req, res, next){
     try{
-        let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
-        let getDoc = guideBookRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-                var responseData = {'result' : 'fail'}
-                res.json(responseData)
-                return;
-                // guideBookRef.set({
-                //     html : req.body.htmlCode,
-                //     created_date : Date.now(),
-                //     modifiyed_date : Date.now()
-                // }).then(function(error) {
-                //     console.log(error)
-
-                // }).catch(function(error){
-                //     return;
-                // })
-            } else {
-                guideBookRef.update({
-                    html : req.body.htmlCode,
-                    modifiyed_date : Date.now()
-                }).then(function(error) {
-                    console.log(error)
-                    var responseData = {'result' : 'success'}
+        if(req.body.altTitle==='null'){
+            let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
+            let getDoc = guideBookRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    var responseData = {'result' : 'fail'}
                     res.json(responseData)
                     return;
-                }).catch(function(error){
+                } else {
+                    guideBookRef.update({
+                        html : req.body.htmlCode,
+                        modifiyed_date : Date.now()
+                    }).then(function(error) {
+                        console.log(error)
+                        var responseData = {'result' : 'success'}
+                        res.json(responseData)
+                        return;
+                    }).catch(function(error){
+                        return;
+                    })
+                }
+                return;
+            })
+            .catch(err => {
+                console.log(err);
+                res.json(err)
+                return;
+            });
+        }else{
+            let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.altTitle);
+            let getDoc = guideBookRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    guideBookRef.set({
+                        html : req.body.htmlCode,
+                        created_date : Date.now(),
+                        modifiyed_date : Date.now()
+                    }).then(function(error) {
+                        console.log(error)
+                        var responseData = {'result' : 'success'}
+                        res.json(responseData)
+                        return;
+                    }).catch(function(error){
+                        return;
+                    })
+                } else {
+                    var responseData = {'result' : 'overlap'}
+                    res.json(responseData)
                     return;
-                })
-            }
-            return;
-        })
-        .catch(err => {
-            console.log(err);
-            res.json(err)
-            return;
-        });
+                }
+                return;
+            })
+            .catch(err => {
+                console.log(err);
+                res.json(err)
+                return;
+            });
+        }
+
     } catch(err){
         console.log(err);
         res.json(err)

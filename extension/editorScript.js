@@ -225,6 +225,7 @@ async function saveHtml_Server(init){
   }
 
   var title = '';
+  var initTitle = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value');
   var blank_pattern = /^\s+|\s+$/g;
   while(true){
     if(title == null){
@@ -234,7 +235,7 @@ async function saveHtml_Server(init){
       $(getShadowEl('#pcss3mm')).removeClass('disabled')
       return;
     }else if(title=='' || title.replace( blank_pattern, '' ) == "" || title.length>20){
-      title = prompt( '가이드북 제목을 입력해 주세요(20자 이하).', init?'':$(getShadowEl('#extGBE-guideBookTitleArea')).attr('value'));
+      title = prompt( '가이드북 제목을 입력해 주세요(20자 이하).', init?'':initTitle);
     }else{
       setChromeStg('currentTitle', title);
       break;
@@ -244,7 +245,8 @@ async function saveHtml_Server(init){
   if(init){
     var html = ''
     var data = {'title' : title,
-                'htmlCode' : html };
+                'htmlCode' : html,
+                'altTitle' : title};
     chrome.runtime.sendMessage({message: 'guideBookCreateRequest', data : data}, 
     function (response) {
       if(response=='success'){
@@ -254,10 +256,9 @@ async function saveHtml_Server(init){
         } catch(err){
           // console.log('저장된 가이드북 목록 없음');
         }
-  
-        
-      }else{
-        alert('이미 존재하는 제목입니다.')
+      }
+      else {
+        alert('존재하는 가이드북입니다.')
       }
       getMyGuideBooks(true, 'initSave');
       //console.log('Response From API', response);
@@ -266,7 +267,8 @@ async function saveHtml_Server(init){
   }else{
     var html =$(getShadowEl('#my-editor')).html();
     var data = {'title' : title,
-                'htmlCode' : html };
+                'htmlCode' : html, 
+                'altHtml' : title!=initTitle?title:'null'};
     chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
     function (response) {
       if(response=='success'){
@@ -276,8 +278,9 @@ async function saveHtml_Server(init){
         } catch(err){
           // console.log('저장된 가이드북 목록 없음');
         }
-  
-        
+
+      }else if(response=='overlap'){
+        alert('이미 존재하는 제목입니다.')
       }else{
         $(getShadowEl('#extGBE-guideBookTitleArea')).html('<i class="" id="extGBE-title-icon"></i>내 가이드북')
         $(getShadowEl('#my-editor')).html('');
@@ -590,7 +593,8 @@ function saveContent(){
   var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
   var content = $(getShadowEl('#my-editor')).html();
   var data = {'title' : title,
-              'htmlCode' : content };
+              'htmlCode' : content,    
+              'altTitle' : 'null'};
 
   $(getShadowEl('#extGBE-title-icon')).attr('class', 'extGBE-circle3');
   chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
@@ -600,7 +604,7 @@ function saveContent(){
       guidebook.html = content;
       myGuideBooks[guideBookIdx] = JSON.stringify(guidebook)
       $(getShadowEl('#extGBE-title-icon')).attr('class', 'icon-saveOk');  
-    }else{
+    }else if(response=='fail'){
       await removeOneChromeStg('currentTitle');
       $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).not(getShadowEl('#extGBE-home')).addClass('disabled');
       $(getShadowEl('#extGBE-guideBookTitleArea')).html('<i class="" id="extGBE-title-icon"></i>내 가이드북')
