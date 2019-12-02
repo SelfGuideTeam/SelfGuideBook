@@ -34,7 +34,9 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
+//https://fir-ex-63c1a.firebaseapp.com/ (firebaseEx) 
+//https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/ (ajaxTest)
+const requestUrlHeader = 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/';
 var provider = new firebase.auth.GoogleAuthProvider();
 
 var toggleStatus = false;
@@ -69,6 +71,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			sendResponse(error);
 		});
 		return true;
+	}else if(message=='guideBookCreateRequest'){
+		guideBookCreateRequest(sendResponse, request.data);
+		return true;
 	}else if(message=='guideBookSaveRequest'){
 		guideBookSaveRequest(sendResponse, request.data);
 		return true;
@@ -79,7 +84,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// content-type을 설정하고 데이터 송신
 		setChromeStg('accessToken', '')
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://fir-ex-63c1a.firebaseapp.com/logout');
+		xhr.open('POST', requestUrlHeader+'logout');
 		xhr.setRequestHeader('Content-type', "application/json");
 		var data = {'uid' : request.data
 					};
@@ -220,6 +225,24 @@ async function tokenValid(sendResponse){
 	return true;
 }
 
+async function guideBookCreateRequest(sendResponse, data){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		if(result.result=='success'){
+			var email = {'email' : user.email};
+			var data2 = Object.assign(email, data)
+			data2 = JSON.stringify(data2);
+			let result = await ajaxSend(requestUrlHeader+'createGuideBook', data2);
+			sendResponse(result.result);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err)
+	}
+}
+
 async function guideBookSaveRequest(sendResponse, data){
 	try{
 		let user = (await getChromeStg('authInfo')).authInfo.user;
@@ -228,7 +251,7 @@ async function guideBookSaveRequest(sendResponse, data){
 			var email = {'email' : user.email};
 			var data2 = Object.assign(email, data)
 			data2 = JSON.stringify(data2);
-			let result = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/setGuideBook', data2);
+			let result = await ajaxSend(requestUrlHeader+'setGuideBook', data2);
 			sendResponse(result.result);
 		}else{
 			sendResponse('fail')
@@ -247,7 +270,7 @@ async function guideBookDeleteRequest(sendResponse, data){
 			var titles = {'titles' : data}
 			var data2 = Object.assign(email, titles)
 			data2 = JSON.stringify(data2);
-			let result = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/deleteGuideBook', data2);
+			let result = await ajaxSend(requestUrlHeader+'deleteGuideBook', data2);
 			sendResponse(result.result);
 		}else{
 			sendResponse('fail')
@@ -266,7 +289,7 @@ async function guideBookListRequest(sendResponse){
 		if(result.result=='success'){
 			var data = {'email' : user.email};
 			data = JSON.stringify(data);
-			let guideBooks = await ajaxSend('https://fir-ex-63c1a.firebaseapp.com/getGuideBookList', data);
+			let guideBooks = await ajaxSend(requestUrlHeader+'getGuideBookList', data);
 			//console.log(text)
 			sendResponse(guideBooks);
 		}else{
@@ -297,7 +320,7 @@ function ajaxSend(url, data){
 function tokenValidRequest(accessToken){
 	return new Promise((resolve, reject) => {
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://fir-ex-63c1a.firebaseapp.com/verifyIdToken');
+		xhr.open('POST', requestUrlHeader+'verifyIdToken');
 		xhr.setRequestHeader('Content-type', "application/json");
 		var data = {'accessToken' : accessToken
 					};

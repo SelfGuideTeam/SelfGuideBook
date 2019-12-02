@@ -243,33 +243,54 @@ async function saveHtml_Server(init){
 
   if(init){
     var html = ''
+    var data = {'title' : title,
+                'htmlCode' : html };
+    chrome.runtime.sendMessage({message: 'guideBookCreateRequest', data : data}, 
+    function (response) {
+      if(response=='success'){
+        try{
+          myGuideBooks2[0]; //존재여부 체크
+          myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
+        } catch(err){
+          // console.log('저장된 가이드북 목록 없음');
+        }
+  
+        
+      }else{
+        alert('이미 존재하는 제목입니다.')
+      }
+      getMyGuideBooks(true, 'initSave');
+      //console.log('Response From API', response);
+    });
+
   }else{
     var html =$(getShadowEl('#my-editor')).html();
-  }
-  var data = {'title' : title,
-              'htmlCode' : html };
-
-  chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
-  function (response) {
-    if(response=='success'){
-      try{
-        myGuideBooks2[0]; //존재여부 체크
-        myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
-      } catch(err){
-        // console.log('저장된 가이드북 목록 없음');
-      }
-
-      if(init){
-        getMyGuideBooks(true, 'initSave');
+    var data = {'title' : title,
+                'htmlCode' : html };
+    chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
+    function (response) {
+      if(response=='success'){
+        try{
+          myGuideBooks2[0]; //존재여부 체크
+          myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
+        } catch(err){
+          // console.log('저장된 가이드북 목록 없음');
+        }
+  
+        
       }else{
-        getMyGuideBooks(true, 'save');
+        $(getShadowEl('#extGBE-guideBookTitleArea')).html('<i class="" id="extGBE-title-icon"></i>내 가이드북')
+        $(getShadowEl('#my-editor')).html('');
+        $(getShadowEl('#my-editor')).trumbowyg('disable')
+        alert('삭제된 가이드북입니다.')
+        // alert('서버저장 실패')
       }
+      getMyGuideBooks(true, 'init');
+      //console.log('Response From API', response);
+    });
+  }
 
-    }else{
-      alert('서버저장 실패')
-    }
-    //console.log('Response From API', response);
-  });
+
 
 }
 
@@ -411,6 +432,8 @@ function getMyGuideBooks(refresh, type){
         });
       }
 
+      $(getShadowEl('#extGBE-title-icon')).removeClass('extGBE-circle3');
+
       setGuideBookListener();
       if(type=='login'){
         $(getShadowEl('#pcss3mm')).removeClass('disabled');
@@ -431,6 +454,8 @@ function getMyGuideBooks(refresh, type){
         $(getShadowEl('#my-editor')).trumbowyg('disable')
       }
       
+
+      
       // if(response.length==0){
       //   $(getShadowEl('#myGuideBookList')).append("<li class='extGBE-addGuideBook'><a href='' onclick='return false'><i class='icon-saveOk' ></i>가이드북 생성</a></li>")
       // }
@@ -450,6 +475,14 @@ function setChromeStg(key, value){
   var obj = {};
   obj[key]=value
   chrome.storage.sync.set(obj, null);
+}
+
+function removeOneChromeStg(key){
+  return new Promise((resolve, reject) => {
+  chrome.storage.sync.remove(key, function(){
+      resolve();
+    })
+  });
 }
 
 async function loginCheck(){
@@ -561,14 +594,20 @@ function saveContent(){
 
   $(getShadowEl('#extGBE-title-icon')).attr('class', 'extGBE-circle3');
   chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
-    function (response) {
+  async function (response) {
     if(response=='success'){
       var guidebook = JSON.parse(myGuideBooks[guideBookIdx]);
       guidebook.html = content;
       myGuideBooks[guideBookIdx] = JSON.stringify(guidebook)
       $(getShadowEl('#extGBE-title-icon')).attr('class', 'icon-saveOk');  
     }else{
-      alert('서버저장 실패')
+      await removeOneChromeStg('currentTitle');
+      $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).not(getShadowEl('#extGBE-home')).addClass('disabled');
+      $(getShadowEl('#extGBE-guideBookTitleArea')).html('<i class="" id="extGBE-title-icon"></i>내 가이드북')
+      $(getShadowEl('#my-editor')).html('');
+      $(getShadowEl('#my-editor')).trumbowyg('disable')
+      getMyGuideBooks(true, 'init')
+      alert('삭제된 가이드북입니다.')
     }
   });
 }

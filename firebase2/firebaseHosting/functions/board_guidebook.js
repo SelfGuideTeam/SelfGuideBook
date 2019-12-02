@@ -92,7 +92,7 @@ router.post('/logout', async function(req, res, next){
     }
 })
 
-router.post('/setGuideBook', async function(req, res, next){
+router.post('/createGuideBook', async function(req, res, next){
     try{
         let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
         let getDoc = guideBookRef.get()
@@ -110,6 +110,44 @@ router.post('/setGuideBook', async function(req, res, next){
                 }).catch(function(error){
                     return;
                 })
+            } else {
+                var responseData = {'result' : 'fail'}
+                res.json(responseData)
+                return;
+            }
+            return;
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err)
+            return;
+        });
+    } catch(err){
+        console.log(err);
+        res.json(err)
+        return;
+    }
+});
+
+router.post('/setGuideBook', async function(req, res, next){
+    try{
+        let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
+        let getDoc = guideBookRef.get()
+        .then(doc => {
+            if (!doc.exists) {
+                var responseData = {'result' : 'fail'}
+                res.json(responseData)
+                return;
+                // guideBookRef.set({
+                //     html : req.body.htmlCode,
+                //     created_date : Date.now(),
+                //     modifiyed_date : Date.now()
+                // }).then(function(error) {
+                //     console.log(error)
+
+                // }).catch(function(error){
+                //     return;
+                // })
             } else {
                 guideBookRef.update({
                     html : req.body.htmlCode,
