@@ -138,6 +138,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
 $(getShadowEl('#my-editor')).trumbowyg('disable')
 if(isLogined){
   $(getShadowEl('#pcss3mm')).children('li').not(getShadowEl('#extGBE-myGuideBooksli')).not(getShadowEl('#extGBE-logout')).not(getShadowEl('#extGBE-home')).addClass('disabled');
+  $(getShadowEl('#extGBE-home')).attr('class', 'container1');
   getMyGuideBooks(false, 'init')
   //$('#my-editor').trumbowyg('disable')
 }else{
@@ -172,6 +173,11 @@ function printHtmlToPdf(html) {
   var endpoint = 'https://v2018.api2pdf.com/chrome/html';
   var apikey = '4ca7ff53-eafa-425c-aed2-64a7fd1f5a87'; //replace this with your own from portal.api2pdf.com
   //다른 언어도 쓰려면 meta charset 명시
+  var blank_pattern = /^\s+|\s+$/g;
+  if(html==null || html=='' ||  html.replace( blank_pattern, '' ) == ""){
+    alert('내용이 없습니다.');
+    return;
+  }
   var payload = {
     "html": "<meta charset='UTF-8'>"+html,
     "inlinePdf": false
@@ -259,6 +265,7 @@ async function saveHtml_Server(init){
       }
       else {
         alert('존재하는 가이드북입니다.')
+        $(getShadowEl('#my-editor')).trumbowyg('disable')
       }
       getMyGuideBooks(true, 'initSave');
       //console.log('Response From API', response);
@@ -281,6 +288,7 @@ async function saveHtml_Server(init){
 
       }else if(response=='overlap'){
         alert('이미 존재하는 제목입니다.')
+        $(getShadowEl('#my-editor')).trumbowyg('disable')
       }else{
         $(getShadowEl('#extGBE-guideBookTitleArea')).html('<i class="" id="extGBE-title-icon"></i>내 가이드북')
         $(getShadowEl('#my-editor')).html('');
