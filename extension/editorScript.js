@@ -553,6 +553,26 @@ async function setGuideBookListener(){
 
 }
 
+function saveContent(){
+  var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
+  var content = $(getShadowEl('#my-editor')).html();
+  var data = {'title' : title,
+              'htmlCode' : content };
+
+  $(getShadowEl('#extGBE-title-icon')).attr('class', 'extGBE-circle3');
+  chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
+    function (response) {
+    if(response=='success'){
+      var guidebook = JSON.parse(myGuideBooks[guideBookIdx]);
+      guidebook.html = content;
+      myGuideBooks[guideBookIdx] = JSON.stringify(guidebook)
+      $(getShadowEl('#extGBE-title-icon')).attr('class', 'icon-saveOk');  
+    }else{
+      alert('서버저장 실패')
+    }
+  });
+}
+
 
 
 //listener -----------------------------------------------------
@@ -630,47 +650,7 @@ function setListeners(){
   })
 
   $(getShadowEl('#my-editor')).keyup(function() {
-    delay(function(){
-      var title = $(getShadowEl('#extGBE-guideBookTitleArea')).attr('value')
-      var content = $(getShadowEl('#my-editor')).html();
-  
-      // var obj = {};
-      // obj[title]={content : content, modifyied_date : Date.now()}
-  
-      // setChromeStg('tempBooks', obj);
-      // myGuideBooks[guideBookIdx].html = content;
-      var data = {'title' : title,
-      'htmlCode' : content };
-
-      $(getShadowEl('#extGBE-title-icon')).attr('class', 'extGBE-circle3');
-      chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
-        function (response) {
-        if(response=='success'){
-          var guidebook = JSON.parse(myGuideBooks[guideBookIdx]);
-          guidebook.html = content;
-          myGuideBooks[guideBookIdx] = JSON.stringify(guidebook)
-          $(getShadowEl('#extGBE-title-icon')).attr('class', 'icon-saveOk');  
-
-
-          // try{
-          //   myGuideBooks2[0]; //존재여부 체크
-          //   myGuideBooks[guideBookIdx] = myGuideBooks2[guideBookIdx];
-          // } catch(err){
-          //   // console.log('저장된 가이드북 목록 없음');
-          // }
-
-          // if(init){
-          //   getMyGuideBooks(true, 'initSave');
-          // }else{
-          //   getMyGuideBooks(true, 'save');
-          // }
-        }else{
-          alert('서버저장 실패')
-        }
-      });
-
-
-    }, 1000 );
+    delay(saveContent, 1000 );
   });
 
 

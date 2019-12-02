@@ -1,7 +1,7 @@
 {
-	"name": "GuideEditor",
+	"name": "TravelBooks",
 	"manifest_version": 2,
-	"description": "Edit your own guide book",
+	"description": "Get start your own guide book",
 	"version": "0.3.2",
 	"background": {
 		"scripts" : ["firebase7.4.0.js","background.js"]

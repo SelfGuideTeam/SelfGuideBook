@@ -47,6 +47,7 @@ function handleRequest(request, sender, sendResponse){
 		var img = document.createElement('img'); 
         img.setAttribute('src', imgsrc);
 		getShadowEl('#my-editor').appendChild(img)
+		saveContent();
 		$('#mySidebar').show();
 	}else if(request.callFunction == "getMyGuideBooks"){
 		if(sidebarOpen) getMyGuideBooks();
@@ -203,7 +204,7 @@ function toggleSidebar() {
 var myGuideBookHtml2 = "\
 <!-- 내 가이드북 -->\
 <li class='dropdown' id='extGBE-myGuideBooksli'>\
-	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i id='extGBE-title-icon'></i>내 가이드북</a><b></b>\
+	<a href='' onclick='return false' id='extGBE-guideBookTitleArea' ><i class='extGBE-circle3' id='extGBE-title-icon'></i>내 가이드북</a><b></b>\
 	<div class='grid-container3'>\
 		<ul id='myGuideBookList'>\
 		</ul>\
