@@ -181,7 +181,7 @@
                                                 )
                                             );
                                     }
-
+                                    console.log(data)
                                     $.ajax({
                                         url: trumbowyg.o.plugins.upload.serverPath,
                                         headers: trumbowyg.o.plugins.upload.headers,

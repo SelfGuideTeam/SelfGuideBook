@@ -132,6 +132,7 @@ router.post('/createGuideBook', async function(req, res, next){
 router.post('/setGuideBook', async function(req, res, next){
     try{
         if(req.body.altTitle==='null'){
+            console.log('ifififififififif')
             let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
             let getDoc = guideBookRef.get()
             .then(doc => {
@@ -149,6 +150,8 @@ router.post('/setGuideBook', async function(req, res, next){
                         res.json(responseData)
                         return;
                     }).catch(function(error){
+                        console.log(error);
+                        res.json(error)
                         return;
                     })
                 }
@@ -168,15 +171,18 @@ router.post('/setGuideBook', async function(req, res, next){
                         html : req.body.htmlCode,
                         created_date : Date.now(),
                         modifiyed_date : Date.now()
-                    }).then(function(error) {
-                        console.log(error)
+                    }).then(function() {
+                        console.log('ese1');
                         var responseData = {'result' : 'success'}
                         res.json(responseData)
                         return;
                     }).catch(function(error){
+                        console.log(error);
+                        res.json(error)
                         return;
                     })
                 } else {
+                    console.log('else2');
                     var responseData = {'result' : 'overlap'}
                     res.json(responseData)
                     return;
@@ -184,6 +190,7 @@ router.post('/setGuideBook', async function(req, res, next){
                 return;
             })
             .catch(err => {
+                console.log('else2222');
                 console.log(err);
                 res.json(err)
                 return;

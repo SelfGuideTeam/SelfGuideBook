@@ -278,6 +278,7 @@ async function saveHtml_Server(init){
                 'altHtml' : title!=initTitle?title:'null'};
     chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 
     function (response) {
+      alert(response)
       if(response=='success'){
         try{
           myGuideBooks2[0]; //존재여부 체크
@@ -285,7 +286,6 @@ async function saveHtml_Server(init){
         } catch(err){
           // console.log('저장된 가이드북 목록 없음');
         }
-
       }else if(response=='overlap'){
         alert('이미 존재하는 제목입니다.')
         $(getShadowEl('#my-editor')).trumbowyg('disable')
