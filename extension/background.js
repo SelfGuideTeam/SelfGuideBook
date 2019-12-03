@@ -86,8 +86,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', requestUrlHeader+'logout');
 		xhr.setRequestHeader('Content-type', "application/json");
-		var data = {'uid' : request.data
-					};
+		var data = {'uid' : request.data};
 		data = JSON.stringify(data);
 		xhr.send(data);
 		
@@ -95,9 +94,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		xhr.addEventListener('load', function(){
 			var result = JSON.parse(xhr.responseText);
 			sendResponse(result.result);
-			// chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			// 	toggleSidebar(tabs[0])
-			// });
 		});
 		return true;
 	}else if(message=='tokenValidRequest'){
@@ -247,11 +243,13 @@ async function guideBookSaveRequest(sendResponse, data){
 	try{
 		let user = (await getChromeStg('authInfo')).authInfo.user;
 		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		console.log(result.result)
 		if(result.result=='success'){
 			var email = {'email' : user.email};
 			var data2 = Object.assign(email, data)
 			data2 = JSON.stringify(data2);
 			let result = await ajaxSend(requestUrlHeader+'setGuideBook', data2);
+			console.log(result.result)
 			sendResponse(result.result);
 		}else if (result.result=='overlap'){
 			sendResponse('overlap')
