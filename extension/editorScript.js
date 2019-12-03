@@ -273,7 +273,7 @@ async function saveHtml_Server(init){
 
   }else{
     var html =$(getShadowEl('#my-editor')).html();
-    var data = {'title' : title,
+    var data = {'title' : initTitle,
                 'htmlCode' : html, 
                 'altHtml' : title!=initTitle?title:'null'};
     chrome.runtime.sendMessage({message: 'guideBookSaveRequest', data : data}, 

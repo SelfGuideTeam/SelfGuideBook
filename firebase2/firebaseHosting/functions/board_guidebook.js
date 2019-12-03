@@ -132,6 +132,7 @@ router.post('/createGuideBook', async function(req, res, next){
 router.post('/setGuideBook', async function(req, res, next){
     try{
         if(req.body.altTitle==='null'){
+            console.log('null 이다');
             let guideBookRef = db.collection('BOARD_GUIDEBOOK').doc(req.body.email).collection('GUIDEBOOKS').doc(req.body.title);
             let getDoc = guideBookRef.get()
             .then(doc => {
