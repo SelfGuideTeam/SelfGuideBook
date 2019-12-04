@@ -6,17 +6,19 @@
         <v-divider></v-divider>
 
         <v-layout>
-          <v-col cols="3">
-            <v-overflow-btn v-model="category" :items="continent" label="카테고리 선택"></v-overflow-btn>
+          <v-col align="start">
+            <v-card width="300" tile flat>
+              <v-overflow-btn v-model="category" :items="continent" label="카테고리 선택"></v-overflow-btn>
+            </v-card>
           </v-col>
         </v-layout>
         <v-layout column="column">
           <v-row justify="center">
-            <v-col cols="2">
+            <v-col cols="3" sm="2" md="2" lg="2" xl="2">
               <v-subheader>제목</v-subheader>
             </v-col>
-            <v-col cols="10">
-              <v-text-field v-model="title"></v-text-field>
+            <v-col cols="9" sm="10" md="10" lg="10" xl="10">
+              <v-text-field v-model="title" counter="45" id="title"></v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -40,7 +42,7 @@
           </v-row>
           <v-row>
             <v-spacer></v-spacer>
-            <v-col cols="4">
+            <v-col cols="12" sm="5" md="5" lg="4" xl="4">
               <v-btn
                 @click="post"
                 :loading="loading"
@@ -93,8 +95,8 @@ export default {
       rules: [
         value =>
           !value ||
-          value.size < 2000000 ||
-          "파일 크기가 2 MB 보다 작아야 합니다"
+          value.size < 20000000 ||
+          "파일 크기가 20 MB 보다 작아야 합니다"
       ]
     };
   },
@@ -127,18 +129,22 @@ export default {
     },
     check() {
       return new Promise((resolve, reject) => {
+        var titleLength = document.getElementById("title");
         if (this.category == "") {
           alert("카테고리를 선택해주세요");
           reject();
-        } else if (this.title == "") {
+        } else if (this.title.replace(/ /gi, "") == "") {
           alert("제목을 입력해주세요");
           reject();
         } else if (this.content == "") {
           alert("내용을 입력해주세요");
           reject();
-        } else if (this.files.size > 2000000) {
+        } else if (titleLength.value.length > 45) {
+          alert("제목을 45자 이하로 작성해주세요");
+          reject();
+        } else if (this.files.size > 20000000) {
           alert(this.files.size);
-          alert("파일 크기가 2 MB 보다 작아야 합니다");
+          alert("파일 크기가 20 MB 보다 작아야 합니다");
           reject();
         }
         resolve();

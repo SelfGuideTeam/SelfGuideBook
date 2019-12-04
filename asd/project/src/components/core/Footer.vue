@@ -1,6 +1,6 @@
 <template>
   <v-footer>
-    <img src="../../assets/mainPagePhoto/logo2.png" width="200" height="500" />
+    <img src="../../assets/mainPagePhoto/logo2.png" width="200" />
     <div id="toot">
       이용 약관 | 개인정보 취급방침 | 사이트맵 | 사이트 운영 방식
       <br />* Travel BooksLLC는 예약 대행사가 아니며 사이트 이용자에게 서비스

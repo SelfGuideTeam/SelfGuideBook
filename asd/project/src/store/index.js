@@ -28,9 +28,13 @@ export default new Vuex.Store({
     },
     deleteData: [],
     isLoginState: localStorage.getItem("email"),
-    drawer: false
+    drawer: false,
+    numOfCommentsVuex: 0
   },
   mutations: {
+    numOfCommentsChange: (state, payload) => {
+      state.numOfCommentsVuex = payload
+    },
     resetMyStore: state => {
       state.GuideBook.num = "";
       state.GuideBook.email = "";
@@ -85,6 +89,9 @@ export default new Vuex.Store({
     },
     getDrawer: state => {
       return state.drawer;
+    },
+    getNumOfComments: state => {
+      return state.numOfCommentsVuex
     }
   },
   actions: {},

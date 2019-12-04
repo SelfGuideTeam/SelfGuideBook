@@ -2,56 +2,28 @@
   <v-container fill-height>
     <v-col cols="12" align="center">
       <v-card tile max-width="1200">
-        <v-card-title tile width="1200" class="display-1 pa-5" align="left"
-          >가이드북 등록</v-card-title
-        >
+        <v-card-title tile width="1200" class="display-1 pa-5" align="left">가이드북 등록</v-card-title>
         <div align="start" class="title pt-7 px-5">
-          <v-text-field
-            v-model="items.title"
-            label="제목"
-            counter="45"
-            id="title"
-          />
+          <v-text-field v-model="items.title" label="제목" counter="45" id="title" />
         </div>
-        <v-text-field
-          v-model="unixDate"
-          label="날짜"
-          readonly
-          v-on="on"
-          class="title px-5"
-        ></v-text-field>
+        <v-text-field v-model="unixDate" label="날짜" readonly v-on="on" class="title px-5"></v-text-field>
 
         <v-file-input
           class="title px-5"
           label="파일"
           v-model="inputFile"
+          :rules="rules"
+          show-size
+          small-chips
+          accept="image/png, image/jpeg, .pdf"
         ></v-file-input>
         <div align="start" class="title px-5">
-          <v-textarea
-            v-model="items.content"
-            label="내용"
-            outlined="true"
-            rows="20"
-          />
+          <v-textarea v-model="items.content" label="내용" outlined="true" rows="20" />
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="secondary"
-            tile
-            outlined="true"
-            class="mr-4 mb-6"
-            @click="writing()"
-            >수정</v-btn
-          >
-          <v-btn
-            color="secondary"
-            tile
-            outlined="true"
-            class="mr-4 mb-6"
-            @click="Back()"
-            >뒤로</v-btn
-          >
+          <v-btn color="secondary" tile outlined="true" class="mr-4 mb-6" @click="writing()">수정</v-btn>
+          <v-btn color="secondary" tile outlined="true" class="mr-4 mb-6" @click="Back()">뒤로</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -79,7 +51,13 @@ export default {
       },
       num: 1,
       isEmptyCheck: true,
-      inputFile: []
+      inputFile: [],
+      rules: [
+        value =>
+          !value ||
+          value.size < 20000000 ||
+          "파일 크기가 20 MB 보다 작아야 합니다"
+      ]
     };
   },
   created() {
@@ -142,7 +120,11 @@ export default {
       return new Promise((resolve, reject) => {
         var title_counter = document.getElementById("title");
         if (title_counter.value.length > 45) {
+          console.log(this.inputFile.size);
           alert("제목을 45자 이하로 작성해주세요");
+          reject();
+        } else if (this.inputFile.size > 20000000) {
+          alert("파일 크기가 20 MB 보다 작아야 합니다");
           reject();
         } else {
           resolve();

@@ -2,10 +2,12 @@
   <v-container fill-height fluid>
     <v-col align="center" cols="12">
       <v-card width="1200" flat>
-        <v-card-subtitle class="title" align="start">{{
+        <v-card-subtitle class="title" align="start">
+          {{
           boardCategory
-        }}</v-card-subtitle>
-        <v-card-title class="display-1 ">게시판 </v-card-title>
+          }}
+        </v-card-subtitle>
+        <v-card-title class="display-1">게시판</v-card-title>
         <v-divider></v-divider>
         <v-toolbar flat color="transparent" class="mt-5">
           <v-spacer></v-spacer>
@@ -20,7 +22,7 @@
           ></v-text-field>
         </v-toolbar>
         <v-data-table
-          :headers="headers"
+          :headers="computedHeaders"
           :items="items"
           :search="search"
           :sort-by="['num']"
@@ -28,27 +30,23 @@
         >
           <template v-slot:item="{ item }">
             <tr>
-              <td>{{ item.num }}</td>
-              <td @click="moveToRead(item)" style="cursor:pointer" width="400">
-                {{ item.title }}
-              </td>
-              <td>{{ item.writer }}</td>
-              <td>{{ unix(item.date) }}</td>
-              <td>{{ item.view }}</td>
-              <td>{{ item.numOfComments }}</td>
+              <td v-if="!$vuetify.breakpoint.xsOnly">{{ item.num }}</td>
+              <td
+                @click="moveToRead(item)"
+                style="cursor:pointer"
+                width="400"
+                class="d-inline-block text-truncate pt-3"
+              >{{ item.title }}</td>
+              <td v-if="!$vuetify.breakpoint.smAndDown">{{ item.writer }}</td>
+              <td v-if="!$vuetify.breakpoint.xsOnly">{{ unix(item.date) }}</td>
+              <td v-if="!$vuetify.breakpoint.mdAndDown">{{ item.view }}</td>
+              <td v-if="!$vuetify.breakpoint.mdAndDown">{{ item.numOfComments }}</td>
             </tr>
           </template>
         </v-data-table>
         <v-toolbar color="transparent" flat>
           <v-spacer></v-spacer>
-          <v-btn
-            class="ml-3"
-            color="grey darken-1"
-            tile
-            outlined
-            @click="moveToWrite()"
-            >작성</v-btn
-          >
+          <v-btn class="ml-3" color="grey darken-1" tile outlined @click="moveToWrite()">작성</v-btn>
         </v-toolbar>
       </v-card>
     </v-col>
@@ -60,7 +58,7 @@ export default {
     return {
       search: "",
       headers: [
-        { text: "번호", value: "num", filterable: false },
+        { text: "번호", value: "num", filterable: false, hide: "xsOnly" },
         {
           text: "제목",
           align: "left",
@@ -68,15 +66,33 @@ export default {
           sortable: false,
           width: 400
         },
-        { text: "작성자", value: "writer", filterable: false, sortable: false },
-        { text: "날짜", value: "date", filterable: false },
-        { text: "조회수", value: "view", filterable: false },
-        { text: "댓글", value: "comments", filterable: false }
+        {
+          text: "작성자",
+          value: "writer",
+          filterable: false,
+          sortable: false,
+          hide: "smAndDown"
+        },
+        { text: "날짜", value: "date", filterable: false, hide: "xsOnly" },
+        { text: "조회수", value: "view", filterable: false, hide: "mdAndDown" },
+        {
+          text: "댓글",
+          value: "comments",
+          filterable: false,
+          hide: "mdAndDown"
+        }
       ],
       items: [],
       date: "",
       boardCategory: ""
     };
+  },
+  computed: {
+    computedHeaders() {
+      return this.headers.filter(
+        h => !h.hide || !this.$vuetify.breakpoint[h.hide]
+      );
+    }
   },
   created() {
     sessionStorage.removeItem("items");

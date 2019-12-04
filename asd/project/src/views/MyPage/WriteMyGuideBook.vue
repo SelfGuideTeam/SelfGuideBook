@@ -50,8 +50,8 @@ export default {
       rules: [
         value =>
           !value ||
-          value.size < 2000000 ||
-          "파일 크기가 2 MB 보다 작아야 합니다"
+          value.size < 20000000 ||
+          "파일 크기가 20 MB 보다 작아야 합니다"
       ]
     };
   },
@@ -86,8 +86,8 @@ export default {
           console.log(this.inputFile.size);
           alert("제목을 45자 이하로 작성해주세요");
           reject();
-        } else if (this.inputFile.size > 2000000) {
-          alert("파일 크기가 2 MB 보다 작아야 합니다");
+        } else if (this.inputFile.size > 20000000) {
+          alert("파일 크기가 20 MB 보다 작아야 합니다");
           reject();
         } else {
           resolve();
@@ -150,7 +150,7 @@ export default {
               resolve();
             });
         } else {
-          if (this.items.title == "") {
+          if (this.items.title.replace(/ /gi, "") == "") {
             alert("제목을 입력해주세요");
           } else if (this.items.content == "") {
             alert("내용을 입력해주세요");

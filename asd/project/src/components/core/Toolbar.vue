@@ -5,7 +5,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-img
-        src="../../assets/mainLogo.png"
+        src="https://imgur.com/Wh6l7xA.png"
         max-width="100"
         @click="mainPage()"
         v-if="$vuetify.breakpoint.lgAndUp"
@@ -14,27 +14,17 @@
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <!-- <v-btn text class="px-6" @click="loginForm()">Login</v-btn> -->
-        <v-btn v-show="!isLogin" text class="px-6" @click.stop="loginForm()"
-          >Login</v-btn
-        >
-        <v-btn v-show="isLogin" text class="px-6" @click="logOut()"
-          >Logout</v-btn
-        >
+        <v-btn v-show="!isLogin" text class="px-6" @click.stop="loginForm()">Login</v-btn>
+        <v-btn v-show="isLogin" text class="px-6" @click="logOut()">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <section>
-      <v-parallax src="../../assets/mainHeader.jpg" height="450"></v-parallax>
+      <v-parallax src="https://imgur.com/0FY1Mct.jpg" height="450"></v-parallax>
     </section>
     <v-toolbar v-if="$vuetify.breakpoint.lgAndUp" flat>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-menu
-          text
-          class="px-12"
-          open-on-hover
-          close-on-content-click
-          offset-y
-        >
+        <v-menu text class="px-12" open-on-hover close-on-content-click offset-y>
           <template v-slot:activator="{ on }">
             <v-btn text v-on="on" @click="boardPage()" class="px-12">
               <v-card color="transparent" flat>Board</v-card>
@@ -68,35 +58,20 @@
         <v-btn text class="px-12" @click="contactUsPage()">
           <v-card color="transparent" flat>Contact Us</v-card>
         </v-btn>
-        <!-- <v-btn text class="px-12" @click="axios2()">
-          <v-card color="transparent" flat>Axios</v-card>
-        </v-btn>-->
+        <v-btn text class="px-12" @click="test">
+          <v-card color="transparent" flat>test</v-card>
+        </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-divider></v-divider>
 
     <v-dialog v-model="dialog" max-width="400">
-      <v-card
-        min-width="300"
-        height="280"
-        elevation="10"
-        align="center"
-        justify="center"
-      >
+      <v-card min-width="300" height="280" elevation="10" align="center" justify="center">
         <v-spacer class="pt-2"></v-spacer>
-        <v-card-title class="display-1 font-regular justify-center pt-12"
-          >로그인</v-card-title
-        >
+        <v-card-title class="display-1 font-regular justify-center pt-12">로그인</v-card-title>
         <v-spacer class="pt-12"></v-spacer>
-        <v-btn
-          v-show="true"
-          width="250"
-          color="primary"
-          x-large
-          @click="loginUsingGoogle()"
-          >Google Login</v-btn
-        >
+        <v-btn v-show="true" width="250" color="primary" x-large @click="login">Google Login</v-btn>
         <v-btn
           v-show="false"
           class="mt-1"
@@ -104,8 +79,7 @@
           color="primary"
           x-large
           @click="logOut()"
-          >LogOut</v-btn
-        >
+        >LogOut</v-btn>
         <v-btn
           class="mt-1"
           width="250"
@@ -113,8 +87,7 @@
           x-large
           v-show="false"
           @click="userInfo()"
-          >UserInfo</v-btn
-        >
+        >UserInfo</v-btn>
         <v-btn
           class="mt-1"
           width="250"
@@ -122,19 +95,14 @@
           x-large
           v-show="false"
           @click="axios2()"
-          >axios</v-btn
-        >
+        >axios</v-btn>
       </v-card>
     </v-dialog>
 
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list-item>
         <v-list-item-content>
-          <v-img
-            src="../../assets/mainLogo.png"
-            @click="mainPage()"
-            style="cursor: pointer"
-          ></v-img>
+          <v-img src="https://imgur.com/Wh6l7xA.png" @click="mainPage()" style="cursor: pointer"></v-img>
         </v-list-item-content>
       </v-list-item>
 
@@ -154,12 +122,7 @@
             <v-list-item-title v-text="item.title"></v-list-item-title>
           </v-list-item>
         </v-list-group>
-        <v-list-item
-          v-for="item in drawrItems"
-          :key="item.title"
-          link
-          @click="item.method"
-        >
+        <v-list-item v-for="item in drawrItems" :key="item.title" link @click="item.method">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -225,6 +188,12 @@ export default {
     }
   },
   methods: {
+    test() {
+      const testString = "12![mainHeader.jpg](https://i.imgur.com/JPpKjsh.jpg)";
+      const pattern = /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi;
+      const ans = testString.match(pattern);
+      alert(ans);
+    },
     setCategory(category) {
       sessionStorage.removeItem("MyBoardPage");
       sessionStorage.setItem("category", category);
@@ -276,30 +245,58 @@ export default {
       this.$router.push("guideline");
       this.drawer = false;
     },
+    async login() {
+      await this.loginUsingGoogle();
+      await this.ManagerCheck();
+    },
     loginUsingGoogle() {
-      firebase
-        .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(() => {
-          var provider = new firebase.auth.GoogleAuthProvider();
-          provider.addScope(
-            "https://www.googleapis.com/auth/contacts.readonly"
-          );
-          return firebase
-            .auth()
-            .signInWithPopup(provider)
-            .then(result => {
-              this.dialog = false;
-              this.isLogin = true;
-              var user = firebase.auth().currentUser;
-              localStorage.setItem("email", user.email);
-              localStorage.setItem("uid", user.uid);
-              localStorage.setItem("displayName", user.displayName);
-            })
-            .catch(error => {
-              this.dialog = false;
+      return new Promise(resolve => {
+        firebase
+          .auth()
+          .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .then(() => {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope(
+              "https://www.googleapis.com/auth/contacts.readonly"
+            );
+            return firebase
+              .auth()
+              .signInWithPopup(provider)
+              .then(result => {
+                this.dialog = false;
+                this.isLogin = true;
+                var user = firebase.auth().currentUser;
+                localStorage.setItem("email", user.email);
+                localStorage.setItem("uid", user.uid);
+                localStorage.setItem("displayName", user.displayName);
+                resolve();
+              })
+              .catch(error => {
+                this.dialog = false;
+              });
+          });
+      });
+    },
+    ManagerCheck() {
+      return new Promise(resolve => {
+        firebase
+          .firestore()
+          .collection("Manager")
+          .doc("Managers")
+          .collection("Managerss")
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              if (doc.id == firebase.auth().currentUser.email) {
+                alert("관리자 로그인");
+                localStorage.setItem("manager", 1);
+              }
             });
-        });
+          })
+          .then(() => {
+            resolve();
+          });
+      });
     },
     logOut() {
       if (localStorage.getItem("email") == null) {
@@ -331,21 +328,24 @@ export default {
       }
       this.dialog = false;
     },
-    axios2() {
-      axios
-        .post("/logout")
-        .then(response => {
-          alert("success!!" + response.data);
-          console.log(response.data);
+    // axios2() {
+    //   axios.post("/logout").then(response => {
+    //       alert("success!!" + response.data);
+    //       console.log(response.data);
 
-          this.dialog = false;
-        })
-        .catch(err => {
-          alert("실패" + err);
-          this.dialog = false;
-        });
-    },
+    //       this.dialog = false;
+    //     })
+    //     .catch(err => {
+    //       alert("실패" + err);
+    //       this.dialog = false;
+    //     });
+    //   this.$router.push("Manager");
+    // },
     guideEditorDownload() {
+      if (localStorage.getItem("email") == null) {
+        alert("로그인을 해주세요");
+        return;
+      }
       const storageRef = firebase.storage().ref();
       var starsRef = storageRef.child("extension.zip");
 

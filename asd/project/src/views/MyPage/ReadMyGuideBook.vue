@@ -1,70 +1,87 @@
 <template>
-  <v-container fill-height>
-    <v-col cols="12" align="center">
-      <v-card width="1200" tile flat>
-        <v-card-title class="display-1">나의 가이드북</v-card-title>
-      </v-card>
-      <v-card width="1200" tile outlined="true">
-        <v-card-title>{{ items.title }}</v-card-title>
-      </v-card>
-      <v-toolbar flat width="1200" color="grey lighten-3" height="50">
-        {{ items.email }}
-        <v-spacer></v-spacer>
-        <span>{{ unix(items.date) }}</span>
-        <a class="ml-6" @click="fileDownload(items)">
-          {{
-            items.file.length > 20
-              ? items.file.substring(0, 20) + ".."
-              : items.file
-          }}
-        </a>
-        <v-icon>mdi-download</v-icon>
-      </v-toolbar>
-
-      <v-card
-        align="start"
-        width="1200"
-        class="pa-12"
-        tile
-        outlined
-        min-height="600"
-        v-html="items.content"
-      ></v-card>
-      <v-toolbar width="1200" flat color="transparent">
-        <v-spacer></v-spacer>
-        <v-btn
-          class="ml-3"
-          color="secondary"
-          tile
-          outlined
-          @click="modifyGuideBook()"
-          >수정</v-btn
-        >
-        <v-btn
-          class="ml-3"
-          color="secondary"
-          tile
-          outlined
-          @click="GuideBook_Dialog()"
-          >삭제</v-btn
-        >
-        <v-btn
-          class="ml-3"
-          color="secondary"
-          tile
-          outlined
-          @click="myGuideBookPage()"
-          >뒤로</v-btn
-        >
-      </v-toolbar>
-    </v-col>
+  <v-container>
+    <v-row>
+      <v-col cols="12" align="center">
+        <v-card tile flat width="1200">
+          <v-card-title class="display-1">나의 가이드북</v-card-title>
+        </v-card>
+        <v-card width="1200" tile flat outlined="true">
+          <v-card tile flat>
+            <v-card-title>{{ items.title }}</v-card-title>
+          </v-card>
+          <v-divider></v-divider>
+          <v-card tile flat>
+            <v-row>
+              <v-col cols="12" sm="4" align="center">{{ items.email }}</v-col>
+              <v-col cols="12" sm="4" align="center">
+                <v-spacer></v-spacer>
+                <span>{{ unix(items.date) }}</span>
+              </v-col>
+              <v-col cols="12" sm="4" align="center">
+                <a class="ml-6" @click="fileDownload(items)">
+                  {{
+                    items.file.length > 20
+                      ? items.file.substring(0, 20) + ".."
+                      : items.file
+                  }}
+                </a>
+                <v-icon>mdi-download</v-icon>
+              </v-col>
+            </v-row>
+          </v-card>
+          <v-divider></v-divider>
+          <v-card
+            align="start"
+            width="1200"
+            class="pa-12"
+            tile
+            flat
+            min-height="600"
+            v-html="items.content"
+          ></v-card>
+          <v-toolbar flat color="transparent">
+            <v-spacer></v-spacer>
+            <v-btn
+              class="ml-3"
+              color="secondary"
+              tile
+              outlined
+              @click="modifyGuideBook()"
+              >수정</v-btn
+            >
+            <v-btn
+              class="ml-3"
+              color="secondary"
+              tile
+              outlined
+              @click="GuideBook_Dialog()"
+              >삭제</v-btn
+            >
+            <v-btn
+              class="ml-3"
+              color="secondary"
+              tile
+              outlined
+              @click="myGuideBookPage()"
+              >뒤로</v-btn
+            >
+          </v-toolbar>
+        </v-card>
+      </v-col>
+    </v-row>
     <v-dialog v-model="dialog_GuideBook_Delete" max-width="300">
       <v-card>
-        <v-card-title>삭제하시겠습니까?</v-card-title>
+        <v-card-title
+          class="mb-3"
+          style="color: white; backgroundColor: #90CAF9"
+          >삭제하시겠습니까?</v-card-title
+        >
         <v-card-text>데이터가 삭제되면 복구할 수 없습니다.</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="GuideBook_Delete()">삭제</v-btn>
+          <v-btn color="#90CAF9" class="white--text" @click="GuideBook_Delete()"
+            >삭제</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -119,7 +136,7 @@ export default {
     GuideBook_Delete() {
       var db = firebase.firestore();
       db.collection("GuideBook")
-        .doc(sessionStorage.getItem("email"))
+        .doc(localStorage.getItem("email"))
         .collection("MyGuideBooks")
         .doc(this.items.docid)
         .delete()

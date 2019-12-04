@@ -5,23 +5,26 @@
         <v-card-title class="display-1">게시글 수정</v-card-title>
         <v-divider></v-divider>
         <v-layout>
-          <v-col cols="3">
-            <v-overflow-btn
-              v-model="items.category"
-              :items="continent"
-              label="카테고리 선택"
-              >{{ items.category }}</v-overflow-btn
-            >
+          <v-col align="start">
+            <v-card width="300" tile flat>
+              <v-overflow-btn
+                v-model="items.category"
+                :items="continent"
+                label="카테고리 선택"
+              >{{ items.category }}</v-overflow-btn>
+            </v-card>
           </v-col>
         </v-layout>
         <v-layout column="column">
           <v-row justify="center">
-            <v-col cols="2">
+            <v-col cols="3" sm="2" md="2" lg="2" xl="2">
               <v-subheader>제목</v-subheader>
             </v-col>
-            <v-col cols="10">
-              <v-text-field v-model="items.title">
-                {{ items.title }}
+            <v-col cols="9" sm="10" md="10" lg="10" xl="10">
+              <v-text-field v-model="items.title" counter="45" id="title">
+                {{
+                items.title
+                }}
               </v-text-field>
             </v-col>
           </v-row>
@@ -53,7 +56,7 @@
           </v-row>
           <v-row>
             <v-spacer></v-spacer>
-            <v-col cols="3">
+            <v-col cols="12" sm="3" md="3" lg="3" xl="3">
               <v-btn text @click="update">수정</v-btn>
               <v-btn text @click="moveToBoard">취소</v-btn>
             </v-col>
@@ -97,8 +100,8 @@ export default {
       rules: [
         value =>
           !value ||
-          value.size < 2000000 ||
-          "파일 크기가 2 MB 보다 작아야 합니다"
+          value.size < 20000000 ||
+          "파일 크기가 20 MB 보다 작아야 합니다"
       ]
     };
   },
@@ -109,6 +112,30 @@ export default {
     async create() {
       await this.getSession();
       await this.getFile();
+    },
+    check() {
+      return new Promise((resolve, reject) => {
+        var titleLength = document.getElementById("title");
+        if (this.category == "") {
+          alert("카테고리를 선택해주세요");
+          reject();
+        } else if (this.title == "") {
+          alert("제목을 입력해주세요");
+          reject();
+        } else if (this.content == "") {
+          alert("내용을 입력해주세요");
+          reject();
+        } else if (titleLength.value.length > 45) {
+          alert("제목을 45자 이하로 작성해주세요");
+          reject();
+        } else if (this.files.size > 20000000) {
+          alert(this.files.size);
+          alert("파일 크기가 20 MB 보다 작아야 합니다");
+          reject();
+        }
+
+        resolve();
+      });
     },
     getSession() {
       return new Promise(resolve => {
@@ -146,33 +173,45 @@ export default {
     },
 
     async update() {
-      this.upload();
-      console.log(this.items.docid);
-      const r = await this.$firebase
-        .firestore()
-        .collection("notes")
-        .doc(this.items.docid)
-        .update({
-          title: this.items.title,
-          content: this.items.content.replace(/\n/gi, "<br/>"),
-          category: this.items.category,
-          writer: this.items.writer,
-          date: this.items.date,
-          filenames: this.files.name == undefined ? "" : this.files.name,
-          num: this.items.num,
-          view: this.items.view,
-          numOfComments: this.items.numOfComments
-        });
-      console.log(r);
-      sessionStorage.setItem("items", JSON.stringify(this.items));
-      this.$router.go(-1);
+      await this.check();
+      await this.firebaseUpdate();
+      await this.upload();
+    },
+    firebaseUpdate() {
+      return new Promise(resolve => {
+        this.$firebase
+          .firestore()
+          .collection("notes")
+          .doc(this.items.docid)
+          .update({
+            title: this.items.title,
+            content: this.items.content.replace(/\n/gi, "<br/>"),
+            category: this.items.category,
+            writer: this.items.writer,
+            date: this.items.date,
+            filenames: this.files.name == undefined ? "" : this.files.name,
+            num: this.items.num,
+            view: this.items.view,
+            numOfComments: this.items.numOfComments
+          })
+          .then(() => {});
+        sessionStorage.setItem("items", JSON.stringify(this.items));
+        this.$router.go(-1);
+        resolve();
+      });
     },
     moveToBoard() {
       this.$router.go(-1);
     },
     upload() {
-      if (this.files.name == undefined) return;
-      this.uploadToFirebase(this.files);
+      return new Promise(resolve => {
+        if (this.files.name == undefined) {
+          return;
+        }
+
+        this.uploadToFirebase(this.files);
+        resolve();
+      });
     },
     uploadToFirebase(file) {
       const storageRef = this.$firebase.storage().ref();

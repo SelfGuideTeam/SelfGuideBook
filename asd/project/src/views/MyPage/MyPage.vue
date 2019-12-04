@@ -8,11 +8,7 @@
           님의 마이페이지
         </v-card-title>
 
-        <v-card
-          width="1000"
-          outlined
-          class="title text-left pa-3 font-weight-bold mt-12"
-        >
+        <v-card width="1000" outlined class="title text-left pa-3 font-weight-bold mt-12">
           작성한 나만의 가이드북
           <v-data-table
             :headers="computedGuideBookHeaders"
@@ -36,9 +32,7 @@
                 >
                   <a style="color: black">{{ item.title }}</a>
                 </td>
-                <td v-if="!$vuetify.breakpoint.smAndDown">
-                  {{ unix(item.date).substring(0, 10) }}
-                </td>
+                <td v-if="!$vuetify.breakpoint.smAndDown">{{ unix(item.date).substring(0, 10) }}</td>
                 <td v-if="!$vuetify.breakpoint.mdAndDown">
                   <a @click="fileDownload(item)">{{ item.file }}</a>
                 </td>
@@ -55,26 +49,21 @@
             outlined="true"
             class="mt-3 ml-3"
             @click="myGuideBookPage()"
-            >나의 모든 가이드북 보기</v-btn
-          >
+          >나의 모든 가이드북 보기</v-btn>
           <v-btn
             color="secondary"
             tile
             outlined="true"
             class="mt-3 ml-3"
             @click="writeMyGuideBook()"
-            >가이드북 등록</v-btn
-          >
+            v-if="!$vuetify.breakpoint.xsOnly"
+          >가이드북 등록</v-btn>
         </v-toolbar>
 
-        <v-card
-          width="1000"
-          class="title text-left pa-3 font-weight-bold mt-12"
-          outlined
-        >
+        <v-card width="1000" class="title text-left pa-3 font-weight-bold mt-12" outlined>
           작성한 게시글
           <v-data-table
-            :headers="boardHeaders"
+            :headers="computedBoardHeaders"
             :sort-by="['num']"
             :sort-desc="[true]"
             :items="boardDatas"
@@ -94,9 +83,9 @@
                 >
                   <a style="color: black">{{ item.title }}</a>
                 </td>
-                <td>{{ unix(item.date / 1000).substr(0, 10) }}</td>
-                <td>{{ item.view }}</td>
-                <td>{{ item.numOfComments }}</td>
+                <td v-if="!$vuetify.breakpoint.smAndDown">{{ unix(item.date / 1000).substr(0, 10) }}</td>
+                <td v-if="!$vuetify.breakpoint.mdAndDown">{{ item.view }}</td>
+                <td v-if="!$vuetify.breakpoint.lgAndDown">{{ item.numOfComments }}</td>
               </tr>
             </template>
           </v-data-table>
@@ -109,15 +98,10 @@
             outlined="true"
             class="mt-3 ml-3"
             @click="myBoardPage()"
-            >작성한 게시글 모두 보기</v-btn
-          >
+          >작성한 게시글 모두 보기</v-btn>
         </v-toolbar>
 
-        <v-card
-          width="1000"
-          outlined
-          class="title text-left pa-3 font-weight-bold mt-12"
-        >
+        <v-card width="1000" outlined class="title text-left pa-3 font-weight-bold mt-12">
           작성한 댓글
           <v-data-table
             :headers="computedCommentsHeaders"
@@ -140,17 +124,13 @@
                 >
                   <a style="color: black">{{ item.content }}</a>
                 </td>
-                <td>{{ unix(item.date / 1000) }}</td>
+                <td v-if="!$vuetify.breakpoint.smAndDown">{{ unix(item.date / 1000) }}</td>
               </tr>
             </template>
           </v-data-table>
         </v-card>
 
-        <v-card
-          width="1000"
-          outlined
-          class="title text-left pa-3 font-weight-bold mt-12"
-        >
+        <v-card width="1000" outlined class="title text-left pa-3 font-weight-bold mt-12">
           임시저장한 가이드북
           <v-data-table
             :headers="computedExtensionSavaDataHeaders"
@@ -168,9 +148,7 @@
                 <td>
                   <a @click="writeExtensionSave(item)">{{ item.title }}</a>
                 </td>
-                <td v-if="!$vuetify.breakpoint.smAndDown">
-                  {{ unix(item.date / 1000) }}
-                </td>
+                <td v-if="!$vuetify.breakpoint.smAndDown">{{ unix(item.date / 1000) }}</td>
                 <td>
                   <a @click="ExtensionSavdData_Dialog(item)">
                     <v-icon>mdi-delete</v-icon>
@@ -184,11 +162,11 @@
     </v-col>
     <v-dialog v-model="dialog_ExtensionData_Delete" max-width="300">
       <v-card>
-        <v-card-title>삭제하시겠습니까?</v-card-title>
+        <v-card-title class="mb-3" style="color: white; backgroundColor: #E91E63">삭제하시겠습니까?</v-card-title>
         <v-card-text>데이터가 삭제되면 복구할 수 없습니다.</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="ExtensionSaveData_Delete()">삭제</v-btn>
+          <v-btn color="pink" class="white--text" @click="ExtensionSaveData_Delete()">삭제</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -271,17 +249,20 @@ export default {
           text: "날짜",
           value: "date",
           sortable: false,
-          filterable: false
+          filterable: false,
+          hide: "smAndDown"
         },
         {
           text: "조회수",
           value: "view",
-          filterable: false
+          filterable: false,
+          hide: "mdAndDown"
         },
         {
           text: "댓글수",
           value: "numOfComments",
-          filterable: false
+          filterable: false,
+          hide: "lgAndDown"
         }
       ],
       boardDatas: [],
@@ -296,7 +277,8 @@ export default {
         {
           text: "날짜",
           value: "date",
-          filterable: false
+          filterable: false,
+          hide: "smAndDown"
         }
       ],
       commentsDatas: [],
