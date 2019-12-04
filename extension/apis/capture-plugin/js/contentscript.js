@@ -50,7 +50,8 @@ function start() {
         var e = document.getElementById("capture-flash");
         e.play()
     }
-    overlay || (overlay = document.createElement("div"), overlay.className = "domElements", overlay.style.position = "fixed", overlay.style.top = "0px", overlay.style.left = "0px", overlay.style.zIndex = "9999", overlay.style.pointerEvents = "none", outline = document.createElement("div"), outline.style.position = "fixed", outline.style.border = BORDER_THICKNESS + "px solid rgba(175, 83, 205, 1)", outline.style.zIndex = "9999", overlay.appendChild(outline)), overlay.parentNode || (document.body.appendChild(overlay), document.body.addEventListener("mousemove", e, !1), document.body.addEventListener("mouseup", t, !1));
+    overlay || (overlay = document.createElement("div"), overlay.className = "domElements", overlay.style.position = "fixed", overlay.style.top = "0px", overlay.style.left = "0px", overlay.style.zIndex = "9999", overlay.style.pointerEvents = "none", outline = document.createElement("div"), outline.style.position = "fixed", outline.style.border = BORDER_THICKNESS + "px solid rgba(175, 83, 205, 1)", outline.style.zIndex = "9999", overlay.appendChild(outline)), overlay.parentNode || (document.body.appendChild(overlay), 
+    document.body.addEventListener("mousemove", e, !1), document.body.addEventListener("mouseup", t, !1));
     var n, s = {};
     window.addEventListener("keydown", function(o) {
         o = o || window.event, 27 == o.keyCode && (document.body.removeEventListener("mousemove", e, !1), document.body.removeEventListener("mouseup", t, !1), $(".domElements").remove())
