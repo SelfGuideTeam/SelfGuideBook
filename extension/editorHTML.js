@@ -72,8 +72,8 @@ function changeLogoutHtml(){
 }
 
 
-
-
+var logo1 = null;
+logo1 = chrome.runtime.getURL("logo1.png");
 
 function toggleSidebar() {
 	if(sidebarOpen) {
@@ -88,10 +88,10 @@ function toggleSidebar() {
 		var pdfTestCss = chrome.runtime.getURL('/view/assets/pdfTest.css');
 		var extViewJs = chrome.runtime.getURL('/view/js/bootstrap3.3.6.js');
 
-		var trumbowygCss = chrome.runtime.getURL("apis/Trumbowyg-master/dist/ui/trumbowyg.css")
-		var editorCss = chrome.runtime.getURL("editorCSS.css")
+		var trumbowygCss = chrome.runtime.getURL("apis/Trumbowyg-master/dist/ui/trumbowyg.css");
+		var editorCss = chrome.runtime.getURL("editorCSS.css");
 
-		
+
 
 		sidebar.id = "mySidebar";
 		document.body.appendChild(sidebar);
@@ -225,6 +225,7 @@ var saveHtml2 = "\
 		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i ></i>Test</a></li>\
 		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i ></i>서버저장</a></li>\
 		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i ></i>PDF저장</a></li>\
+		<li id='extGBE-saveToPDF2'><a href='' onclick='return false'><i ></i>PDF저장2</a></li>\
 	</ul>\
 </div>\
 </li>\
@@ -264,7 +265,7 @@ var saveHtml2 = "\
 // </li>\
 var homtHtml = "<!-- home -->\
 <li class='container1' id='extGBE-home'>\
-	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' ><i ></i>Travel<br> Books</a>\
+	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' ><img src="+logo1+"><i ></i>Travel<br> Books</a>\
 </li>\
 <!--/ home -->";
 

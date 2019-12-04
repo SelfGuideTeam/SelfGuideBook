@@ -704,6 +704,18 @@ function setListeners(){
     delay(saveContent, 1000 );
   });
 
+  $(getShadowEl('#extGBE-saveToPDF2')).click(async function(){
+    var title = await getChromeStg('currentTitle').currentTitle;
+    var content =  $(getShadowEl('#my-editor')).html();
+    chrome.runtime.sendMessage({message: 'guideBookPdfRequest', title:title, content:content}, function(response){ 
+      if(response=='success'){
+        alert('hi')
+      }else{
+        alert('hi')
+      }
+    });
+  })
+
 
 }
 

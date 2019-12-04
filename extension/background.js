@@ -77,6 +77,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}else if(message=='guideBookSaveRequest'){
 		guideBookSaveRequest(sendResponse, request.data);
 		return true;
+	}else if(message=='guideBookPdfRequest'){
+		var data = {'title' : request.data, 'content': request.content};
+		guideBookPdfRequest(sendResponse, data)
+		return true;
 	}else if(message=='guideBookDeleteRequest'){
 		guideBookDeleteRequest(sendResponse, request.data);
 		return true;
@@ -127,7 +131,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		});
 		return true;
 	}else{
-		//alert('저장');
 		console.log(message);
 	}
 
@@ -219,6 +222,25 @@ async function tokenValid(sendResponse){
 		sendResponse('fail')
 	}
 	return true;
+}
+
+async function guideBookPdfRequest(sendResponse, data){
+	try{
+		let user = (await getChromeStg('authInfo')).authInfo.user;
+		let result = await tokenValidRequest(user.stsTokenManager.accessToken);
+		if(result.result=='success'){
+			var email = {'email' : user.email};
+			var data2 = Object.assign(email, data)
+			data2 = JSON.stringify(data2);
+			console.log(data2)
+			let result = await ajaxSend(requestUrlHeader+'pdfSave', data2);
+			sendResponse(result.result);
+		}else{
+			sendResponse('fail')
+		}
+	} catch(err){
+		console.log(err)
+	}
 }
 
 async function guideBookCreateRequest(sendResponse, data){
@@ -642,7 +664,8 @@ var screenshot = {
 	domcapture: function() {
 		chrome.tabs.getSelected(null, function(e) {
 			chrome.tabs.executeScript(null, {
-				file: "/apis/capture-plugin/js/contentscript.js"
+				file : "contentScrapper.js"
+				// file: "/apis/capture-plugin/js/contentscript.js"
 			}, function() {
 				chrome.tabs.sendRequest(e.id, {
 					type: "start",
