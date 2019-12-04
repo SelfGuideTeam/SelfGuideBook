@@ -72,8 +72,7 @@ function changeLogoutHtml(){
 }
 
 
-var logo1 = null;
-logo1 = chrome.runtime.getURL("logo1.png");
+
 
 function toggleSidebar() {
 	if(sidebarOpen) {
@@ -263,15 +262,17 @@ var saveHtml2 = "\
 // 		</ul>\
 // 	</div>\
 // </li>\
+var logo1 = chrome.runtime.getURL("logo1.png");;
+var logo2 = chrome.runtime.getURL("logo2.png");
 var homtHtml = "<!-- home -->\
 <li class='container1' id='extGBE-home'>\
-	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' ><img src="+logo1+"><i ></i>Travel<br> Books</a>\
+	<a id='extGBE-homeTitle' href='https://travelbooks.kr/#/' target='_blank' ><img src="+logo2+"><i ></i></a>\
 </li>\
 <!--/ home -->";
 
 var homtLogoutHtml = "<!-- home -->\
 <li class='container1-full' id='extGBE-home'>\
-	<a id='extGBE-homeTitle' href='https://fir-ex-63c1a.firebaseapp.com/#/guideline' target='_blank' ><i ></i>Home</a>\
+	<a id='extGBE-homeTitle' href='https://travelbooks.kr/#/' target='_blank' ><img src="+logo2+"><i ></i>Home</a>\
 </li>\
 <!--/ home -->";
 

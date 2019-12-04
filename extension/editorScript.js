@@ -1,7 +1,8 @@
 
 var guideBookIdx = -1
 // console.log(shadow)
-
+var logo1 = chrome.runtime.getURL("logo1.png");;
+var logo2 = chrome.runtime.getURL("logo2.png");
 
 //console.log(shadowEl)
 //console.log(shadow.querySelector('#my-editor'))
@@ -50,7 +51,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       ico: 'capture-dom',
       hasIcon: true,
       fn: function(){
-        $('#mySidebar').hide();
+        // $('#mySidebar').hide();
         chrome.runtime.sendMessage({message: "domCapture"}, null);
       }
     },
@@ -61,7 +62,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       fn: function(){
         if($('#mySidebar').css('width')=='350px'){
           $('#mySidebar').css('width', '870px');
-          $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Home')
+          $(getShadowEl('#extGBE-homeTitle')).html('<img src='+logo2+'><i></i>')
           $(getShadowEl('.container1')).attr('class', 'container1-full')
           $(getShadowEl('#my-editor')).css('height', '840px')
         }else{
@@ -70,7 +71,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
           if(!isLogined){
 
           }else{
-            $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Travel<br> Books')
+            $(getShadowEl('#extGBE-homeTitle')).html('<img src='+logo2+'><i></i>')
             $(getShadowEl('.container1-full')).attr('class', 'container1')
           }
         }
@@ -524,7 +525,7 @@ function login(){
         changeLogoutHtml();
         $('#mySidebar').css('width', '350px');
         if($('#mySidebar').css('width')=='350px'){
-          $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Travel<br> Books')
+          $(getShadowEl('#extGBE-homeTitle')).html('<img src='+logo2+'><i></i>')
           $(getShadowEl('.container1-full')).attr('class', 'container1')
         }
 
@@ -551,7 +552,7 @@ async function logout(){
       alert('로그아웃 실패')
     }
     changeLoginHtml();
-    $(getShadowEl('#extGBE-homeTitle')).html('<i></i>Home')
+    $(getShadowEl('#extGBE-homeTitle')).html('<img src='+logo2+'><i></i>')
     $(getShadowEl('.container1')).attr('class', 'container1-full')
     $(getShadowEl('#pcss3mm')).removeClass('disabled')
     
@@ -705,13 +706,12 @@ function setListeners(){
   });
 
   $(getShadowEl('#extGBE-saveToPDF2')).click(async function(){
-    var title = await getChromeStg('currentTitle').currentTitle;
+    var title = (await getChromeStg('currentTitle')).currentTitle;
     var content =  $(getShadowEl('#my-editor')).html();
     chrome.runtime.sendMessage({message: 'guideBookPdfRequest', title:title, content:content}, function(response){ 
       if(response=='success'){
-        alert('hi')
       }else{
-        alert('hi')
+        alert('실패')
       }
     });
   })

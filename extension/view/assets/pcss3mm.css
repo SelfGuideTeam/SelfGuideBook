@@ -1007,8 +1007,14 @@
 	border-left-width:1px;
 }
 
+.pcss3mm .container1 a{
+	/* padding-right: 20px; */
+	padding : 0px;
+	padding-top: 14px;
+}
+
 .pcss3mm .container1-full{
-	width : 80px;
+	width : 120px;
 	height: 40px;
 	border-left-width:1px;
 }

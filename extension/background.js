@@ -36,7 +36,8 @@ firebase.initializeApp(config);
 
 //https://fir-ex-63c1a.firebaseapp.com/ (firebaseEx) 
 //https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/ (ajaxTest)
-const requestUrlHeader = 'https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/';
+//https://travelbooks.kr/#/
+const requestUrlHeader = 'https://travelbooks.kr/';
 var provider = new firebase.auth.GoogleAuthProvider();
 
 var toggleStatus = false;
@@ -78,7 +79,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		guideBookSaveRequest(sendResponse, request.data);
 		return true;
 	}else if(message=='guideBookPdfRequest'){
-		var data = {'title' : request.data, 'content': request.content};
+		var data = {'title' : request.title, 'content': request.content};
 		guideBookPdfRequest(sendResponse, data)
 		return true;
 	}else if(message=='guideBookDeleteRequest'){
@@ -231,8 +232,8 @@ async function guideBookPdfRequest(sendResponse, data){
 		if(result.result=='success'){
 			var email = {'email' : user.email};
 			var data2 = Object.assign(email, data)
-			data2 = JSON.stringify(data2);
 			console.log(data2)
+			data2 = JSON.stringify(data2);
 			let result = await ajaxSend(requestUrlHeader+'pdfSave', data2);
 			sendResponse(result.result);
 		}else{

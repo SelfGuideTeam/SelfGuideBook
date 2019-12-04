@@ -18,7 +18,11 @@ function start() {
     }
 
     function t(n) { //mouse up 
-        console.log(n.target)
+        // var target = document.getElementById('target');
+        // alert(n.target.innerText);
+        $(getShadowEl('#my-editor')).append(n.target.innerText)
+        console.log($(n.target.innerText).find('img'))
+        // $(getShadowEl('#my-editor')).append();
         return "IFRAME" == n.target.tagName ? !1 : void("true" === flashSound ? (o(), $(".domElements div").css({
             background: "rgba(255, 255, 255, 0.5)"
         }), setTimeout(function() {
