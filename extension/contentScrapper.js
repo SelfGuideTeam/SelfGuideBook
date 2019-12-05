@@ -3,6 +3,7 @@
 // }
 
 function start() {
+
     function e(e) {//mouse move
         if (n !== e.target) {
             "A" == e.target.tagName && $(e.target).attr("href", "javascript:void(0);").attr("onclick", "javascript:void(0);"), 
@@ -20,8 +21,33 @@ function start() {
     function t(n) { //mouse up 
         // var target = document.getElementById('target');
         // alert(n.target.innerText);
-        $(getShadowEl('#my-editor')).append(n.target.innerText)
-        $(getShadowEl('#my-editor')).append($(n.target.outerHTML).find('img'))
+        // $('#my-editor').trumbowyg('execCmd', {
+        //     cmd: 'insertText',
+        //     param: 'TextToInsert',
+        //     forceCss: false,
+        // });
+        // $(getShadowEl('.trumbowyg-undo-button')).execCommand('undo', false, null);
+        // $(getShadowEl('#my-editor')).on('tbwinit', function() { console.log('INIT') });
+        var html = $(getShadowEl('#my-editor')).html();
+        // console.log(html)
+        var imgHtml = '';
+        $($(n.target.outerHTML).find('img')).each(function(index, item){ 
+            imgHtml += item.outerHTML
+        })
+
+        $($(n.target.outerHTML).find('div')).each(function(index, item){ 
+            var imgUrl = $(item.outerHTML).css('background-image');
+            if(imgUrl && imgUrl!='none'){
+                console.log(imgUrl)
+                var itemHtml = imgUrl.substring(5, imgUrl.length-2)
+                imgHtml +=  "<img src="+itemHtml+"> " 
+
+            }
+        })
+
+        $(getShadowEl('#my-editor')).trumbowyg('html', html+n.target.innerText+imgHtml);
+        $(getShadowEl('#my-editor')).trigger('keyup');
+        // $(getShadowEl('#my-editor')).trumbowyg('html');append($(n.target.outerHTML).find('img'))
         // $(getShadowEl('#my-editor')).append();
         return "IFRAME" == n.target.tagName ? !1 : void("true" === flashSound ? (o(), $(".domElements div").css({
             background: "rgba(255, 255, 255, 0.5)"
@@ -87,7 +113,7 @@ function start() {
     );
     var n, s = {};
     window.addEventListener("keydown", function(o) {
-        o = o || window.event, 27 == o.keyCode && (document.body.removeEventListener("mousemove", e, !1), document.body.removeEventListener("mouseup", t, !1), $(".domElements").remove())
+        o = o || window.event, 27 == o.keyCode && (document.body.removeEventListener("mousemove", e, !1), document.body.removeEventListener("mouseup", t, !1), $(".domElements").remove(), 		$("#mySidebar").show())
     }, !1)
 }
 

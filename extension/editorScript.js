@@ -9,6 +9,7 @@ var logo2 = chrome.runtime.getURL("logo2.png");
 
 // let eeditor = shadow.querySelector('#my-editor');
 // shadowEl.querySelector('#my-editor');
+// jQuery.noConflict();
 $(getShadowEl('#my-editor')).trumbowyg({
   disabled: false, 
   resetCss: true,
@@ -21,6 +22,10 @@ $(getShadowEl('#my-editor')).trumbowyg({
     image: {
         dropdown: ['insertImage', 'upload'],
         ico: 'insertImage'
+    },
+    justify: {
+      dropdown : ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+      ico : 'justifyCenter'
     },
     capture: {
       dropdown : ['SelectedArea', 'EntirePage', 'VisiblePage'],
@@ -51,7 +56,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       ico: 'capture-dom',
       hasIcon: true,
       fn: function(){
-        // $('#mySidebar').hide();
+        $('#mySidebar').hide();
         chrome.runtime.sendMessage({message: "domCapture"}, null);
       }
     },
@@ -108,7 +113,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
     ['formatting'],
     ['strong', 'em', 'del'],
     ['removeformat'],
-    ['justifyLeft', 'justifyCenter', 'justifyRight'/*, 'justifyFull'*/],
+    ['justify'/*'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'*/],
     ['unorderedList', 'orderedList'],
     ['horizontalRule'], 
     ['superscript', 'subscript'],
@@ -135,6 +140,11 @@ $(getShadowEl('#my-editor')).trumbowyg({
     }
   }
 });
+
+
+$(getShadowEl('.trumbowyg-undo-button')).trigger('mousedown')
+$(getShadowEl('.trumbowyg-undo-button')).trigger('mouseup')
+
 
 $(getShadowEl('#my-editor')).trumbowyg('disable')
 if(isLogined){

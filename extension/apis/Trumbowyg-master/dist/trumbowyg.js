@@ -1118,7 +1118,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
             if (show) {
                 var btnOffsetLeft = $btn[0].offsetLeft;
-                console.log($btn)
+                // console.log($btn)
                 $btn.addClass(prefix + 'active');
 
                 $dropdown.css({
