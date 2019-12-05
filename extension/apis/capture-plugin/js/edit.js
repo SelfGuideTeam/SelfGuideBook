@@ -38,6 +38,7 @@ $(document).ready(function() {
         var n = t.getContext("2d");
         n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
 
+        console.log(n)
         var o = (localStorage.screenname + "screenshot."),
             r = localStorage.format || "png";
         o += r, 
@@ -47,37 +48,39 @@ $(document).ready(function() {
 
         var i = chrome.extension.getBackgroundPage().screenshot;
         // ,l = i.getFileName(g, !0);
-        l = $("#image_name_text").val() + $("#filename_ext").text();
-        $.ajax({
-            url: "https://api.imgur.com/3/image",
-            headers: {
-                'Authorization': 'Client-ID 1264088c861551b'
-            },
-            type: "POST",
-            data: {
-                'image': c,
-                'type': 'base64', 
-                'title': 'image'
-            },
-            success: function(data) {
-                // imageSelected = null;
-                // chrome.tabs.create({
-                //     url: data.data.link
-                // });
 
-                var e = chrome.extension.getBackgroundPage().screenshot;
-                e.insertImage({
-                    url: data.data.link
-                })
-                chrome.tabs.getCurrent(function(tab) {
-                    chrome.tabs.remove(tab.id, function() { });
-                });
-            },
-            error: function(e) {
-                var a = $.parseJSON(e.responseText);
-                alert(a.error);
-            }
-        });
+
+        // l = $("#image_name_text").val() + $("#filename_ext").text();
+        // $.ajax({
+        //     url: "https://api.imgur.com/3/image",
+        //     headers: {
+        //         'Authorization': 'Client-ID 1264088c861551b'
+        //     },
+        //     type: "POST",
+        //     data: {
+        //         'image': c,
+        //         'type': 'base64', 
+        //         'title': 'image'
+        //     },
+        //     success: function(data) {
+        //         // imageSelected = null;
+        //         // chrome.tabs.create({
+        //         //     url: data.data.link
+        //         // });
+
+        //         var e = chrome.extension.getBackgroundPage().screenshot;
+        //         e.insertImage({
+        //             url: data.data.link
+        //         })
+        //         chrome.tabs.getCurrent(function(tab) {
+        //             chrome.tabs.remove(tab.id, function() { });
+        //         });
+        //     },
+        //     error: function(e) {
+        //         var a = $.parseJSON(e.responseText);
+        //         alert(a.error);
+        //     }
+        // });
     })
 
     
