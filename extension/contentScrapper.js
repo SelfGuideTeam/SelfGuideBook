@@ -35,17 +35,7 @@ function start() {
             imgHtml += item.outerHTML
         })
 
-        $($(n.target.outerHTML).find('div')).each(function(index, item){ 
-            var imgUrl = $(item.outerHTML).css('background-image');
-            if(imgUrl && imgUrl!='none'){
-                console.log(imgUrl)
-                var itemHtml = imgUrl.substring(5, imgUrl.length-2)
-                imgHtml +=  "<img src="+itemHtml+"> " 
-
-            }
-        })
-
-        $(getShadowEl('#my-editor')).trumbowyg('html', html+n.target.innerText+imgHtml);
+        $(getShadowEl('#my-editor')).trumbowyg('html', html+n.target.innerText+imgHtml+'<p></p>');
         $(getShadowEl('#my-editor')).trigger('keyup');
         // $(getShadowEl('#my-editor')).trumbowyg('html');append($(n.target.outerHTML).find('img'))
         // $(getShadowEl('#my-editor')).append();
