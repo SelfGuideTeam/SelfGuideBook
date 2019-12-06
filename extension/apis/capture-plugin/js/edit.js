@@ -23,22 +23,32 @@ $(document).ready(function() {
         // $("#iframe").css({
         //     "margin-bottom": "178px"
         // });
-        // var e = document.getElementsByClassName("lower-canvas"),
-        //     a = document.getElementsByClassName("upper-canvas");
+        
+        
         // var e = $('.lower-canvas');
         // var a = $('.lower-canvas');
-        // var t = document.createElement("canvas");
+        var e = (document.getElementsByClassName("lower-canvas"))[0],
+        a = (document.getElementsByClassName("upper-canvas"))[0];
+
+        // console.log(e);
+        // console.log(a)
+
+        var t = document.createElement("canvas");
+        t.width = e.width, t.height = e.height;
+        var n = t.getContext("2d");
+        n.drawImage(e, 0, 0)
+        , n.drawImage(a, 0, 0);
+
+
+        // var e = document.getElementById("canvasfon"),
+        // a = document.getElementById("canvasbg"),
+        // t = document.createElement("canvas");
         // t.width = e.width, t.height = e.height;
         // var n = t.getContext("2d");
         // n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
-        var e = document.getElementById("canvasfon"),
-        a = document.getElementById("canvasbg"),
-        t = document.createElement("canvas");
-        t.width = e.width, t.height = e.height;
-        var n = t.getContext("2d");
-        n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
 
-        console.log(n)
+        // console.log(t.toDataURL())
+
         var o = (localStorage.screenname + "screenshot."),
             r = localStorage.format || "png";
         o += r, 
@@ -46,41 +56,43 @@ $(document).ready(function() {
         c = t.toDataURL("image/" + r, localStorage.imageQuality / 100) 
         c = c.substring(22)
 
-        var i = chrome.extension.getBackgroundPage().screenshot;
+        console.log(c)
+
+        // var i = chrome.extension.getBackgroundPage().screenshot;
         // ,l = i.getFileName(g, !0);
 
 
-        // l = $("#image_name_text").val() + $("#filename_ext").text();
-        // $.ajax({
-        //     url: "https://api.imgur.com/3/image",
-        //     headers: {
-        //         'Authorization': 'Client-ID 1264088c861551b'
-        //     },
-        //     type: "POST",
-        //     data: {
-        //         'image': c,
-        //         'type': 'base64', 
-        //         'title': 'image'
-        //     },
-        //     success: function(data) {
-        //         // imageSelected = null;
-        //         // chrome.tabs.create({
-        //         //     url: data.data.link
-        //         // });
+        l = $("#image_name_text").val() + $("#filename_ext").text();
+        $.ajax({
+            url: "https://api.imgur.com/3/image",
+            headers: {
+                'Authorization': 'Client-ID 1264088c861551b'
+            },
+            type: "POST",
+            data: {
+                'image': c,
+                'type': 'base64', 
+                'title': 'image'
+            },
+            success: function(data) {
+                // imageSelected = null;
+                // chrome.tabs.create({
+                //     url: data.data.link
+                // });
 
-        //         var e = chrome.extension.getBackgroundPage().screenshot;
-        //         e.insertImage({
-        //             url: data.data.link
-        //         })
-        //         chrome.tabs.getCurrent(function(tab) {
-        //             chrome.tabs.remove(tab.id, function() { });
-        //         });
-        //     },
-        //     error: function(e) {
-        //         var a = $.parseJSON(e.responseText);
-        //         alert(a.error);
-        //     }
-        // });
+                var e = chrome.extension.getBackgroundPage().screenshot;
+                e.insertImage({
+                    url: data.data.link
+                })
+                chrome.tabs.getCurrent(function(tab) {
+                    chrome.tabs.remove(tab.id, function() { });
+                });
+            },
+            error: function(e) {
+                var a = $.parseJSON(e.responseText);
+                alert(a.error);
+            }
+        });
     })
 
     

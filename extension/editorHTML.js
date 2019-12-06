@@ -280,7 +280,7 @@ var homtHtml = "<!-- home -->\
 
 var homtLogoutHtml = "<!-- home -->\
 <li class='container1-full' id='extGBE-home'>\
-	<a id='extGBE-homeTitle' href='https://travelbooks.kr/#/' target='_blank' ><img src="+logo2+"><i ></i>Home</a>\
+	<a id='extGBE-homeTitle' href='https://travelbooks.kr/#/' target='_blank' ><img src="+logo2+"><i ></i></a>\
 </li>\
 <!--/ home -->";
 
