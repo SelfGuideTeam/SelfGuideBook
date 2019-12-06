@@ -161,6 +161,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	// console.log(tab.id)
 })
 
+chrome.tabs.onRemoved.addListener(function(tabId){
+	if(extOpendTabId == tabId){
+		chrome.browserAction.setIcon({path:"icon3-black.png"});
+		extOpendTabId = -1;
+	}
+})
+
 chrome.commands.onCommand.addListener(function(command) {
 	if(command=='open'){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
