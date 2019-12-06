@@ -52,7 +52,7 @@ $(getShadowEl('#my-editor')).trumbowyg({
       }
     },
     VisiblePage : {
-      title: '영역 복사',
+      title: '텍스트 복사',
       ico: 'capture-dom',
       hasIcon: true,
       fn: function(){
