@@ -20,18 +20,8 @@ $(document).ready(function() {
     });
 
     $('.tui-image-editor-append-btn').click(function(){
-        // $("#iframe").css({
-        //     "margin-bottom": "178px"
-        // });
-        
-        
-        // var e = $('.lower-canvas');
-        // var a = $('.lower-canvas');
         var e = (document.getElementsByClassName("lower-canvas"))[0],
         a = (document.getElementsByClassName("upper-canvas"))[0];
-
-        // console.log(e);
-        // console.log(a)
 
         var t = document.createElement("canvas");
         t.width = e.width, t.height = e.height;
@@ -39,28 +29,11 @@ $(document).ready(function() {
         n.drawImage(e, 0, 0)
         , n.drawImage(a, 0, 0);
 
-
-        // var e = document.getElementById("canvasfon"),
-        // a = document.getElementById("canvasbg"),
-        // t = document.createElement("canvas");
-        // t.width = e.width, t.height = e.height;
-        // var n = t.getContext("2d");
-        // n.drawImage(e, 0, 0), n.drawImage(a, 0, 0);
-
-        // console.log(t.toDataURL())
-
         var o = (localStorage.screenname + "screenshot."),
             r = localStorage.format || "png";
         o += r, 
-
         c = t.toDataURL("image/" + r, localStorage.imageQuality / 100) 
         c = c.substring(22)
-
-        console.log(c)
-
-        // var i = chrome.extension.getBackgroundPage().screenshot;
-        // ,l = i.getFileName(g, !0);
-
 
         l = $("#image_name_text").val() + $("#filename_ext").text();
         $.ajax({
@@ -75,10 +48,6 @@ $(document).ready(function() {
                 'title': 'image'
             },
             success: function(data) {
-                // imageSelected = null;
-                // chrome.tabs.create({
-                //     url: data.data.link
-                // });
 
                 var e = chrome.extension.getBackgroundPage().screenshot;
                 e.insertImage({
