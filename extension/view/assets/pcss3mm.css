@@ -985,12 +985,12 @@
 	border-color: #d9d9d9;
 	background: #ffffff;
 	font-size: 13px;
-	line-height: 35px;
+	line-height: 40px;
 }
 
 #extGBE-myGuideBooksli {
 	width: 263px;
-	height: 37px;
+	height: 40px;
 }
 
 .dropdown {
@@ -1003,14 +1003,14 @@
 
 .pcss3mm .container1{
 	width : 80px;
-	height: 76px;
+	height: 83px;
 	border-left-width:1px;
 }
 
 .pcss3mm .container1 a{
 	/* padding-right: 20px; */
 	padding : 0px;
-	padding-top: 14px;
+	padding-top: 18px;
 }
 
 .pcss3mm .container1-full{
