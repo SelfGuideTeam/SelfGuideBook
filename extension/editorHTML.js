@@ -229,10 +229,7 @@ var saveHtml2 = "\
 <a href='' onclick='return false'><i ></i>저장</a><b></b>\
 <div class='grid-container2'>\
 	<ul>\
-		<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i ></i>Test</a></li>\
-		<li id='extGBE-saveToServer'><a href='' onclick='return false'><i ></i>서버저장</a></li>\
 		<li id='extGBE-saveToPDF'><a href='' onclick='return false'><i ></i>PDF저장</a></li>\
-		<li id='extGBE-saveToPDF2'><a href='' onclick='return false'><i ></i>PDF저장2</a></li>\
 	</ul>\
 </div>\
 </li>\
@@ -246,6 +243,11 @@ var saveHtml2 = "\
 </div>\
 </li>\
 "
+
+
+//<li id='extGBE-saveToLocal'><a href='' onclick='return false'><i ></i>Test</a></li>\
+//<li id='extGBE-saveToServer'><a href='' onclick='return false'><i ></i>서버저장</a></li>\
+//		<li id='extGBE-saveToPDF2'><a href='' onclick='return false'><i ></i>PDF저장2</a></li>\
 // <!-- 새로고침 -->\
 // <li class='dropdown'>\
 // <a href='' onclick='return false' id='extGBE-refreshOneGB'></a><b></b>\

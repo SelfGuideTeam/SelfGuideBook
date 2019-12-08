@@ -215,6 +215,8 @@
                                                         trumbowyg.closeModal();
                                                     }, 250);
                                                     trumbowyg.$c.trigger('tbwuploadsuccess', [trumbowyg, data, url]);
+
+
                                                 } else {
                                                     trumbowyg.addErrorOnModalField(
                                                         $('input[type=file]', $modal),
@@ -223,6 +225,8 @@
                                                     trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg, data]);
                                                 }
                                             }
+
+                                            
                                         },
 
                                         error: trumbowyg.o.plugins.upload.error || function () {

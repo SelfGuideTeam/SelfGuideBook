@@ -129,7 +129,8 @@ $(getShadowEl('#my-editor')).trumbowyg({
         headers: {
             'Authorization': 'Client-ID 1264088c861551b'
         },
-        urlPropertyName: 'data.link'
+        urlPropertyName: 'data.link',
+        imageWidthModalEdit :true
     },
     fontsize: {
       sizeList: [

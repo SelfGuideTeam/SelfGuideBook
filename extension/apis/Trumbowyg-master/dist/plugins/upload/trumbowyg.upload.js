@@ -224,6 +224,7 @@
                                                     trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg, data]);
                                                 }
                                             }
+                                            $(getShadowEl('#my-editor')).trigger('keyup');
                                         },
 
                                         error: trumbowyg.o.plugins.upload.error || function () {
