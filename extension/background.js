@@ -37,6 +37,7 @@ firebase.initializeApp(config);
 //https://fir-ex-63c1a.firebaseapp.com/ (firebaseEx) 
 //https://ajaxtest-882ac.firebaseapp.com/guidebook/extension/ (ajaxTest)
 //https://travelbooks.kr/#/
+
 const requestUrlHeader = 'https://fir-ex-63c1a.web.app/';
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -66,6 +67,9 @@ chrome.extension.onConnect.addListener(function(port) {
 		// 	 console.log("message recieved" + msg);
 		// 	 port.postMessage("Hi Popup.js");
 		// });
+
+
+
 	}
 
 })
@@ -77,7 +81,12 @@ openTab = async function(){
 	});
 
 
+
 }
+
+
+
+
 
 chrome.browserAction.onClicked.addListener(openTab);
 
@@ -182,6 +191,8 @@ chrome.browserAction.onClicked.addListener(openTab);
 
 
 
+
+
 // chrome.tabs.onActivated.addListener(function (tab){
 // 	chrome.tabs.sendRequest(tab.tabId,{callFunction: "getMyGuideBooks"});
 // 	currentTabId = tab.id;
@@ -189,6 +200,7 @@ chrome.browserAction.onClicked.addListener(openTab);
 // })
 
 // chrome.browserAction.onClicked.addListener(toggleSidebar2);
+
 
 // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 // 	if(changeInfo.status=='complete'){
@@ -386,6 +398,7 @@ chrome.browserAction.onClicked.addListener(openTab);
 // 	});
 // }
 
+
 // function tokenValidRequest(accessToken){
 // 	return new Promise((resolve, reject) => {
 // 		var xhr = new XMLHttpRequest();
@@ -510,6 +523,7 @@ chrome.browserAction.onClicked.addListener(openTab);
 // 			o && o(u.size)
 // 		}
   
+
 // 		function n() {
 // 			console.log("Error!")
 // 		}
@@ -605,7 +619,7 @@ chrome.browserAction.onClicked.addListener(openTab);
 // 				hideFixedElements: "true" === localStorage.hideFixedElements
 // 			}, function() {})
 // 		}
-  
+
 // 		function t(e, t, o) {
 // 			var n = e.devicePixelRatio || 1;
 // 			localStorage.metaDescription = e.meta_description;
@@ -647,6 +661,7 @@ chrome.browserAction.onClicked.addListener(openTab);
 // 				localStorage.imgdata = screenshot.path + r, 
 // 				1 == saveScroll ? saveScroll = !1 : screenshot.createEditPage(n)
 				
+
 // 			})
 // 		}
 // 		var a = {};
@@ -822,3 +837,4 @@ chrome.browserAction.onClicked.addListener(openTab);
 //   }), window.onload = function() {
 // 	screenshot.init()
 //   };
+

@@ -75,6 +75,7 @@ function changeLogoutHtml(){
 
 
 function toggleSidebar() {
+
 	  // While we could have used `let url = "hello.html"`, using runtime.getURL is a bit more robust as
   // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
   // runtime.
@@ -209,6 +210,7 @@ function toggleSidebar() {
 	// 	//확장이 로딩되는 모습을 안보여주기 위함
 	// 	$('#mySidebar').hide();		
 	// }
+
 }
 
 
