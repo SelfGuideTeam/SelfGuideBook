@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Screenshot Capture Tool</title>
+		<link rel="stylesheet" href="/js/capture-plugin/css/style.css" type="text/css" media="screen, projection"/>
+		<link rel="stylesheet" href="/js/capture-plugin/css/query.switchButton.css" type="text/css" media="screen, projection"/>
+		<style type="text/css">
+			body {
+				width: 300px;
+				text-align: center;
+				height: auto;
+				float: left;
+				margin: 0;
+			}
+			.main_btn {
+				background-color: #f8ffff;
+				border: none;
+				float: left;
+				cursor: pointer;
+				outline: none;
+				width: 28%;
+			}
+			.main_btn div {
+				height: 75px;
+				width: 72px;
+			}
+			button#entire {
+				margin-left: 8px;
+				margin-right: 8px;
+			}
+			#selection_icon {
+				background: url('/js/capture-plugin/images/selection.png') no-repeat;
+				background-size: 72px 96px;
+			}
+			#scroll {
+				margin-left: 12px;
+			}
+			#scroll:hover #selection_icon {
+				background: url('/js/capture-plugin/images/selection_hover.gif') no-repeat;
+				background-size: 72px 96px;
+			}
+			#entire_icon {
+				background: url('/js/capture-plugin/images/fullpage.png') no-repeat;
+				background-size: 72px 96px;
+			}
+			#entire:hover #entire_icon {
+				background: url('/js/capture-plugin/images/fullpage_hover.gif') no-repeat;
+				background-size: 72px 96px;
+			}
+			#dom_icon {
+				background: url('/js/capture-plugin/images/dom.png') no-repeat;
+				background-size: 72px 96px;
+			}
+			#domcapture:hover #dom_icon {
+				background: url('/js/capture-plugin/images/dom_hover.gif') no-repeat;
+				background-size: 72px 96px;
+			}
+			.main_btn span {
+				font-size: 13px;
+				font-weight: 100;
+				color: #484848;
+				margin-top: -14px;
+				float: left;
+				margin-left: 8px;
+			}
+			div#wrapper {
+				float: left;
+				margin-top: 15px;
+				/*margin-bottom: 38px;*/
+			}
+			.main_btn:hover span {
+				color: #44caff;
+			}
+			.options_wrapper a {
+				height: 20px;
+				width: 20px;
+				float: right;
+				outline: none;
+			}
+			#options_icon {
+				background: url('/js/capture-plugin/images/options.png');
+				background-size: 20px 20px;
+			}
+			#options_icon:hover, #options_icon.active {
+				background: url('/js/capture-plugin/images/options_hover.png');
+				background-size: 20px 20px;
+			}
+			#options_icon:active {
+				background: url('/js/capture-plugin/images/options_pressed.png');
+				background-size: 20px 20px;
+			}
+			.options_wrapper {
+				float: left;
+				width: 98%;
+				margin-top: 4px;
+				margin-bottom: 4px;
+			}
+			.about_voila_wrapper {
+				float: left;
+				width: 100%;
+				border-top: 1px solid #00a7ff;
+				background: rgb(244, 244, 244);
+				padding-top: 6px;
+				padding-bottom: 18px;
+			}
+
+			.about_voila_wrapper a span {
+				float: left;
+				margin-left: 66px;
+				margin-top: 16px;
+				font-size: 14px;
+				font-style: italic;
+				color: #626262;
+			}
+			#know_voila {
+				background: url('/js/capture-plugin/images/voila_normal.png') no-repeat;
+				background-size: 56px 30px;
+				height: 30px;
+				width: 56px;
+				float: left;
+				margin-left: 3px;
+				margin-top: 9px;
+			}
+			.about_voila_wrapper a:hover #know_voila {
+				background: url('/js/capture-plugin/images/voila.png') no-repeat;
+				background-size: 56px 30px;
+			}
+			.about_voila_wrapper a:active {
+				color: #626262;
+			}
+			div#extension_option {
+				float: left;
+				width: 100%;
+				padding-top: 14px;
+				padding-bottom: 14px;
+				border-top: 1px solid #d6d6d6;
+			}
+			.switch-button-background.checked {
+				background: url('/js/capture-plugin/images/audio_on_bg.png') no-repeat;
+				border: none;
+				border-radius: 0;
+				background-size: 36px 18px;
+				width: 36px !important;
+				height: 18px !important;
+			}
+			/*.switch-button-background.checked .switch-button-button{
+				  left: 18px;
+			}*/
+			.switch-button-button {
+				background: url('/js/capture-plugin/images/audio_knob.png') no-repeat;
+				border-radius: 0px;
+				width: 18px !important;
+				height: 18px !important;
+				background-size: 18px 18px;
+				border: none;
+				top: 0px;
+			}
+			.switch-button-background {
+				border: none;
+				border-radius: 0;
+				float: left;
+				margin-left: 63px;
+				background: url('/js/capture-plugin/images/audio_off_bg.png') no-repeat;
+				background-size: 36px 18px;
+				width: 36px !important;
+				height: 18px !important;
+			}
+			span#sound-text {
+				float: left;
+				margin-top: 3px;
+			}
+			div#outer-wrapper {
+				float: right;
+				width: 300px;
+				background: #fdfeff;
+			}
+			#selection_arrow {
+				background: url('/js/capture-plugin/images/tutorial_selection_arrow.png') no-repeat;
+				background-size: 67px 9px;
+				width: 67px;
+				height: 9px;
+				position: absolute;
+				left: 325px;
+				top: 49px;
+			}
+			#fullpage_arrow {
+				background: url('/js/capture-plugin/images/tutorial_fullpage_arrow.png') no-repeat;
+				background-size: 192px 20px;
+				width: 192px;
+				height: 20px;
+				position: absolute;
+				left: 355px;
+				bottom: 120px;
+			}
+			#dom_arrow {
+				background: url('/js/capture-plugin/images/tutorial_dom_arrow.png') no-repeat;
+				background-size: 9px 57px;
+				width: 9px;
+				height: 57px;
+				position: absolute;
+				left: 632px;
+				bottom: 80px;
+			}
+			.tutorial_text {
+				font-size: 18px;
+				position: absolute;
+				color: #666;
+				display: none;
+				font-weight: 200;
+				letter-spacing: 0.02em;
+				text-align: right;
+			}
+			div#selection_text {
+				top: 29px;
+				width: 250px;
+				left: 81px;
+			}
+			div#fullpage_text {
+				top: 120px;
+				width: 233px;
+				left: 100px;
+			}
+			div#dom_text {
+				top: 178px;
+				right: 55px;
+				width: 250px;
+			}
+			.arrows {
+				display: none;
+			}
+			.close {
+				width: 20px;
+				height: 20px;
+				position: absolute;
+				right: 0;
+				cursor: pointer;
+			}
+			.close_btn {
+				background: url('/js/capture-plugin/images/tutorial_close.png') no-repeat;
+				background-size: 20px 20px;
+				height:20px;
+			}
+			.close_btn:hover {
+				background: url('/js/capture-plugin/images/tutorial_close_hover.png') no-repeat;
+				background-size: 20px 20px;
+				height:20px;
+			}
+			.close_btn:active {
+				background: url('/js/capture-plugin/images/tutorial_close_pressed.png') no-repeat;
+				background-size: 20px 20px;
+				height:20px;
+			}
+			div#close {
+			  position: absolute;
+			  left: 8px;
+			  bottom: 8px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="outer-wrapper">
+			<div id="wrapper">
+				<button class="main_btn" id="scroll" tabindex="-1">
+					<!-- <div id="selection_icon"></div> -->
+					<img src="/js/capture-plugin/images/selection.png" width="72" height="72" />
+					<span>Selected Area</span>
+				</button>
+				<button class="main_btn" id="entire" tabindex="-1">
+					<img src="/js/capture-plugin/images/fullpage.png" width="72" height="72" />
+					<!-- <div id="entire_icon"></div> -->
+					<span>Entire page</span>
+				</button>
+				<button class="main_btn" id="domcapture" tabindex="-1">
+					<img src="/js/capture-plugin/images/dom.png" width="72" height="72" />
+					<!-- <div id="dom_icon"></div> -->
+					<span>Visible page</span>
+				</button>
+
+				<div class="options_wrapper">
+					<a href="javascript:void(0);" id="options_icon"> </a>
+				</div>
+				<div id="extension_option" style="display: none;">
+					<input type="checkbox" name="togglesound" id="togglesound" />
+					<span id="sound-text"></span>
+				</div>
+			</div>
+		<div id="tutorial">
+			<div class="arrows" id="selection_arrow"></div>
+			<div id="selection_text" class="tutorial_text">
+				Take screenshots for particular region of a page
+			</div>
+			<div class="arrows" id="fullpage_arrow"></div>
+			<div id="fullpage_text" class="tutorial_text">
+				Take screenshots for full screen
+			</div>
+			<div class="arrows" id="dom_arrow"></div>
+			<div id="dom_text" class="tutorial_text">
+				Take screenshots individual object that selected on page
+			</div>
+			<div class="close close_btn" id="close"></div>
+		</div>
+		<script src="/js/capture-plugin/js/jquery.js"></script>
+		<script src="/js/capture-plugin/js/jquery-ui.min.js"></script>
+		<script src="/js/capture-plugin/js/jquery.switchButton.js"></script>
+		<script src="/js/capture-plugin/js/popup.js"></script>
+	</body>
+</html>

@@ -1,0 +1,68 @@
+{
+	"name": "GuideEditor",
+	"manifest_version": 2,
+	"description": "Edit your own guide book",
+	"version": "0.3.2",
+	"background": {
+		"scripts" : ["firebase7.4.0.js","background.js"]
+    },
+	"browser_action": {
+		"default_icon": "icon3.png",
+		"__default_popup": "apis/capture-plugin/view/popup.html",
+		"__default_title": "Clicked Me"
+	},
+	"icons": { 
+	   "128": "icon2.png" },
+    "__content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["apis/jquery/jquery.min.js",
+				"apis/quill/quill.js",
+				"script.js",
+				"apis/capture-plugin/js/contentscript.js"
+			],
+			"css": ["apis/quill/quill-snow.css"]
+		}
+	],
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["apis/jquery/jquery.min.js",
+				"apis/Trumbowyg-master/dist/trumbowyg.js",
+				"apis/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
+				"apis/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
+				"apis/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
+				"apis/Trumbowyg-master/dist/langs/ko.js",
+				"apis/capture-plugin/js/contentscript.js",
+				"apis/html2pdf.js",
+				"apis/arrayList.js",
+				"editorHTML.js"
+			],
+			"css": ["apis/Trumbowyg-master/dist/ui/trumbowyg.min.css",
+					"editorCSS.css"],
+			"all_frames": false
+		}
+	],
+    "web_accessible_resources": [
+        "*"
+	],
+	"content_security_policy":"script-src 'self' https://ajaxtest-882ac.firebaseapp.com/ https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://apis.google.com; object-src 'self'",
+    "__content_security_policy": "script-src 'self' 'sha256-IThiKMnsg0UHaLmP7sJxZpd/ohvINImwjxFJyxGFSlk='; object-src 'self'",
+	"permissions": [
+		"activeTab",
+		"storage", 
+		"http://*/*", "https://*/*"
+		,
+		"downloads", 
+		"unlimitedStorage", "<all_urls>",
+		"identity"
+	],
+	"oauth2": {
+		"client_id": "912304737763-o27o5usb5pupg83g0ql0vkpuibl1uhkq.apps.googleusercontent.com",
+		"scopes": [
+		  "https://www.googleapis.com/auth/userinfo.email",
+		  "https://www.googleapis.com/auth/userinfo.profile"
+		]
+	  },
+	  "key": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDxRnl94wNJIK5M0m6kmJGECJHAD0tKdhnyCeU8YMV3DGJVBS/NWYz5+WhtCzN8/6TElYF+uXY4kHLU2vUh5QbZh3kidMP7s100thpsSWaEVrrAB0G+YS3XiQz+s58tSVLIgeKBcZkGZJoycRMtId5afTGeNFz54TFN4QD99an3CVO4Eo229mmFOvCGpJ2zPUZXUMyP369Lgah5YgVNpS+j5wxyQPZiZhAbgzgtvF2y0gPuxNvFtNANqSCgbghH3kQXDwT3ckBff1GS00vLDNjlQJ+9HHvi5aagn15fypznMSkACEjqojmQlvixH9ctchm8dX+WeB7Rj4vo4zmb1twVAgMBAAECggEADNmujdRh7+qkLeZFS1Hu6iPUs3B9F5Wrsxbw1SLoUXtg31tb3OmIlyW/+JLQprcs7OVzlK7HC6Mx4oFY7fm3QC21d27Vo1m9vJl4Vc0g/yppXuHkEAI4AVNE1Gn3r99IX/J/AFrvBgakqcwY893qbFJfqqfqTcq/KAE0XtJPP59ukp45F4wurnzxS/gWibXPkgQacNwYhL5XT138HnsmpckLZudpA/fDRgYqHlOnRPJhlF/f0qx7z2KbqM9G2+0lQzvxCMq5TcjWTvq52LH8uQ/NTzNiz0BEUJgCEbPCErqcLSQVG6KWuMo+V2G+SPLCuSkRwA59ljI1GOcLlLgNAQKBgQD8E1Jh2ipDECIpTGk9aROz7u/UeOH2lKd22wKN4gu+tWzIU7WEmyemM2hZ7Tj55fIg2Y2+b/ysIXySYkYRn64fxkEHSm/Q6WnOWAKgU6Gc/RdJqbYvQeRw+977h6lCunpWS9XUf2pZqOLipg2I4YHkJ+LVHAr0hgwSi79eI1D6gQKBgQD1CBt3dUq4ubL1cHoL2ex1Hs3ZLcw5g7TlQSI6G+TA/SsnMJBdQGJexjm8E0crSHHV5jTc+Uk2OyH0Vz5kzTmy+XnifEqiLTVfc8ycsaC+MfpxiskzPhj3rgrQ86VrvbKc46FdvX5UfbCz5w3uBXQQxLyyiV7aYBB9NMqjWEePlQKBgQCb6feSvrZVNK1sje6qJUwihy+gZASf1+KdCWnTCHXrR5w5bE1h7/XePv3UYX5UU34oA2hA2lOWxD+g61gbnoC89otSTyBKP5VKI/W75P6Zc5Hr5iThpgf+Okv5mDeBJoZ0ygNApG7LdkKfncXRXGpTDLiox+eexyrAbd+4AnAcAQKBgHs7WJT7qFi/DAHkT30mXIWKuHxBTDSgyJmD6HLRFHr62HkdM32yo8aGawLrrx9Vj+rDnFKGDQv5MVpxhi+sBxi731DIscBefDlFQ+KKcw00lYAFDKt4z5XBMi9kWg2Vmf7NfJpocuCLVhMkYR0UIQtN5pjj/ZBWP/S4WDFOdK8BAoGABGbtRZ1lzXk4nxX9pnG4wqpBCpiAftohSa3Y42SMTVrgmNsElZfBKBtU6gtj/e2ctDRUhngtr2k+6//9Ujemq62/mgjEaqi9clieaHwQmoPCI+HMd4zqaC9Niddq/XZ1XFBbV2gIj8sFyPsZ+f+JOUA04vsaoX2J2jT5mPmj/pY="
+}

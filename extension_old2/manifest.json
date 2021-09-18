@@ -1,0 +1,56 @@
+{
+	"name": "TravelBooks",
+	"manifest_version": 2,
+	"description": "Get start your own guide book",
+	"version": "0.3.4",
+	"background": {
+		"scripts" : ["firebase7.4.0.js","background.js"]
+    },
+	"browser_action": {
+		"default_icon": "icon3-black.png",
+		"__default_popup": "apis/capture-plugin/view/popup.html",
+		"__default_title": "Clicked Me"
+	},
+	"icons": { 
+	   "128": "icon2.png" },
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["apis/jquery/jquery.min.js",
+				"apis/Trumbowyg-master/dist/trumbowyg.js",
+				"apis/Trumbowyg-master/dist/plugins/upload/trumbowyg.upload.js",
+				"apis/Trumbowyg-master/dist/plugins/lineheight/trumbowyg.lineheight.min.js",
+				"apis/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js",
+				"apis/Trumbowyg-master/dist/langs/ko.js",
+				"apis/capture-plugin/js/contentscript.js",
+				"apis/html2pdf.js",
+				"apis/arrayList.js",
+				"editorHTML.js"
+			],
+			"css": ["apis/Trumbowyg-master/dist/ui/trumbowyg.css"],
+			"all_frames": false
+		}
+	],
+    "web_accessible_resources": [
+        "*"
+	],
+	"content_security_policy":"script-src 'self' https://ajaxtest-882ac.firebaseapp.com/ https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://apis.google.com; object-src 'self'",
+	"permissions": [
+		"activeTab",
+		"storage", 
+		"http://*/*", "https://*/*"
+		,
+		"downloads", 
+		"unlimitedStorage", "<all_urls>",
+		"identity"
+	],
+	"commands": {
+		"open": {
+		  "suggested_key": {
+			"default": "Alt+A",
+			"mac": "Command+A"
+		  },
+		  "description": "Open Sidebar"
+		}
+	  }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- jQuery  -->
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+  </head>
+  <style>
+    button{
+      border: 0;
+      background-size: 100%; /* To fill the dimensions of container (button), or */
+      background-color: white;
+    }
+    
+  </style>
+  <body>
+    파이어베이스 웹서버 입니다.
+    <p id="accessToken"></p>
+    <p id="idToken"></p>
+    <p id="displayName"></p>
+    <p id="email"></p>
+    <p id="refreshToken"></p>
+    <p id="uid"></p>
+    
+    <button type="button" id="btnGoogleLogin"><img src="/assets/google_login.PNG" alt=""></button>
+    <button type="button" id="btnGoogleLoout">로그아웃</button>
+    <button type="button" id="insertData">데이터 넣기</button>
+    <button type="button" id="getDataList">데이터 가져오기</button>
+    
+    
+    
+    
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="/js/fbConfigure.js"></script>
+    <script src="/js/fbGoogleAuth.js"></script>
+    <script src="/js/fbDB.js"></script>
+</body>
+</html>
