@@ -7,23 +7,11 @@
 		"scripts" : ["firebase7.4.0.js","background.js"]
     },
 	"browser_action": {
-		"default_icon": "icon3-black.png",
-		"__default_popup": "apis/capture-plugin/view/popup.html",
-		"__default_title": "Clicked Me"
+		"default_icon": "icon3-black.png"
 	},
 	"icons": { 
-	   "128": "icon2.png" },
-    "__content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"js": ["apis/jquery/jquery.min.js",
-				"apis/quill/quill.js",
-				"script.js",
-				"apis/capture-plugin/js/contentscript.js"
-			],
-			"css": ["apis/quill/quill-snow.css"]
-		}
-	],
+	   "128": "icon2.png" 
+	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
@@ -46,10 +34,10 @@
         "*"
 	],
 	"content_security_policy":"script-src 'self' https://ajaxtest-882ac.firebaseapp.com/ https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://apis.google.com; object-src 'self'",
-    "__content_security_policy": "script-src 'self' 'sha256-IThiKMnsg0UHaLmP7sJxZpd/ohvINImwjxFJyxGFSlk='; object-src 'self'",
 	"permissions": [
 		"activeTab",
 		"storage", 
+		"contextMenus", 
 		"http://*/*", "https://*/*"
 		,
 		"downloads", 
